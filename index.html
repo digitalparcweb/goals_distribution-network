@@ -1980,6 +1980,43 @@ body.bf-theme .sb-label{max-width:80px;overflow:hidden;text-overflow:ellipsis}
 .bfr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px}.bfr-f{display:block;font-size:11.5px;color:var(--g500);font-weight:600}.bfr-f input,.bfr-f select{margin-top:4px}
 .bfscan{max-width:1000px}.bfscan-h{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:14px;gap:14px;flex-wrap:wrap}
 @media print{body.bf-theme .sidebar,body.bf-theme .topbar,body.bf-theme .bfx-head,body.bf-theme .bfscan-btn,body.bf-theme .bfx-seg{display:none!important}body.bf-theme .page-area{margin:0!important;padding:0!important;overflow:visible!important}}
+.bfph-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:20px}
+.bfph-whos{display:flex;gap:10px;flex-wrap:wrap}.bfph-who{display:inline-flex;gap:9px;align-items:center;background:#f4efe3;border-radius:999px;padding:5px 16px 5px 5px}
+.bfph-who span{display:flex;flex-direction:column;line-height:1.25}.bfph-who b{font-size:12.5px}.bfph-who i{font-size:11px;color:var(--g500);font-style:normal}
+.bfph-acts{display:flex;gap:8px}
+.bfph-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:40px;align-items:start}@media(max-width:1100px){.bfph-grid{grid-template-columns:minmax(0,1fr)}}
+.bfph-h{font-size:15px;font-weight:600;margin-bottom:8px}.bfph-h span{color:var(--g400);font-weight:400;margin-left:4px}
+.bfph-call{display:flex;gap:12px;padding:14px 0;border-top:1px solid var(--g100)}.bfph-h+.bfph-call{border-top:none}
+.bfph-ic{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}.bfph-cb{flex:1;min-width:0}
+.bfph-ct{display:flex;gap:10px;align-items:baseline;font-size:13px}.bfph-ct span{color:var(--g500);font-size:12px}.bfph-ct em{margin-left:auto;font-style:normal;font-size:11.5px;color:var(--g400)}
+.bfph-cs{font-size:12.5px;color:var(--g600);line-height:1.55;margin-top:3px}
+.bfph-tag{display:inline-block;margin-top:6px;font-size:11px;font-weight:600;color:#6b5a3a;background:#f1ead9;border-radius:999px;padding:2px 9px}
+.bfph-th{background:#f7f3ea;border-radius:20px;padding:16px 18px;display:flex;flex-direction:column;gap:6px;max-height:460px;overflow-y:auto}
+.bfph-day{align-self:center;font-size:11px;color:var(--g400);margin:8px 0 2px}
+.bfph-b{max-width:80%;padding:9px 14px;border-radius:18px;font-size:13px;line-height:1.5}.bfph-b.o{align-self:flex-end;background:#2b2418;color:#fff;border-bottom-right-radius:6px}.bfph-b.i{align-self:flex-start;background:#fff;border-bottom-left-radius:6px;box-shadow:0 1px 2px rgba(36,29,20,.06)}
+.bfph-comp{display:flex;gap:8px;margin-top:10px;background:#f7f3ea;border-radius:999px;padding:6px 6px 6px 18px;align-items:center}.bfph-comp input{flex:1;border:none;background:none;outline:none;font:13px var(--font);min-width:0}
+.bfph-send{border:none;background:var(--teal);color:#fff;border-radius:999px;padding:8px 18px;font-weight:600;font-size:12.5px;cursor:pointer;font-family:var(--font)}
+.bfn-comp{background:#faf6ec;border-radius:16px;padding:16px 18px;margin-bottom:24px}.bfn-ch{font-size:12.5px;font-weight:600;color:var(--g600);margin-bottom:8px}
+.bfn-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:2px}.bfn-title{font-size:16px;font-weight:600}.bfn-title span{color:var(--g400);font-weight:400;margin-left:4px}
+.bfn-q{border:1px solid var(--g200);border-radius:999px;padding:7px 14px;font-size:12.5px;width:220px;background:#fff;font-family:var(--font)}
+.bfn-sec{font-family:var(--mono);font-size:10.5px;letter-spacing:.7px;text-transform:uppercase;color:var(--g500);margin:20px 0 4px}
+.bfn-row{display:grid;grid-template-columns:200px minmax(0,1fr) auto;gap:22px;padding:16px 0;border-top:1px solid var(--g100);align-items:start}
+.bfn-meta{display:flex;gap:10px;align-items:flex-start}.bfn-who{font-size:13px;font-weight:600}.bfn-when{font-size:11.5px;color:var(--g400);margin-top:1px}
+.bfn-body{font-size:13.5px;line-height:1.65;min-width:0}.bfn-body ul{margin:6px 0 0;padding-left:18px}
+.bfn-act{display:flex;gap:6px;opacity:0;transition:opacity .15s}.bfn-row:hover .bfn-act,.bfn-row:focus-within .bfn-act{opacity:1}
+@media(max-width:900px){.bfn-row{grid-template-columns:minmax(0,1fr);gap:8px}.bfn-act{opacity:1}}
+.bfag-bar{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:flex-end;margin-bottom:16px}.bfag-q{border:1px solid var(--g200);border-radius:999px;padding:8px 14px;font-size:13px;width:210px;background:#fff;font-family:var(--font)}
+.bfag-f{display:flex;flex-direction:column;gap:3px;font-size:10.5px;color:var(--g400)}
+.bfag-grid2{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px}
+.bfag-card{background:#fff;border:1px solid var(--g200);border-radius:18px;padding:22px 22px 18px;cursor:pointer;position:relative;overflow:hidden;box-shadow:0 1px 2px rgba(36,29,20,.04);transition:transform .15s,box-shadow .15s}
+.bfag-card::before{content:"";position:absolute;left:0;top:0;right:0;height:4px;background:var(--ac)}.bfag-card:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(36,29,20,.11)}
+.bfag-top{display:flex;gap:12px;align-items:center}.bfag-mark{width:42px;height:42px;border-radius:12px;background:var(--ac);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.bfag-nm{flex:1;min-width:0;display:flex;flex-direction:column}.bfag-nm b{font-size:15px}.bfag-nm i{font-size:12px;color:var(--g500);font-style:normal}
+.bfag-chips{display:flex;gap:6px;margin:14px 0 6px;flex-wrap:wrap}.bfag-chips span{font-size:11px;color:var(--g600);background:#f4efe3;border-radius:999px;padding:3px 10px}
+.bfag-big .l{font-family:var(--mono);font-size:10px;letter-spacing:.7px;text-transform:uppercase;color:var(--g400);margin-top:10px}.bfag-big .v{font-family:var(--serif,Georgia,serif);font-size:34px;line-height:1.15;margin-top:2px}
+.bfag-share{height:6px;background:var(--g100);border-radius:6px;overflow:hidden;margin-top:8px}.bfag-share i{display:block;height:100%;background:var(--ac)}.bfag-big .n{font-size:11.5px;color:var(--g500);margin-top:6px}
+.bfag-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px}.bfag-grid div{display:flex;flex-direction:column;gap:2px}.bfag-grid span{font-size:10.5px;color:var(--g400)}.bfag-grid b{font-size:15px;font-weight:600}
+.bfag-ft{display:flex;justify-content:space-between;margin-top:16px;padding-top:12px;border-top:1px solid var(--g100);font-size:12px;color:var(--g500)}.bfag-go{color:var(--teal);font-weight:600}
 .bfp-head{display:flex;align-items:center;gap:12px;padding:16px;border-bottom:1px solid var(--g100)}
 .bfp-head .t{display:flex;flex-direction:column;min-width:0}.bfp-head b{font-size:14px;font-weight:700;color:var(--dark)}.bfp-head i{font-size:11.5px;color:var(--g500);font-style:normal;margin-top:1px}
 .bfp-sec{padding:12px 12px 8px}.bfp-lab{font-family:var(--mono);font-size:10px;letter-spacing:.6px;text-transform:uppercase;color:var(--g400);margin:2px 4px 7px}
@@ -30708,7 +30745,7 @@ BF_PAGES['agent:dashboard'] = function() {
   var stg = BF_OPP_STAGES.map(function(s){ var os = S.opps.filter(function(o){ return o.status === s; }); return { s: s, n: os.length, v: bfSum(os, bfOppAssets) }; });
   var smax = Math.max.apply(null, stg.map(function(x){ return x.n; }).concat([1]));
   var pipe = stg.map(function(x){ return bfBar(BF_STAGE_LABEL[x.s], x.n, smax, x.n + ' <span style="color:var(--g400)">· ' + bfMoneyK(x.v) + '</span>', x.s === 'issued' ? '#176b4f' : null); }).join('');
-  return bfHead('Good morning, ' + a.name.split(' ')[0], 'Your book, today\'s work and the annuity opportunities worth a look.', '<button class="bfx-btn pri" ' + bfOc('bfClientAsk') + '>Add household or lead</button>') +
+  return bfHead('Good morning, ' + a.name.split(' ')[0], 'Your book, today\'s work and the annuity opportunities worth a look.') +
     '<div class="bfx-kpis">' + bfKpi('Production, last 12 months', bfMoneyK(prod), recent.length + ' policies written') + bfKpi('Households', clients, 'Active relationships') + bfKpi('Leads', leads, 'Not yet clients') + bfKpi('Active policies', active.length, 'Across all lines') + '</div>' +
     '<div class="bfx-row"><div class="bfx-card"><h3>Today\'s work</h3>' + workHtml + '</div><div class="bfx-card"><h3>Policies by line of business</h3>' + lobBars + '<div style="font-size:11.5px;color:var(--g500);margin-top:10px">Life, property and casualty, Medicare and annuity policies in your book.</div></div></div>' +
     '<div class="bfx-row"><div class="bfx-card"><div style="display:flex;justify-content:space-between;align-items:center"><h3>Annuity opportunities</h3><button class="bfx-btn" ' + bfOc('bfGo', 'opps') + '>View all</button></div>' + oppHtml + '<div style="font-size:11.5px;color:var(--g500);margin-top:8px">Tiers prioritize clients to review. They are not predictions or product recommendations.</div></div>' +
@@ -30832,7 +30869,7 @@ function bfClientFilter() { var r = bfEl('bf-cl-results'); if (r) r.innerHTML = 
 function bfSetQ(key, v, kind) { _bfv.f[key] = v; if (kind === 'clients') bfClientFilter(); else if (kind === 'pol') bfPolFilter(); else if (kind === 'book') bfBookFilter(); }
 BF_PAGES['agent:clients'] = function() {
   var f = _bfv.f;
-  return bfHead('Households & Leads', 'Every household you work with, their existing lines, and where an annuity conversation may fit.', '<button class="bfx-btn" ' + bfOc('bfGo', 'import') + '>Import CSV</button> <button class="bfx-btn pri" ' + bfOc('bfClientAsk') + '>Add household or lead</button>') +
+  return bfHead('Households & Leads', 'Every household you work with, their existing lines, and where an annuity conversation may fit.', '<button class="bfx-btn" ' + bfOc('bfGo', 'import') + '>Import CSV</button>') +
     '<div class="bfx-card"><div class="bfx-filters"><input id="bf-cq" value="' + bfEsc(f.cq) + '" placeholder="Search households" oninput="bfSetQ(\'cq\',this.value,\'clients\')" style="border:1px solid var(--g200);border-radius:9px;padding:8px 12px;font-size:13px;font-family:var(--font);width:260px">' + bfFilterChips('cSt', [['all', 'All'], ['Client', 'Clients'], ['Lead', 'Leads']], f.cSt) + '</div><div id="bf-cl-results">' + bfClientTable(bfClientRows()) + '</div></div>';
 };
 
@@ -32266,6 +32303,136 @@ function bfGateInfo(o, sc) {
   if (o.review) rows.push(['Principal review', o.review.status === 'pending' ? 'Waiting for the principal.' : (o.review.status === 'approved' ? 'Approved' + (o.review.by ? ' by ' + bfEsc(o.review.by) : '') + '.' : 'Returned: ' + bfEsc(o.review.note || '') )]);
   return bfSecLabel('Before it can move forward') + rows.map(function(r){ return '<div style="display:flex;gap:12px;padding:7px 0;border-top:1px solid var(--g100);font-size:12.5px;line-height:1.5"><span style="width:110px;color:var(--g500);flex-shrink:0">' + r[0] + '</span><span>' + r[1] + '</span></div>'; }).join('');
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BROOKFIELD DEMO: softer Phone tab, aligned Notes tab with more examples,
+   and the Agencies page as cards or list with filters.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── more example data ── */
+function bfPhoneData(c) {
+  var cm = bfComms(c); if (cm._ph) return cm;
+  cm._ph = true;
+  var r = bfRng(c.id + 'phone'), mem = bfMembers(c), first = mem[0].first, ag = bfAgent(c.agent).name.split(' ')[0], pols = bfClientPolicies(c.id);
+  var cd = c.cds[0], ann = pols.filter(function(p){ return p.lob === 'Annuity'; })[0];
+  var calls = [];
+  if (cm.call) calls.push({ dir: cm.call.dir || 'Incoming', when: cm.call.when, dur: cm.call.dur, summary: cm.call.summary, tag: 'Question' });
+  calls.push({ dir: 'Outgoing', when: 18 + Math.floor(r() * 10), dur: 6 + Math.floor(r() * 12), summary: 'Walked through the annual review agenda and confirmed the meeting time. ' + first + ' will gather the latest statements.', tag: 'Scheduling' });
+  calls.push({ dir: 'Missed', when: 24 + Math.floor(r() * 8), dur: 0, summary: 'Missed call. A voicemail asked for a call back about paperwork.', tag: 'Voicemail' });
+  calls.push({ dir: 'Outgoing', when: 40 + Math.floor(r() * 20), dur: 3 + Math.floor(r() * 6), summary: cd ? 'Left a message about the ' + bfMoneyK(cd.amt) + ' CD that matures ' + bfDateS(cd.matures) + ' and asked for a good time to talk.' : 'Left a message to check in and offer a time for the annual review.', tag: 'Follow-up' });
+  calls.push({ dir: 'Incoming', when: 70 + Math.floor(r() * 30), dur: 9 + Math.floor(r() * 10), summary: ann ? first + ' asked how the surrender schedule on the ' + ann.carrier + ' annuity works and when it ends.' : first + ' asked about Medicare timing and what changes at 65.', tag: 'Question' });
+  calls.sort(function(a, b){ return a.when - b.when; });
+  cm.calls = calls;
+  var extra = [
+    { dir: 'out', text: 'Happy birthday, ' + first + '! Wishing you a wonderful year ahead.', ago: 52 + Math.floor(r() * 20) },
+    { dir: 'in', text: 'Thank you ' + ag + '! That is kind of you.', ago: 51 + Math.floor(r() * 10) },
+    { dir: 'out', text: 'A reminder about our review on Thursday at 10:00. Please bring any new statements.', ago: 20 + Math.floor(r() * 6) },
+    { dir: 'in', text: 'Will do. Is it okay if ' + (mem[1] ? mem[1].first : 'a family member') + ' joins?', ago: 19 + Math.floor(r() * 4) },
+    { dir: 'out', text: 'Of course. I will add them to the invite.', ago: 19 + Math.floor(r() * 4) }
+  ];
+  cm.texts = extra.concat(cm.texts).sort(function(a, b){ return b.ago - a.ago; });
+  return cm;
+}
+function bfNoteExtras(c, cm) {
+  var r = bfRng(c.id + 'moren'), mem = bfMembers(c), pols = bfClientPolicies(c.id), ann = pols.filter(function(p){ return p.lob === 'Annuity'; })[0], sp = mem[1] ? mem[1].first : null, ag = bfAgent(c.agent).name;
+  var X = [
+    { html: 'Called to confirm the beneficiary update. ' + (sp ? sp + ' will' : 'The client will') + ' send the signed form this week.', ago: 18 + Math.floor(r() * 20), pin: false, tag: 'Follow-up' },
+    { html: 'Worried about market swings. Wants to hear about <b>guaranteed options</b> before deciding anything. No pressure.', ago: 45 + Math.floor(r() * 30), pin: false, tag: 'Goals' },
+    { html: 'A grandchild\'s college costs came up. Asked to revisit <b>liquidity</b> in the spring.', ago: 80 + Math.floor(r() * 60), pin: false, tag: 'Family' },
+    { html: 'Prefers meetings before noon and a short written summary afterward.', ago: 150 + Math.floor(r() * 120), pin: false, tag: 'Personal' }
+  ];
+  if (c.age >= 63) X.push({ html: 'Medicare window reminder sent with the enrollment checklist. Check back before the deadline.', ago: 30 + Math.floor(r() * 25), pin: false, tag: 'Follow-up' });
+  if (ann) X.push({ html: 'Received the ' + bfEsc(ann.carrier) + ' annuity statement. Surrender period ends <b>' + bfDate(ann.surrenderEnds) + '</b>. Discuss options only if the client raises it.', ago: 25 + Math.floor(r() * 30), pin: false, tag: 'Policy' });
+  X.forEach(function(n){ n.by = r() < 0.15 ? ag : undefined; });
+  cm.notes = cm.notes.concat(X);
+  cm.notes.sort(function(a, b){ return (b.pin ? 1 : 0) - (a.pin ? 1 : 0) || a.ago - b.ago; });
+}
+function bfNoteList(c) { var cm = bfComms(c); if (!cm.notesAll) { bfNoteExtras(c, cm); cm.notesAll = (cm.userNotes || []).concat(cm.notes); } return cm.notesAll; }
+
+/* ── Phone tab ── */
+function bfDayLabel(ago) { return ago <= 0 ? 'Today' : (ago === 1 ? 'Yesterday' : (ago < 30 ? ago + ' days ago' : (ago < 60 ? 'About a month ago' : Math.round(ago / 30) + ' months ago'))); }
+function bfPhoneTab(c, edit) {
+  var cm = bfPhoneData(c), mem = bfMembers(c), first = mem[0].first;
+  var chips = mem.map(function(m){ return '<span class="bfph-who">' + bfAv(m.name, 28) + '<span><b>' + bfEsc(m.name.split(' ')[0]) + '</b><i>' + bfEsc(m.phone) + '</i></span></span>'; }).join('');
+  var acts = edit ? '<div class="bfph-acts"><button class="bfx-btn" ' + bfOc('bfOutreachAsk', c.id) + '>Log call</button><button class="bfx-btn" ' + bfOc('bfCallAsk', c.id) + '>Schedule call</button></div>' : '';
+  var icon = function(d) { var col = d === 'Missed' ? '#c0553f' : (d === 'Outgoing' ? '#1d9e75' : '#c8794a'); var path = d === 'Outgoing' ? '<path d="M7 17L17 7M9 7h8v8"/>' : (d === 'Missed' ? '<path d="M17 7L7 17M17 17V9M17 17H9"/>' : '<path d="M17 7L7 17M7 9v8h8"/>'); return '<span class="bfph-ic" style="color:' + col + ';background:' + col + '1a"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + path + '</svg></span>'; };
+  var calls = cm.calls.slice().reverse().map(function(k){ return '<div class="bfph-call">' + icon(k.dir) + '<div class="bfph-cb"><div class="bfph-ct"><b>' + k.dir + (k.dur ? ' call' : '') + '</b>' + (k.dur ? '<span>' + k.dur + ' min</span>' : '') + '<em>' + bfDayLabel(k.when) + '</em></div><div class="bfph-cs">' + bfEsc(k.summary) + '</div>' + (k.tag ? '<span class="bfph-tag">' + bfEsc(k.tag) + '</span>' : '') + '</div></div>'; }).join('');
+  var last = -1, thread = cm.texts.map(function(m){ var sep = ''; if (m.ago !== last && (last < 0 || bfDayLabel(m.ago) !== bfDayLabel(last))) sep = '<div class="bfph-day">' + bfDayLabel(m.ago) + '</div>'; last = m.ago; return sep + '<div class="bfph-b ' + (m.dir === 'out' ? 'o' : 'i') + '">' + bfEsc(m.text) + '</div>'; }).join('');
+  var comp = edit ? '<div class="bfph-comp"><input id="bf-sms" placeholder="Text ' + bfEsc(first) + '..." onkeydown="if(event.key===\'Enter\')bfSmsSend(\'' + c.id + '\')"><button class="bfph-send" ' + bfOc('bfSmsSend', c.id) + ' aria-label="Send">Send</button></div>' : '';
+  return '<div class="bfph"><div class="bfph-head"><div class="bfph-whos">' + chips + '</div>' + acts + '</div><div class="bfph-grid"><section><div class="bfph-h">Calls <span>' + cm.calls.length + '</span></div>' + calls + '</section><section><div class="bfph-h">Text messages <span>' + cm.texts.length + '</span></div><div class="bfph-th">' + thread + '</div>' + comp + '</section></div></div>';
+}
+(function() {
+  var prev = bfRecTabHtml;
+  bfRecTabHtml = function(c, sc, o, canSee, isAgent) { if (_bfv.rec.tab === 'phone') return bfPhoneTab(c, isAgent && canSee); return prev(c, sc, o, canSee, isAgent); };
+})();
+
+/* ── Notes tab ── */
+function bfNoteQ(v) { _bfv.f.nq = v; var b = bfEl('bf-nlist'); if (b && _bfv.rec.id) b.innerHTML = bfNoteRows(BF.byId[_bfv.rec.id], _bfNoteEdit); }
+var _bfNoteEdit = false;
+function bfNoteRows(c, canEdit) {
+  var nts = bfNoteList(c), by = bfAgent(c.agent).name, q = (_bfv.f.nq || '').toLowerCase();
+  var vis = nts.map(function(n, i){ return { n: n, i: i }; }).filter(function(x){ return !q || (x.n.html.replace(/<[^>]+>/g, ' ') + ' ' + (x.n.tag || '')).toLowerCase().indexOf(q) > -1; });
+  var row = function(x) {
+    var n = x.n, i = x.i, who = n.by || by;
+    return '<div class="bfn-row"><div class="bfn-meta">' + bfAv(who, 28) + '<div><div class="bfn-who">' + bfEsc(who) + '</div><div class="bfn-when">' + bfDayLabel(n.ago) + '</div>' + (n.tag ? '<span class="bfph-tag">' + bfEsc(n.tag) + '</span>' : '') + '</div></div><div class="bfn-body">' + n.html + '</div>' + (canEdit ? '<div class="bfn-act"><button class="bfx-btn" ' + bfOc('bfNoteEdit', c.id, i) + '>Edit</button><button class="bfx-btn del" ' + bfOc('bfNoteDel', c.id, i) + '>Delete</button></div>' : '<div></div>') + '</div>';
+  };
+  var pin = vis.filter(function(x){ return x.n.pin; }), rest = vis.filter(function(x){ return !x.n.pin; });
+  return (pin.length ? '<div class="bfn-sec">Pinned</div>' + pin.map(row).join('') : '') + (rest.length ? '<div class="bfn-sec">' + (pin.length ? 'Earlier' : 'All notes') + '</div>' + rest.map(row).join('') : '') + (!vis.length ? '<div class="bfx-note">' + (q ? 'No notes match.' : 'No notes yet.') + '</div>' : '');
+}
+function bfNotesTab(c, canEdit) {
+  _bfNoteEdit = canEdit; var nts = bfNoteList(c);
+  var comp = canEdit ? '<div class="bfn-comp"><div class="bfn-ch">New note</div>' + bfEditorHtml('bf-n-ed2', '', 'Write a note...') + '<div style="display:flex;justify-content:flex-end;margin-top:10px"><button class="bfx-btn pri" ' + bfOc('bfNoteSaveInline', c.id) + '>Save note</button></div></div>' : '';
+  return comp + '<div class="bfn-bar"><div class="bfn-title">Notes <span>' + nts.length + '</span></div><input class="bfn-q" placeholder="Search notes" value="' + bfEsc(_bfv.f.nq || '') + '" oninput="bfNoteQ(this.value)" aria-label="Search notes"></div><div id="bf-nlist">' + bfNoteRows(c, canEdit) + '</div>';
+}
+
+/* ── Agencies: cards or list, with filters ── */
+function bfAgState(a) { return (a.city.split(', ')[1] || ''); }
+function bfAgFilters() { var f = _bfv.f; if (!f.agV) { f.agV = 'cards'; f.agQ = ''; f.agSt = 'all'; f.agReg = 'all'; f.agRev = 'all'; f.agAcc = 'all'; f.agSort = 'prem'; } return f; }
+function bfAgRows() {
+  var f = bfAgFilters(), all = BF_AGENCIES.map(function(a){ var s = bfAgencyStats(a.id), cl = BF.clients.filter(function(c){ return c.agency === a.id; }); s.a = a; s.state = bfAgState(a); s.complete = cl.length ? Math.round(bfSum(cl, function(c){ return c.score.complete; }) / cl.length) : 0; return s; });
+  var ps = all.map(function(s){ return s.prem; }).sort(function(x, y){ return x - y; }), lo = ps[Math.floor(ps.length / 3)], hi = ps[Math.floor(ps.length * 2 / 3)], q = (f.agQ || '').toLowerCase();
+  all.forEach(function(s){ s.band = s.prem >= hi ? 'high' : (s.prem >= lo ? 'mid' : 'low'); });
+  var rows = all.filter(function(s){
+    if (q && (s.a.name + ' ' + s.a.city).toLowerCase().indexOf(q) < 0) return false;
+    if (f.agSt !== 'all' && s.state !== f.agSt) return false;
+    if (f.agReg !== 'all' && s.a.region !== f.agReg) return false;
+    if (f.agRev !== 'all' && s.band !== f.agRev) return false;
+    if (f.agAcc === 'yes' && !s.a.access) return false; if (f.agAcc === 'no' && s.a.access) return false;
+    return true;
+  });
+  var key = { prem: function(s){ return -s.prem; }, open: function(s){ return -s.open; }, agents: function(s){ return -s.agents; }, conv: function(s){ return -(s.opps ? s.issuedOpps / s.opps : 0); }, name: function(s){ return s.a.name; } }[f.agSort] || function(s){ return -s.prem; };
+  rows.sort(function(x, y){ var a = key(x), b = key(y); return a < b ? -1 : (a > b ? 1 : 0); });
+  return { rows: rows, all: all, net: bfSum(all, function(s){ return s.prem; }) || 1 };
+}
+function bfAgSel(key, label, opts) { var f = bfAgFilters(); return '<label class="bfag-f"><span>' + label + '</span><select class="bfx-sel" onchange="bfSetF(\'' + key + '\',this.value)">' + opts.map(function(o){ return '<option value="' + o[0] + '"' + (f[key] === o[0] ? ' selected' : '') + '>' + o[1] + '</option>'; }).join('') + '</select></label>'; }
+function bfAgCard(s, net, idx) {
+  var a = s.a, pal = ['#1d9e75', '#c8794a', '#5a7fb0', '#8a6fa8', '#b89a3e'], col = pal[BF_AGENCIES.indexOf(a) % pal.length], ini = a.name.split(' ').slice(0, 2).map(function(w){ return w[0]; }).join(''), share = Math.round(s.prem / net * 100), conv = s.opps ? Math.round(s.issuedOpps / s.opps * 100) : 0;
+  return '<div class="bfag-card" style="--ac:' + col + '" ' + bfOc('bfOpenAgency', a.id) + ' role="button" tabindex="0"><div class="bfag-top"><span class="bfag-mark">' + bfEsc(ini) + '</span><div class="bfag-nm"><b>' + bfEsc(a.name) + '</b><i>' + bfEsc(a.city) + '</i></div><span class="bfx-st ' + (a.access ? 'submitted' : 'dismissed') + '">' + (a.access ? 'Access agreed' : 'Totals only') + '</span></div>' +
+    '<div class="bfag-chips"><span>' + bfEsc(a.region) + '</span><span>' + bfEsc(s.state) + '</span><span>' + s.agents + ' agents</span></div>' +
+    '<div class="bfag-big"><div class="l">Premium written, 12 months</div><div class="v">' + bfMoneyK(s.prem) + '</div><div class="bfag-share"><i style="width:' + Math.max(3, share) + '%"></i></div><div class="n">' + share + '% of the network &middot; ' + s.sold + ' policies</div></div>' +
+    '<div class="bfag-grid"><div><span>Households</span><b>' + s.clients + '</b></div><div><span>Open opportunities</span><b>' + s.open + '</b></div><div><span>In play</span><b>' + bfMoneyK(s.assets) + '</b></div><div><span>Issued rate</span><b>' + conv + '%</b></div></div>' +
+    '<div class="bfag-ft"><span>Profiles ' + s.complete + '% complete</span><span class="bfag-go">View agency &rarr;</span></div></div>';
+}
+BF_PAGES['bws:agencies'] = function() {
+  if (_bfv.agencyDetail) return bfAgencyDetail(_bfv.agencyDetail);
+  var f = bfAgFilters(), d = bfAgRows(), rows = d.rows, states = [], regs = [];
+  BF_AGENCIES.forEach(function(a){ if (states.indexOf(bfAgState(a)) < 0) states.push(bfAgState(a)); if (regs.indexOf(a.region) < 0) regs.push(a.region); });
+  var nF = (f.agQ ? 1 : 0) + ['agSt', 'agReg', 'agRev', 'agAcc'].filter(function(k){ return f[k] !== 'all'; }).length;
+  var bar = '<div class="bfag-bar"><div class="bfx-seg"><button class="' + (f.agV === 'cards' ? 'on' : '') + '" ' + bfOc('bfSetF', 'agV', 'cards') + '>Cards</button><button class="' + (f.agV === 'list' ? 'on' : '') + '" ' + bfOc('bfSetF', 'agV', 'list') + '>List</button></div>' +
+    '<input class="bfag-q" id="bf-agq" placeholder="Search agencies" value="' + bfEsc(f.agQ) + '" oninput="bfAgSearch(this.value)" aria-label="Search agencies">' +
+    bfAgSel('agSt', 'State', [['all', 'All states']].concat(states.sort().map(function(s){ return [s, s]; }))) + bfAgSel('agReg', 'Region', [['all', 'All regions']].concat(regs.sort().map(function(s){ return [s, s]; }))) +
+    bfAgSel('agRev', 'Premium written', [['all', 'Any'], ['high', 'Top third'], ['mid', 'Middle third'], ['low', 'Lower third']]) + bfAgSel('agAcc', 'Client records', [['all', 'Any'], ['yes', 'Access agreed'], ['no', 'Totals only']]) +
+    bfAgSel('agSort', 'Sort by', [['prem', 'Premium written'], ['open', 'Open opportunities'], ['conv', 'Issued rate'], ['agents', 'Agents'], ['name', 'Name']]) + (nF ? '<button class="bfx-btn" ' + bfOc('bfAgClear') + '>Clear ' + nF + ' filter' + (nF === 1 ? '' : 's') + '</button>' : '') + '</div>';
+  var tot = '<div class="bfx-kpis">' + bfKpi('Agencies shown', rows.length, 'of ' + BF_AGENCIES.length) + bfKpi('Premium written', bfMoneyK(bfSum(rows, function(s){ return s.prem; })), '12 months') + bfKpi('Agents', bfSum(rows, function(s){ return s.agents; }), bfSum(rows, function(s){ return s.clients; }) + ' households') + bfKpi('Open opportunities', bfSum(rows, function(s){ return s.open; }), bfMoneyK(bfSum(rows, function(s){ return s.assets; })) + ' in play') + '</div>';
+  var body;
+  if (!rows.length) body = '<div class="bfx-card"><div class="bfx-note">No agencies match these filters.</div></div>';
+  else if (f.agV === 'cards') body = '<div class="bfag-grid2">' + rows.map(function(s, i){ return bfAgCard(s, d.net, i); }).join('') + '</div>';
+  else body = '<div class="bfx-card"><div style="overflow-x:auto"><table class="bfx-tbl"><thead><tr><th>Agency</th><th>State</th><th>Region</th><th>Agents</th><th>Households</th><th>Open opportunities</th><th>Issued rate</th><th>Premium written</th><th>Client records</th></tr></thead><tbody>' + rows.map(function(s){ var a = s.a; return '<tr class="click" ' + bfOc('bfOpenAgency', a.id) + '><td><b>' + bfEsc(a.name) + '</b><div style="font-size:11px;color:var(--g500)">' + bfEsc(a.city) + '</div></td><td>' + s.state + '</td><td>' + bfEsc(a.region) + '</td><td>' + s.agents + '</td><td>' + s.clients + '</td><td>' + s.open + '<div style="font-size:11px;color:var(--g500)">' + bfMoneyK(s.assets) + ' in play</div></td><td>' + (s.opps ? Math.round(s.issuedOpps / s.opps * 100) : 0) + '%</td><td><b>' + bfMoney(s.prem) + '</b><div style="font-size:11px;color:var(--g500)">' + Math.round(s.prem / d.net * 100) + '% of network</div></td><td><span class="bfx-st ' + (a.access ? 'submitted' : 'dismissed') + '">' + (a.access ? 'Access agreed' : 'Totals only') + '</span></td></tr>'; }).join('') + '</tbody></table></div></div>';
+  return bfHead('Agencies', 'Participating agencies with their agents, households, opportunity pipeline and sales.') + bar + tot + body +
+    '<div class="bfx-note" style="margin-top:14px"><b>Access.</b> Brookfield sees agency-level totals for every participating agency. Client-level records open only where the agency has agreed to share them. Exactly what is shared still needs to be confirmed with Brookfield.</div>';
+};
+function bfAgSearch(v) { _bfv.f.agQ = v; var pos = v.length; bfRender(); var e = bfEl('bf-agq'); if (e && e.focus) { e.focus(); try { e.setSelectionRange(pos, pos); } catch (x) {} } }
+function bfAgClear() { var f = _bfv.f; f.agQ = ''; f.agSt = 'all'; f.agReg = 'all'; f.agRev = 'all'; f.agAcc = 'all'; bfRender(); }
 
 /* ── Brookfield boot ── */
 function bfInit() {
