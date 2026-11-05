@@ -242,6 +242,7 @@ html,body{height:100%;overflow:hidden;font-family:var(--font);color:var(--dark);
 .page-area::-webkit-scrollbar-thumb{background:var(--g300);border-radius:6px;border:2px solid var(--off)}
 .page-area::-webkit-scrollbar-thumb:hover{background:var(--g400)}
 .page{display:none}.page.active{display:block}
+body.bf-booting .sidebar,body.bf-booting .topbar,body.bf-booting .page-area{visibility:hidden}
 
 /* SHARED */
 .page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
@@ -1756,8 +1757,8 @@ body.dark-mode .tgt-rie-input{background:var(--g50)!important;color:var(--dark)!
 @font-face{font-family:'BFDollar';src:local('Inter'),local('Inter Regular'),local('Helvetica Neue'),local('Helvetica'),local('Arial');unicode-range:U+0024;font-weight:100 900}
 body.bf-theme:not(.dark-mode){
   --serif:'BFDollar','Newsreader','Source Serif 4',Georgia,'Times New Roman',serif;
-  --off:#f6f2e9;--white:#ffffff;
-  --g50:#fbf8f1;--g100:#f1ece0;--g200:#e4ddcc;--g300:#d0c8b3;--g400:#a0987f;
+  --off:#fbf9f4;--white:#ffffff;
+  --g50:#fdfcf8;--g100:#f6f2e8;--g200:#e8e1d1;--g300:#d0c8b3;--g400:#a0987f;
   --g500:#7a7260;--g600:#5c5546;--g700:#42392c;--g800:#2c261d;--dark:#241d14;
   --navy:#241d14;--navy2:#2c261d;
   -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
@@ -1771,7 +1772,7 @@ body.bf-theme .bfx-sel{border:1px solid var(--g200);border-radius:8px;padding:6p
 /* Ask Ace and Ace Insights are hidden for now (remove this rule to bring them back) */
 body.bf-theme .ace-tb-btn,body.bf-theme #ace-insights-fab,body.bf-theme .ace-insights-fab,body.bf-theme #ace-dialog,body.bf-theme .ace-dialog{display:none!important}
 /* Sidebar: light and warm */
-body.bf-theme:not(.dark-mode) .sidebar{background:#ece5d4;border-right:1px solid var(--g200)}
+body.bf-theme:not(.dark-mode) .sidebar{background:#f1ecdf;border-right:1px solid var(--g200)}
 body.bf-theme:not(.dark-mode) .sb-logo{border-bottom:1px solid var(--g200)}
 body.bf-theme:not(.dark-mode) .sb-logo svg path{fill:var(--dark)}
 body.bf-theme:not(.dark-mode) .sb-item:hover{background:rgba(36,29,20,.07)}
@@ -2085,7 +2086,7 @@ body.bf-theme #user-switcher-panel{width:300px!important}body.bf-theme #trial-av
 
 /* production core */
 .bfx-bdg{display:inline-block;vertical-align:middle;font-family:var(--font);font-size:10px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;border-radius:999px;padding:2px 8px;margin-left:6px;position:relative;top:-2px}
-.bfx-bdg.fnd{background:rgba(29,158,117,.12);color:var(--teal2)}.bfx-bdg.cst{background:#f4e6d8;color:#8a4a22}
+.bfx-bdg.fnd{background:rgba(29,158,117,.12);color:var(--teal2)}.bfx-bdg.cst{background:#f3e9d6;color:#8a4a22}
 .bfx-sech{margin:22px 0 10px}.bfx-sech .t{font-family:var(--serif,Georgia,serif);font-size:21px;font-weight:500;letter-spacing:-.2px}.bfx-sech .s{font-size:12.5px;color:var(--g500);margin-top:2px}
 .bfx-st.risk{background:rgba(239,68,68,.1);color:#dc2626}
 .bfg-bar{flex:1;height:8px;background:var(--g100);border-radius:6px;overflow:hidden;min-width:70px}.bfg-bar i{display:block;height:100%;border-radius:6px}
@@ -2153,6 +2154,7 @@ body.bf-theme select:not([multiple]):focus{outline:0;border-color:var(--teal);bo
 .bfq{position:relative}
 .bfq-btn{display:inline-flex;align-items:center;gap:6px;background:var(--teal);color:#fff;border:none;border-radius:10px;padding:7px 14px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:var(--font)}.bfq-btn:hover{background:var(--teal2)}
 .bfq-menu{position:absolute;left:0;top:calc(100% + 6px);z-index:700;min-width:190px;background:#fff;border:1px solid var(--g200);border-radius:12px;box-shadow:0 12px 32px rgba(36,29,20,.14);padding:6px}
+.bfq-menu{left:auto!important;right:0}
 .bfq-h{font-family:var(--mono);font-size:10px;letter-spacing:.8px;text-transform:uppercase;color:var(--g400);padding:8px 10px 4px}
 .bfq-i{display:block;width:100%;text-align:left;border:none;background:none;border-radius:8px;padding:8px 10px;font-size:13px;cursor:pointer;font-family:var(--font);color:var(--dark)}.bfq-i:hover{background:var(--g100)}
 
@@ -2166,7 +2168,7 @@ body.bf-theme select:not([multiple]):focus{outline:0;border-color:var(--teal);bo
 @media(max-width:1000px){.bfx-kpis{grid-template-columns:repeat(2,1fr)}.bfx-row{grid-template-columns:1fr}.bfr-body{grid-template-columns:1fr}}
 </style>
 </head>
-<body class="bf-theme">
+<body class="bf-theme bf-booting">
 <a href="#main-content" class="skip-link">Skip to main content</a>
 
 <!-- Trial banner — hidden from this mockup -->
@@ -2422,7 +2424,6 @@ body.bf-theme select:not([multiple]):focus{outline:0;border-color:var(--teal);bo
 <div class="main">
 <header class="topbar" role="banner" aria-label="Application toolbar">
   <div class="tb-left">
-    <div id="bf-quick" data-nolabel="1" style="display:flex;align-items:center"></div>
     <button class="tb-btn btn-teal" onclick="openShortcutMenu(event)" aria-haspopup="true" aria-label="Quick add new item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Quick Add</button>
     <button class="tb-btn btn-dark" onclick="openTargetsModal()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Today's Outreach</button>
     <!-- Custom shortcut slot -->
@@ -2445,6 +2446,7 @@ body.bf-theme select:not([multiple]):focus{outline:0;border-color:var(--teal);bo
       <button class="gt-ext-btn" onclick="gtOpenExtend()">Extend your trial</button>
     </div>
     <button class="ace-tb-btn" onclick="openAskAce()" aria-label="Open Ask Ace AI Coach" aria-haspopup="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3L13.5 8.5L19 10L13.5 11.5L12 17L10.5 11.5L5 10L10.5 8.5L12 3Z"/><path d="M5 3L5.75 5.25L8 6L5.75 6.75L5 9L4.25 6.75L2 6L4.25 5.25L5 3Z"/><path d="M19 14L19.5 15.5L21 16L19.5 16.5L19 18L18.5 16.5L17 16L18.5 15.5L19 14Z"/></svg> Ask Ace</button>
+    <div id="bf-quick" data-nolabel="1" style="display:flex;align-items:center"></div>
     <div class="tb-icon-btn" onclick="togglePanel('cal-panel')" title="Calendar" role="button" aria-label="Open calendar" aria-haspopup="true" tabindex="0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
     <div class="tb-icon-btn" onclick="togglePanel('notif-panel')" title="Notifications" role="button" aria-label="Open notifications" aria-haspopup="true" tabindex="0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><div class="notif-dot" aria-hidden="true"></div><span class="bf-nbadge" id="bf-nbadge" style="display:none"></span></div>
     <!-- User switcher -->
@@ -2569,7 +2571,7 @@ body.bf-theme select:not([multiple]):focus{outline:0;border-color:var(--teal);bo
 </header>
 <div class="page-area" id="main-content" role="main" tabindex="-1">
 <!-- DASHBOARD -->
-<div id="page-dashboard" class="page active">
+<div id="page-dashboard" class="page">
 <div class="page-header">
   <div class="page-title">Dashboard</div>
   <div class="page-subtitle" id="dash-subtitle">Good morning, Sagar — here is your team snapshot</div>
@@ -4065,7 +4067,7 @@ body.bf-theme select:not([multiple]):focus{outline:0;border-color:var(--teal);bo
 </div>
 
 <!-- CONTACTS / PEOPLE + ORGS -->
-<div id="page-bf-app" class="page" data-nolabel="1"><div id="bf-root" class="bfx"></div></div>
+<div id="page-bf-app" class="page active" data-nolabel="1"><div id="bf-root" class="bfx"></div></div>
 <div id="page-contacts" class="page">
 <div class="page-header">
   <div>
@@ -12239,7 +12241,7 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function() {
   try {
     var lastPage = localStorage.getItem('goalscom_lastPage');
-    if (lastPage && lastPage !== 'dashboard' && document.getElementById('page-' + lastPage)) {
+    if (lastPage && lastPage !== 'dashboard' && !document.body.classList.contains('bf-theme') && document.getElementById('page-' + lastPage)) {
       showPage(lastPage);
     }
   } catch (e) {}
@@ -33031,7 +33033,7 @@ function bfReadOnly(html) {
 
 /* ── Reports for every view ── */
 var BF_RTABS = {
-  agent: [['score', 'Scorecard'], ['funnel', 'Funnel and leakage'], ['quality', 'Data quality'], ['audit', 'Audit trail'], ['scan', 'Book scan']],
+  agent: [['quality', 'Data quality'], ['scan', 'Book scan']],
   agency: [['overview', 'Overview'], ['score', 'Scorecard'], ['funnel', 'Funnel and leakage'], ['quality', 'Data quality'], ['audit', 'Audit trail'], ['scan', 'Book scan']]
 };
 function bfReportBody(k) { return k === 'score' ? bfScoreTab() : (k === 'funnel' ? bfFunnelTab() : (k === 'quality' ? bfQualityTab() : (k === 'audit' ? bfAuditTab() : bfScanBody()))); }
@@ -33042,7 +33044,7 @@ function bfReportsFor(t) {
   if (f.rTab === 'overview') return _bfAgencyReportsBase().replace('<!--bf-head-end-->', '<!--bf-head-end-->' + bfTabs('rTab', tabs, f.rTab));
   var body = bfReportBody(f.rTab);
   if (f.rTab === 'score') body = bfReadOnly(body);
-  return bfHead('Reports', t === 'agent' ? 'How your annuity work is moving, how complete your data is, and what happened on each household.' : 'Scorecard, funnel, data quality and audit trail for your agency.') + bfTabs('rTab', tabs, f.rTab) + body;
+  return bfHead('Reports', t === 'agent' ? 'Which households need their profile completed, and a printable summary of your book.' : 'Scorecard, funnel, data quality and audit trail for your agency.') + bfTabs('rTab', tabs, f.rTab) + body;
 }
 BF_PAGES['agent:reports'] = function() { return bfReportsFor('agent'); };
 BF_PAGES['agency:reports'] = function() { return bfReportsFor('agency'); };
@@ -33372,7 +33374,7 @@ function bfKPages() {
   var more = [
     ['Calendar, full screen', 'calendar events schedule', ['bfCalFull']], ['Notifications', 'alerts bell updates', ['togglePanel', 'notif-panel']]
   ];
-  if (t === 'agent') more.push(['Import households from CSV', 'upload csv import leads', ['bfGo', 'import']], ['Quarterly book scan', 'scan printable quarterly', ['bfGo', 'scan']], ['Opportunity Inbox', 'hot warm watch review', ['bfGo', 'inbox']], ['Reports: Scorecard', 'reports score', ['bfJump', 'reports', 'rTab=score']], ['Reports: Audit trail', 'audit log history', ['bfJump', 'reports', 'rTab=audit']]);
+  if (t === 'agent') more.push(['Import households from CSV', 'upload csv import leads', ['bfGo', 'import']], ['Quarterly book scan', 'scan printable quarterly', ['bfGo', 'scan']], ['Opportunity Inbox', 'hot warm watch review', ['bfGo', 'inbox']], ['Reports: Data quality', 'completeness missing profile', ['bfJump', 'reports', 'rTab=quality']]);
   if (t === 'agency') more.push(['Import households from CSV', 'upload csv import leads', ['bfGo', 'import']], ['Quarterly book scan', 'scan printable quarterly', ['bfGo', 'scan']], ['Principal review queue', 'approve review large cases', ['bfGo', 'review']], ['Reports: Funnel and leakage', 'funnel leak conversion', ['bfJump', 'reports', 'rTab=funnel']], ['Reports: Audit trail', 'audit log history', ['bfJump', 'reports', 'rTab=audit']]);
   if (t === 'bws') more.push(['Reports: Revenue at risk', 'persistency chargeback licensing', ['bfJump', 'reports', 'rTab=risk']], ['Reports: Pilot scorecard', 'targets pilot score', ['bfJump', 'reports', 'rTab=score']], ['Reports: Audit trail', 'audit log history', ['bfJump', 'reports', 'rTab=audit']], ['Reports: Data quality', 'completeness missing', ['bfJump', 'reports', 'rTab=quality']], ['Reports: Funnel and leakage', 'funnel leak conversion', ['bfJump', 'reports', 'rTab=funnel']], ['Quarterly book scan', 'scan printable quarterly', ['bfJump', 'reports', 'rTab=scan']], ['Rules: Triggers and tiers', 'thresholds hot warm watch points', ['bfJump', 'rules', 'rlTab=triggers']], ['Rules: State availability', 'states products available', ['bfJump', 'rules', 'rlTab=states']], ['Rules: Compliance', 'quiet hours consent disclosure suitability', ['bfJump', 'rules', 'rlTab=compliance']], ['Rules: Products', 'catalog annuity products', ['bfJump', 'rules', 'rlTab=products']]);
   more.forEach(function(m){ out.push({ t: m[0], s: 'Page', k: m[1], go: m[2] }); });
@@ -33567,6 +33569,413 @@ function bfEsc2(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;
   document.head.appendChild(st);
 })();
 
+/* ═══ Brookfield demo: Earnings (Commissions, Bonuses, Contests, Forecast) and Documents (Contracts, Invoices, Payments) ═══ */
+/* Structure follows the original Goals.com Commissions, Bonuses, Contests, Forecast and Marketing pages, rebuilt on Brookfield data. All amounts are illustrative. */
+var BF_RATE_LOB = { 'Annuity': 0.055, 'Life': 0.35, 'P&C': 0.12, 'Medicare': 0.08 };
+var BF_RATE_PROD = { 'BWS Multi-Year Guarantee': 0.05, 'BWS Fixed Index Annuity': 0.065, 'BWS Income Annuity': 0.045 };
+var BF_IMO_SHARE = 0.15;   /* Brookfield keeps 15% of the gross commission and passes 85% to the agency */
+function bfRate(p) { return BF_RATE_PROD[p.product] != null ? BF_RATE_PROD[p.product] : (BF_RATE_LOB[p.lob] || 0.06); }
+function bfSplit(agId) { return (70 + bfHash(agId + 'sp') % 16) / 100; }
+function bfGross(p) { return (p.premium || 0) * bfRate(p); }
+function bfCommOf(p) {
+  var g = bfGross(p), t = _bfv.tier;
+  if (t === 'agent') return g * (1 - BF_IMO_SHARE) * bfSplit(p.agency);
+  if (t === 'agency') return g * (1 - BF_IMO_SHARE);
+  return g * BF_IMO_SHARE;
+}
+function bfCommLabel() { return _bfv.tier === 'agent' ? 'Your commission' : (_bfv.tier === 'agency' ? 'Agency commission' : 'Brookfield override'); }
+function bfCommPols() { return bfScope().policies.filter(function(p){ return (p.status === 'Active' || p.status === 'Lapsed') && p.premium; }); }
+function bfSigned(p) { return p.status === 'Lapsed' ? -bfCommOf(p) * 0.6 : bfCommOf(p); }
+function bfMonthKey(ms) { var d = new Date(ms); return d.getFullYear() * 12 + d.getMonth(); }
+var BF_MN = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+function bfMonthName(k) { return BF_MN[k % 12] + ' ' + Math.floor(k / 12); }
+function bfEarnMonths(n) {
+  var cur = bfMonthKey(BF_T), pols = bfCommPols(), out = [];
+  for (var i = n - 1; i >= 0; i--) {
+    var k = cur - i, ps = pols.filter(function(p){ return bfMonthKey(p.effective) === k; });
+    var earned = bfSum(ps.filter(function(p){ return p.status === 'Active'; }), bfCommOf), cb = bfSum(ps.filter(function(p){ return p.status === 'Lapsed'; }), function(p){ return bfCommOf(p) * 0.6; });
+    out.push({ k: k, n: ps.length, prem: bfSum(ps, function(p){ return p.premium; }), earned: earned, cb: cb, net: earned - cb, paid: i > 0 });
+  }
+  return out;
+}
+function bfNextPay() { var d = new Date(BF_T), e = new Date(d.getFullYear(), d.getMonth() + 1, 0); return BF_MN[e.getMonth()] + ' ' + e.getDate(); }
+function bfEarnTabs() { return [['comm', 'Commissions'], ['bonus', 'Bonuses'], ['contest', 'Contests'], ['fcst', 'Forecast']]; }
+
+/* Commissions */
+function bfCommTab() {
+  var t = _bfv.tier, ms = bfEarnMonths(6), cur = ms[ms.length - 1], pols = bfCommPols(), yr = new Date(BF_T).getFullYear();
+  var ytd = pols.filter(function(p){ return new Date(p.effective).getFullYear() === yr; }), ytdNet = bfSum(ytd, bfSigned), ytdPrem = bfSum(ytd, function(p){ return p.premium; });
+  var kp = '<div class="bfx-kpis">' + bfKpi('This month', bfMoney(Math.round(cur.net)), cur.n + ' policies written') + bfKpi('Year to date', bfMoney(Math.round(ytdNet)), 'After chargebacks') + bfKpi('Average rate', (ytdPrem ? Math.round(bfSum(ytd, bfGross) / ytdPrem * 1000) / 10 : 0) + '%', 'Gross, before splits') + bfKpi('Next payout', bfNextPay(), 'Monthly, by direct deposit') + '</div>';
+  var mrows = ms.slice().reverse().map(function(m){ return '<tr><td><b>' + bfMonthName(m.k) + '</b></td><td>' + m.n + '</td><td>' + bfMoneyK(m.prem) + '</td><td>' + bfMoney(Math.round(m.earned)) + '</td><td>' + (m.cb ? '<span style="color:#dc2626">-' + bfMoney(Math.round(m.cb)) + '</span>' : '<span style="color:var(--g400)">None</span>') + '</td><td><b>' + bfMoney(Math.round(m.net)) + '</b></td><td><span class="bfx-st ' + (m.paid ? 'submitted' : 'new') + '">' + (m.paid ? 'Paid' : 'Scheduled') + '</span></td></tr>'; });
+  var monthly = '<div class="bfx-card"><div style="display:flex;justify-content:space-between;align-items:center"><h3>Monthly breakdown</h3><button class="bfx-btn" ' + bfOc('bfCommExport') + '>Export CSV</button></div><table class="bfx-tbl"><thead><tr><th>Month</th><th>Policies</th><th>Premium</th><th>' + bfCommLabel() + '</th><th>Chargebacks</th><th>Net</th><th>Status</th></tr></thead><tbody>' + mrows.join('') + '</tbody></table></div>';
+  var bp = {}; ytd.forEach(function(p){ var k = p.lob === 'Annuity' ? p.product : p.lob; bp[k] = (bp[k] || 0) + bfSigned(p); });
+  var keys = Object.keys(bp).sort(function(a, b){ return bp[b] - bp[a]; }), mx = Math.max.apply(null, keys.map(function(k){ return Math.abs(bp[k]); }).concat([1]));
+  var byProd = '<div class="bfx-card"><h3>By product, this year</h3>' + keys.map(function(k){ return bfBar(k, Math.abs(bp[k]), mx, bfMoneyK(bp[k])); }).join('') + '<div style="font-size:11.5px;color:var(--g500);margin-top:8px">Annuity rates: Multi-Year Guarantee 5.0%, Fixed Index 6.5%, Income 4.5%. Life, property and casualty, and Medicare use their own rates.</div></div>';
+  var who = '';
+  if (t !== 'agent') {
+    var grp = t === 'agency' ? bfScope().agents : BF_AGENCIES, rows = grp.map(function(g) {
+      var ps = ytd.filter(function(p){ return t === 'agency' ? p.agent === g.id : p.agency === g.id; });
+      return { n: g.name, sub: t === 'agency' ? bfAgency(g.ag).name : (g.region || ''), prem: bfSum(ps, function(p){ return p.premium; }), net: bfSum(ps, bfSigned), sp: t === 'agency' ? Math.round(bfSplit(g.id) * 100) : Math.round((1 - BF_IMO_SHARE) * 100) };
+    }).sort(function(a, b){ return b.net - a.net; });
+    who = '<div class="bfx-card"><h3>' + (t === 'agency' ? 'By agent, this year' : 'By agency, this year') + '</h3><div style="font-size:12.5px;color:var(--g500);margin-bottom:8px">' + (t === 'agency' ? 'Each agent keeps the split shown. The agency keeps the rest.' : 'Brookfield keeps 15% of the gross commission and passes 85% to the agency.') + '</div><table class="bfx-tbl"><thead><tr><th>' + (t === 'agency' ? 'Agent' : 'Agency') + '</th><th>Premium</th><th>' + (t === 'agency' ? 'Split' : 'Passed on') + '</th><th>' + bfCommLabel() + '</th></tr></thead><tbody>' + rows.map(function(r){ return '<tr><td><b>' + bfEsc(r.n) + '</b></td><td>' + bfMoneyK(r.prem) + '</td><td>' + r.sp + '%</td><td>' + bfMoney(Math.round(r.net)) + '</td></tr>'; }).join('') + '</tbody></table></div>';
+  }
+  var recent = pols.slice().sort(function(a, b){ return b.effective - a.effective; }).slice(0, 12), cl = BF.byId;
+  var lines = '<div class="bfx-card"><h3>Recent commission lines</h3><table class="bfx-tbl"><thead><tr><th>Date</th><th>Household</th><th>Product</th><th>Premium</th><th>Rate</th><th>' + bfCommLabel() + '</th><th>Status</th></tr></thead><tbody>' + recent.map(function(p){ var c = cl[p.client]; return '<tr><td>' + bfFmtDay(p.effective) + '</td><td><b>' + (c ? bfName(c) : '') + '</b></td><td>' + bfEsc(p.lob === 'Annuity' ? p.product : p.lob + ' · ' + p.product) + '</td><td>' + bfMoney(p.premium) + '</td><td>' + (Math.round(bfRate(p) * 1000) / 10) + '%</td><td>' + (p.status === 'Lapsed' ? '<span style="color:#dc2626">-' + bfMoney(Math.round(bfCommOf(p) * 0.6)) + '</span>' : bfMoney(Math.round(bfCommOf(p)))) + '</td><td><span class="bfx-st ' + (p.status === 'Lapsed' ? 'risk' : 'submitted') + '">' + (p.status === 'Lapsed' ? 'Chargeback' : 'Earned') + '</span></td></tr>'; }).join('') + '</tbody></table></div>';
+  return kp + bfRow2(monthly, byProd) + who + lines;
+}
+function bfFmtDay(ms) { var d = new Date(ms); return bfPad(d.getMonth() + 1) + '/' + bfPad(d.getDate()) + '/' + d.getFullYear(); }
+function bfCommExport() {
+  var rows = [['Date', 'Household', 'Product', 'Premium', 'Rate', bfCommLabel(), 'Status']];
+  bfCommPols().forEach(function(p){ var c = BF.byId[p.client]; rows.push([bfFmtDay(p.effective), c ? (bfCanSeeClient(c) ? c.name : c.code) : '', p.product, p.premium, (bfRate(p) * 100).toFixed(1) + '%', Math.round(bfSigned(p)), p.status === 'Lapsed' ? 'Chargeback' : 'Earned']); });
+  bfDownload('commissions.csv', rows.map(function(r){ return r.map(bfCsvCell).join(','); }).join('\n')); showToast('Commissions exported');
+}
+
+/* Bonuses */
+var BF_BONUS_TIERS = [[50000, 500], [100000, 1500], [200000, 4000]];
+function bfBonusOf(a) { var v = bfAgentPlaced(a), earned = 0, next = null; BF_BONUS_TIERS.forEach(function(t){ if (v >= t[0]) earned = t[1]; else if (!next) next = t; }); return { v: v, earned: earned, next: next }; }
+function bfBonusTab() {
+  var ag = bfScope().agents, rows = ag.map(function(a){ return { a: a, b: bfBonusOf(a) }; }).sort(function(x, y){ return y.b.v - x.b.v; });
+  var awarded = bfSum(rows, function(r){ return r.b.earned; }), pend = bfSum(rows.filter(function(r){ return bfHash(r.a.id + 'bn') % 3 === 0; }), function(r){ return r.b.earned; }), hit = rows.filter(function(r){ return r.b.earned > 0; }).length;
+  var kp = '<div class="bfx-kpis">' + bfKpi('Total awarded', bfMoney(awarded), 'Tiers reached this year') + bfKpi('Pending payout', bfMoney(pend), 'Paid with the next run') + bfKpi('Producers on a tier', hit, 'of ' + ag.length) + bfKpi('Average bonus', bfMoney(Math.round(awarded / Math.max(1, ag.length))), 'Per producer') + '</div>';
+  var prog = '<div class="bfx-card"><h3>Placed premium bonus</h3><div style="font-size:12.5px;color:var(--g500);margin-bottom:10px">Paid on placed premium over the last 12 months: ' + BF_BONUS_TIERS.map(function(t){ return bfMoneyK(t[0]) + ' earns ' + bfMoney(t[1]); }).join(', ') + '.</div>' +
+    '<table class="bfx-tbl"><thead><tr><th>Producer</th><th>Placed premium</th><th>Progress to next tier</th><th>Bonus earned</th></tr></thead><tbody>' + rows.map(function(r){ var nx = r.b.next, pc = nx ? Math.min(100, Math.round(r.b.v / nx[0] * 100)) : 100; return '<tr><td><b>' + bfEsc(r.a.name) + '</b>' + (_bfv.tier === 'bws' ? '<div class="bfo-sub">' + bfEsc(bfAgency(r.a.ag).name) + '</div>' : '') + '</td><td>' + bfMoneyK(r.b.v) + '</td><td style="width:240px"><div style="height:8px;background:var(--g100);border-radius:6px;overflow:hidden"><div style="height:100%;width:' + pc + '%;background:var(--teal)"></div></div><div class="bfo-sub">' + (nx ? pc + '% of ' + bfMoneyK(nx[0]) + ' for ' + bfMoney(nx[1]) : 'Top tier reached') + '</div></td><td><b>' + (r.b.earned ? bfMoney(r.b.earned) : '<span style="color:var(--g400)">None yet</span>') + '</b></td></tr>'; }).join('') + '</tbody></table></div>';
+  return kp + prog;
+}
+
+/* Contests */
+var BF_CONTESTS = [{ id: 'k1', name: 'Appointment Challenge', desc: 'Most annuity appointments set this quarter', prize: 2000, left: 26, key: 'appt' }, { id: 'k2', name: 'Placed Premium Race', desc: 'Most placed premium in the last 90 days', prize: 3500, left: 41, key: 'prem' }];
+function bfContestScore(c, a) {
+  if (c.key === 'appt') return BF.opps.filter(function(o){ return o.agent === a.id && BF_OPP_STAGES.indexOf(o.status) >= 3; }).length;
+  return bfPlaced(BF.policies.filter(function(p){ return p.agent === a.id; }), 90);
+}
+function bfContestTab() {
+  var ag = bfScope().agents, tot = bfSum(BF_CONTESTS, function(c){ return c.prize; });
+  var kp = '<div class="bfx-kpis">' + bfKpi('Active contests', BF_CONTESTS.length, 'Network wide') + bfKpi('Prize pool', bfMoney(tot), 'Funded by Brookfield') + bfKpi('Participants', ag.length, 'Producers in view') + bfKpi('Days to deadline', Math.min.apply(null, BF_CONTESTS.map(function(c){ return c.left; })), 'Next contest to close') + '</div>';
+  var cards = BF_CONTESTS.map(function(c) {
+    var rk = ag.map(function(a){ return { a: a, v: bfContestScore(c, a) }; }).sort(function(x, y){ return y.v - x.v; }), mx = Math.max(1, rk[0] ? rk[0].v : 1), fmt = c.key === 'appt' ? function(v){ return v + ' appointments'; } : bfMoneyK;
+    return '<div class="bfx-card"><div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start"><div><h3 style="margin-bottom:4px">' + c.name + '</h3><div style="font-size:12.5px;color:var(--g500)">' + c.desc + '</div></div><span class="bfx-chip ret">' + c.left + ' days left</span></div><div style="font-size:12px;color:var(--g600);margin:10px 0">Prize ' + bfMoney(c.prize) + '</div>' +
+      rk.slice(0, 7).map(function(r, i){ return bfBar((i + 1) + '. ' + r.a.name, r.v, mx, fmt(r.v), i === 0 ? 'var(--teal2)' : null); }).join('') + '</div>';
+  });
+  return kp + bfRow2(cards[0], cards[1]);
+}
+
+/* Forecast */
+var BF_PROB = { identified: 0.05, reviewed: 0.1, contacted: 0.2, appointment: 0.35, illustration: 0.55, application: 0.8, issued: 1 };
+var BF_CLOSE_DAYS = { application: 30, illustration: 60, appointment: 90 };
+function bfFcstTab() {
+  var S = bfScope(), op = S.opps.filter(bfOppOpen), t = _bfv.tier;
+  var w = function(o){ return bfOppAssets(o) * (BF_PROB[o.status] || 0); };
+  var weighted = bfSum(op, w), in90 = bfSum(op.filter(function(o){ return BF_CLOSE_DAYS[o.status]; }), w), rate = BF_RATE_PROD['BWS Fixed Index Annuity'];
+  var issued90 = bfPlaced(S.policies.filter(function(p){ return p.lob === 'Annuity'; }), 90);
+  var kp = '<div class="bfx-kpis">' + bfKpi('Weighted pipeline', bfMoneyK(weighted), op.length + ' open opportunities') + bfKpi('Expected in 90 days', bfMoneyK(in90), 'Appointment stage or later') + bfKpi('Issued, last 90 days', bfMoneyK(issued90), 'Annuity premium') + bfKpi('Expected commission', bfMoneyK(in90 * rate * (t === 'agent' ? (1 - BF_IMO_SHARE) * 0.78 : (t === 'agency' ? 1 - BF_IMO_SHARE : BF_IMO_SHARE))), 'At the Fixed Index rate') + '</div>';
+  var stg = BF_OPP_STAGES.slice(0, 6).map(function(s){ var os = op.filter(function(o){ return o.status === s; }); return { s: s, n: os.length, v: bfSum(os, bfOppAssets), w: bfSum(os, w) }; }), mx = Math.max.apply(null, stg.map(function(x){ return x.v; }).concat([1]));
+  var bars = '<div class="bfx-card"><h3>Pipeline by stage</h3><div style="font-size:12.5px;color:var(--g500);margin-bottom:8px">Assets in play, and what each stage is expected to close.</div>' + stg.map(function(x){ return bfBar(BF_STAGE_LABEL[x.s] + ' · ' + Math.round(BF_PROB[x.s] * 100) + '%', x.v, mx, bfMoneyK(x.v) + ' <span style="color:var(--g400)">→ ' + bfMoneyK(x.w) + '</span>'); }).join('') + '</div>';
+  var grp = t === 'agent' ? null : (t === 'agency' ? S.agents : BF_AGENCIES);
+  var who = grp ? '<div class="bfx-card"><h3>' + (t === 'agency' ? 'By producer' : 'By agency') + '</h3><table class="bfx-tbl"><thead><tr><th>' + (t === 'agency' ? 'Producer' : 'Agency') + '</th><th>Open</th><th>Assets in play</th><th>Weighted</th></tr></thead><tbody>' + grp.map(function(g){ var os = op.filter(function(o){ return t === 'agency' ? o.agent === g.id : o.agency === g.id; }); return { n: g.name, c: os.length, v: bfSum(os, bfOppAssets), w: bfSum(os, w) }; }).sort(function(a, b){ return b.w - a.w; }).map(function(r){ return '<tr><td><b>' + bfEsc(r.n) + '</b></td><td>' + r.c + '</td><td>' + bfMoneyK(r.v) + '</td><td>' + bfMoneyK(r.w) + '</td></tr>'; }).join('') + '</tbody></table></div>' : '';
+  return kp + bars + who + '<div class="bfx-note">Stage probabilities are illustrative and can be tuned once Brookfield shares real conversion history.</div>';
+}
+
+BF_PAGES['agent:earn'] = BF_PAGES['agency:earn'] = BF_PAGES['bws:earn'] = function() {
+  var f = _bfv.f, tabs = bfEarnTabs(); if (!tabs.some(function(x){ return x[0] === f.eTab; })) f.eTab = 'comm';
+  var body = f.eTab === 'comm' ? bfCommTab() : (f.eTab === 'bonus' ? bfBonusTab() : (f.eTab === 'contest' ? bfContestTab() : bfFcstTab()));
+  return bfHead('Earnings', 'Commissions, bonuses, contests and the premium forecast. Amounts are illustrative.') + bfTabs('eTab', tabs, f.eTab) + body;
+};
+
+/* Documents: contracts, invoices, payments */
+function bfDocTabs() { return [['contracts', 'Contracts'], ['invoices', 'Invoices'], ['payments', 'Payments']]; }
+function bfDocStatus(s) { return '<span class="bfx-st ' + ({ Signed: 'submitted', Paid: 'submitted', Awaiting: 'new', Due: 'new', Expiring: 'new', Overdue: 'risk' }[s] || 'new') + '">' + s + '</span>'; }
+function bfContractRows() {
+  var t = _bfv.tier, S = bfScope(), rows = [];
+  var add = function(party, sub, type, status, ms, ctx) { rows.push({ party: party, sub: sub, type: type, status: status, when: ms }); };
+  var stat = function(id, k) { var h = bfHash(id + k) % 20; return h === 0 ? 'Awaiting' : (h < 4 ? 'Expiring' : 'Signed'); };
+  if (t !== 'agent') {
+    (t === 'agency' ? [bfAgency(_bfv.agency)] : BF_AGENCIES).forEach(function(g){ add(g.name, g.city, 'Agency agreement with Brookfield', stat(g.id, 'ag'), bfAt(-(200 + bfHash(g.id) % 600))); add(g.name, g.city, 'Client data sharing addendum', g.access ? 'Signed' : 'Awaiting', bfAt(-(30 + bfHash(g.id + 'd') % 200))); });
+  }
+  S.agents.forEach(function(a){ var g = bfAgency(a.ag); add(a.name, g.name, 'Producer agreement', stat(a.id, 'pa'), bfAt(-(100 + bfHash(a.id) % 700))); add(a.name, g.name, 'BWS carrier appointment', (BF_LIC_OVR[a.id] && BF_LIC_OVR[a.id].appt) ? 'Awaiting' : 'Signed', bfAt(-(20 + bfHash(a.id + 'c') % 300))); });
+  return rows.sort(function(a, b){ return ({ Awaiting: 0, Expiring: 1, Signed: 2 }[a.status]) - ({ Awaiting: 0, Expiring: 1, Signed: 2 }[b.status]) || b.when - a.when; });
+}
+function bfContractsTab() {
+  var rows = bfContractRows(), pend = rows.filter(function(r){ return r.status === 'Awaiting'; }).length, exp = rows.filter(function(r){ return r.status === 'Expiring'; }).length;
+  var kp = '<div class="bfx-kpis">' + bfKpi('Contracts', rows.length, 'Agreements and appointments') + bfKpi('Signed', rows.filter(function(r){ return r.status === 'Signed'; }).length, 'In force') + bfKpi('Awaiting signature', pend, 'Follow up this week') + bfKpi('Expiring soon', exp, 'Renew within 60 days') + '</div>';
+  return kp + '<div class="bfx-card"><h3>Agreements</h3><table class="bfx-tbl"><thead><tr><th>Party</th><th>Agreement</th><th>Status</th><th>Date</th></tr></thead><tbody>' + rows.slice(0, 40).map(function(r){ return '<tr><td><b>' + bfEsc(r.party) + '</b><div class="bfo-sub">' + bfEsc(r.sub) + '</div></td><td>' + r.type + '</td><td>' + bfDocStatus(r.status) + '</td><td>' + bfFmtDay(r.when) + '</td></tr>'; }).join('') + '</tbody></table></div>';
+}
+var BF_INV_ITEMS = [['E&O coverage program', 210], ['Compliance and licensing platform', 95], ['Lead and data services', 140], ['Marketing materials', 60]];
+function bfInvoiceRows() {
+  var t = _bfv.tier, S = bfScope(), rows = [], n = 3000;
+  var payers = t === 'agent' ? [{ name: bfAgent(_bfv.agent).name, id: _bfv.agent, mult: 1 }] : (t === 'agency' ? S.agents.map(function(a){ return { name: a.name, id: a.id, mult: 1 }; }) : BF_AGENCIES.map(function(g){ return { name: g.name, id: g.id, mult: BF_AGENTS.filter(function(a){ return a.ag === g.id; }).length }; }));
+  payers.forEach(function(p) { BF_INV_ITEMS.slice(0, 2 + bfHash(p.id + 'iv') % 3).forEach(function(it, i) {
+    var due = bfAt(-30 + i * 14 + bfHash(p.id + i) % 25), h = bfHash(p.id + 'st' + i) % 10, st = due < BF_T ? (h < 2 ? 'Overdue' : 'Paid') : 'Due';
+    rows.push({ no: 'INV-' + (n++), to: p.name, what: it[0], amt: it[1] * p.mult, due: due, st: st });
+  }); });
+  return rows.sort(function(a, b){ return b.due - a.due; });
+}
+function bfInvoicesTab() {
+  var rows = bfInvoiceRows(), tot = function(f){ return bfSum(rows.filter(f), function(r){ return r.amt; }); };
+  var kp = '<div class="bfx-kpis">' + bfKpi('Billed', bfMoney(tot(function(){ return true; })), rows.length + ' invoices') + bfKpi('Paid', bfMoney(tot(function(r){ return r.st === 'Paid'; })), 'Collected') + bfKpi('Due', bfMoney(tot(function(r){ return r.st === 'Due'; })), 'Not yet past due') + bfKpi('Overdue', bfMoney(tot(function(r){ return r.st === 'Overdue'; })), 'Needs follow up') + '</div>';
+  return kp + '<div class="bfx-card"><h3>Invoices</h3><div style="font-size:12.5px;color:var(--g500);margin-bottom:8px">Program fees billed by Brookfield, such as E&O coverage, compliance platform, data services, and materials.</div><table class="bfx-tbl"><thead><tr><th>Invoice</th><th>Billed to</th><th>Description</th><th>Amount</th><th>Due</th><th>Status</th></tr></thead><tbody>' + rows.slice(0, 40).map(function(r){ return '<tr><td>' + r.no + '</td><td><b>' + bfEsc(r.to) + '</b></td><td>' + r.what + '</td><td>' + bfMoney(r.amt) + '</td><td>' + bfFmtDay(r.due) + '</td><td>' + bfDocStatus(r.st) + '</td></tr>'; }).join('') + '</tbody></table></div>';
+}
+function bfPaymentRows() {
+  var t = _bfv.tier, ms = bfEarnMonths(6).filter(function(m){ return m.paid; }), rows = [], S = bfScope();
+  var payees = t === 'agent' ? [{ name: bfAgent(_bfv.agent).name, f: function(p){ return p.agent === _bfv.agent; } }] : (t === 'agency' ? [{ name: bfAgency(_bfv.agency).name + ' (agency)', f: function(p){ return p.agency === _bfv.agency; } }] : BF_AGENCIES.map(function(g){ return { name: g.name, f: function(p){ return p.agency === g.id; } }; }));
+  ms.forEach(function(m) { payees.forEach(function(py) {
+    var ps = bfCommPols().filter(function(p){ return bfMonthKey(p.effective) === m.k && py.f(p); }); if (!ps.length) return;
+    var amt = bfSum(ps, bfSigned); var d = new Date(Math.floor(m.k / 12), (m.k % 12) + 1, 0).getTime();
+    rows.push({ when: d, to: py.name, memo: bfMonthName(m.k) + ' commissions', amt: amt, method: 'Direct deposit' });
+  }); });
+  return rows.sort(function(a, b){ return b.when - a.when; });
+}
+function bfPaymentsTab() {
+  var rows = bfPaymentRows(), tot = bfSum(rows, function(r){ return r.amt; }), last = rows[0] ? rows[0].amt : 0;
+  var kp = '<div class="bfx-kpis">' + bfKpi('Paid, last 6 months', bfMoneyK(tot), rows.length + ' payments') + bfKpi('Latest payout', bfMoney(Math.round(last)), rows[0] ? bfFmtDay(rows[0].when) : '') + bfKpi('Next payout', bfNextPay(), 'Monthly run') + bfKpi('Method', 'Direct deposit', 'Set up with each payee') + '</div>';
+  return kp + '<div class="bfx-card"><h3>Payment ledger</h3><table class="bfx-tbl"><thead><tr><th>Date</th><th>Payee</th><th>For</th><th>Method</th><th>Amount</th><th>Status</th></tr></thead><tbody>' + rows.slice(0, 40).map(function(r){ return '<tr><td>' + bfFmtDay(r.when) + '</td><td><b>' + bfEsc(r.to) + '</b></td><td>' + r.memo + '</td><td>' + r.method + '</td><td>' + (r.amt < 0 ? '<span style="color:#dc2626">-' + bfMoney(Math.round(-r.amt)) + '</span>' : bfMoney(Math.round(r.amt))) + '</td><td>' + bfDocStatus('Paid') + '</td></tr>'; }).join('') + '</tbody></table></div>';
+}
+BF_PAGES['agent:docs'] = BF_PAGES['agency:docs'] = BF_PAGES['bws:docs'] = function() {
+  var f = _bfv.f, tabs = bfDocTabs(); if (!tabs.some(function(x){ return x[0] === f.dcTab; })) f.dcTab = 'contracts';
+  var body = f.dcTab === 'contracts' ? bfContractsTab() : (f.dcTab === 'invoices' ? bfInvoicesTab() : bfPaymentsTab());
+  return bfHead('Documents', 'Agreements, program invoices and the commission payment ledger. Amounts are illustrative.') + bfTabs('dcTab', tabs, f.dcTab) + body;
+};
+(function() {
+  ['agent', 'agency', 'bws'].forEach(function(t) {
+    if (!BF_NAV[t].some(function(n){ return n[0] === 'earn'; })) BF_NAV[t].push(['earn', 'Earnings', 'dollar', 'Earnings'], ['docs', 'Documents', 'file', 'Documents']);
+  });
+})();
+
+/* ═══ Brookfield demo: agencies create their own splits, bonuses and contests ═══ */
+/* Brookfield sets carrier rates and its override. Each agency sets agent splits and its own programs. Brookfield reviews every program. */
+var BF_SPLIT_OVR = {};   /* agent id -> split, set by the agency */
+function bfSplit(id) {
+  if (BF_SPLIT_OVR[id] != null) return BF_SPLIT_OVR[id];
+  var ag = /^a\d+$/.test(String(id)) ? bfAgent(id).ag : id;
+  return (70 + bfHash(ag + 'sp') % 16) / 100;
+}
+function bfCommOf(p) {
+  var g = bfGross(p), t = _bfv.tier;
+  if (t === 'agent') return g * (1 - BF_IMO_SHARE) * bfSplit(p.agent);
+  if (t === 'agency') return g * (1 - BF_IMO_SHARE);
+  return g * BF_IMO_SHARE;
+}
+var BF_METRICS = {
+  placed12: { n: 'Placed premium, last 12 months', money: true, v: function(a){ return bfAgentPlaced(a); } },
+  sub90: { n: 'Submitted premium, last 90 days', money: true, v: function(a){ return bfSubmitted(BF.policies.filter(function(p){ return p.agent === a.id; }), 90); } },
+  appt: { n: 'Appointments set', money: false, v: function(a){ return BF.opps.filter(function(o){ return o.agent === a.id && BF_OPP_STAGES.indexOf(o.status) >= 3; }).length; } }
+};
+var BF_PROGS = [
+  { id: 'pg1', agency: 'ag1', kind: 'bonus', name: 'Quarterly Placed Premium Bonus', metric: 'placed12', tiers: [[25000, 250], [75000, 750]], start: bfAt(-40), end: bfAt(50), agents: 'all', status: 'Active', review: 'Approved' },
+  { id: 'pg2', agency: 'ag1', kind: 'contest', name: 'Appointment Sprint', metric: 'appt', prize: 500, start: bfAt(-10), end: bfAt(20), agents: 'all', status: 'Active', review: 'Pending review' },
+  { id: 'pg3', agency: 'ag3', kind: 'bonus', name: 'New Business Kicker', metric: 'sub90', tiers: [[50000, 500], [150000, 1500]], start: bfAt(-20), end: bfAt(70), agents: 'all', status: 'Active', review: 'Pending review' },
+  { id: 'pg4', agency: 'ag7', kind: 'contest', name: 'Fall Placement Race', metric: 'sub90', prize: 1000, start: bfAt(-45), end: bfAt(15), agents: 'all', status: 'Active', review: 'Approved' }
+];
+var BF_PG_SEQ = 10;
+function bfProgsFor(kind) {
+  var t = _bfv.tier;
+  return BF_PROGS.filter(function(p){
+    if (p.kind !== kind) return false;
+    if (t === 'agency') return p.agency === _bfv.agency;
+    if (t === 'agent') return p.agency === bfAgent(_bfv.agent).ag && p.status === 'Active' && (p.agents === 'all' || p.agents.indexOf(_bfv.agent) > -1);
+    return true;
+  });
+}
+function bfProgAgents(p) { return BF_AGENTS.filter(function(a){ return a.ag === p.agency && (p.agents === 'all' || p.agents.indexOf(a.id) > -1); }); }
+function bfFmtM(m, v) { return m.money ? bfMoneyK(v) : v + (v === 1 ? ' appointment' : ' appointments'); }
+function bfReviewPill(r) { return '<span class="bfx-st ' + (r === 'Approved' ? 'submitted' : (r === 'Changes requested' ? 'risk' : 'new')) + '">' + (r === 'Approved' ? 'Approved by Brookfield' : r) + '</span>'; }
+function bfProgCard(p) {
+  var t = _bfv.tier, m = BF_METRICS[p.metric] || BF_METRICS.placed12, ag = bfProgAgents(p), rows = ag.map(function(a){ return { a: a, v: m.v(a) }; }).sort(function(x, y){ return y.v - x.v; }), mx = Math.max(1, rows[0] ? rows[0].v : 1);
+  var rule = p.kind === 'bonus' ? p.tiers.map(function(x){ return bfFmtM(m, x[0]) + ' earns ' + bfMoney(x[1]); }).join(', ') : 'Winner receives ' + bfMoney(p.prize);
+  var days = Math.max(0, Math.round((p.end - BF_T) / BF_DAY));
+  var body = p.kind === 'bonus' ? rows.map(function(r){ var earned = 0; p.tiers.forEach(function(x){ if (r.v >= x[0]) earned = x[1]; }); return bfBar(r.a.name, r.v, Math.max(mx, p.tiers[p.tiers.length - 1][0]), bfFmtM(m, r.v) + (earned ? ' <span style="color:var(--teal2)">· ' + bfMoney(earned) + ' earned</span>' : '')); }).join('') : rows.slice(0, 6).map(function(r, i){ return bfBar((i + 1) + '. ' + r.a.name, r.v, mx, bfFmtM(m, r.v), i === 0 ? 'var(--teal2)' : null); }).join('');
+  var btns = '';
+  if (t === 'agency') btns = '<button class="bfx-btn" ' + bfOc('bfProgForm', p.kind, p.id) + '>Edit</button>' + (p.status === 'Active' ? ' <button class="bfx-btn" ' + bfOc('bfProgEnd', p.id) + '>End</button>' : '');
+  if (t === 'bws' && p.review !== 'Approved') btns = '<button class="bfx-btn pri" ' + bfOc('bfProgReview', p.id, 'Approved') + '>Approve</button> <button class="bfx-btn" ' + bfOc('bfProgReview', p.id, 'Changes requested') + '>Request changes</button>';
+  return '<div class="bfx-card"><div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap"><div><h3 style="margin-bottom:4px">' + bfEsc(p.name) + '</h3><div style="font-size:12.5px;color:var(--g500)">' + (t === 'bws' ? bfEsc(bfAgency(p.agency).name) + ' · ' : '') + m.n + ' · ' + bfFmtDay(p.start) + ' to ' + bfFmtDay(p.end) + (p.status === 'Active' ? ' · ' + days + ' days left' : '') + '</div></div><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap"><span class="bfx-st ' + (p.status === 'Active' ? 'submitted' : 'new') + '">' + p.status + '</span>' + bfReviewPill(p.review) + '</div></div>' +
+    '<div style="font-size:12.5px;color:var(--g600);margin:10px 0">' + rule + '</div>' + body + (btns ? '<div style="margin-top:12px;display:flex;gap:8px">' + btns + '</div>' : '') + '</div>';
+}
+function bfProgSection(kind) {
+  var t = _bfv.tier, list = bfProgsFor(kind), label = kind === 'bonus' ? 'bonus' : 'contest';
+  var head = '<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin:22px 0 12px"><div><div class="bfx-sech" style="margin:0"><div class="t">' + (t === 'bws' ? 'Agency ' : (t === 'agent' ? 'Your agency\'s ' : 'Your ')) + label + 's</div></div><div style="font-size:12.5px;color:var(--g500);margin-top:2px">' + (t === 'agency' ? 'Created by your agency. Brookfield reviews each one.' : (t === 'bws' ? 'Created by agencies. Approve or ask for changes.' : 'Set by your agency for its producers.')) + '</div></div>' + (t === 'agency' ? '<button class="bfx-btn pri" ' + bfOc('bfProgForm', kind, '') + '>New ' + label + '</button>' : '') + '</div>';
+  return head + (list.length ? list.map(bfProgCard).join('') : '<div class="bfx-note">No ' + label + 's yet.' + (t === 'agency' ? ' Select New ' + label + ' to create one.' : '') + '</div>');
+}
+(function() {
+  var b0 = bfBonusTab, c0 = bfContestTab, m0 = bfCommTab;
+  bfBonusTab = function() { return b0() + bfProgSection('bonus'); };
+  bfContestTab = function() { return c0() + bfProgSection('contest'); };
+  bfCommTab = function() {
+    var h = m0(), t = _bfv.tier;
+    if (t === 'agent') {
+      var a = bfAgent(_bfv.agent), note = '<div class="bfx-note" style="margin-bottom:14px">Your agency, ' + bfEsc(bfAgency(a.ag).name) + ', pays you ' + Math.round(bfSplit(a.id) * 100) + '% of the commission it receives. Your agency sets this split.</div>';
+      return note + h;
+    }
+    if (t !== 'agency') return h;
+    var ag = bfScope().agents, card = '<div class="bfx-card"><h3>Agent splits</h3><div style="font-size:12.5px;color:var(--g500);margin-bottom:8px">The share of agency commission each agent keeps. You set these. Brookfield sees every change in the audit trail.</div><table class="bfx-tbl"><thead><tr><th>Agent</th><th>Split</th><th></th></tr></thead><tbody>' + ag.map(function(a){ return '<tr><td><b>' + bfEsc(a.name) + '</b></td><td>' + Math.round(bfSplit(a.id) * 100) + '%' + (BF_SPLIT_OVR[a.id] != null ? ' <span class="bfo-more">Custom</span>' : '') + '</td><td style="text-align:right"><button class="bfx-btn" ' + bfOc('bfSplitForm', a.id) + '>Edit split</button></td></tr>'; }).join('') + '</tbody></table></div>';
+    return h + card;
+  };
+})();
+
+/* forms */
+function bfSplitForm(aid) {
+  bfModal('Split for ' + bfEsc(bfAgent(aid).name), bfField('Share of commission the agent keeps (50 to 95 percent)', bfInput('bf-sp-v', Math.round(bfSplit(aid) * 100), 'number')) + '<div style="font-size:12px;color:var(--g500)">The agency keeps the rest of the commission it receives from Brookfield.</div>', 'Save split', "bfSplitSave('" + aid + "')");
+}
+function bfSplitSave(aid) {
+  var v = parseFloat(bfV('bf-sp-v')); if (!(v >= 50 && v <= 95)) { showToast('Enter a split between 50 and 95'); return; }
+  BF_SPLIT_OVR[aid] = Math.round(v) / 100; bfAudit('Rule change', null, bfAgency(_bfv.agency).name + ' set ' + bfAgent(aid).name + '\'s commission split to ' + Math.round(v) + '%.'); bfModalClose(); showToast('Split updated'); bfRender();
+}
+function bfProgForm(kind, id) {
+  var p = id ? BF_PROGS.filter(function(x){ return x.id === id; })[0] : null, team = BF_AGENTS.filter(function(a){ return a.ag === _bfv.agency; }), lc = kind === 'bonus' ? 'bonus' : 'contest';
+  var tiers = p && p.tiers ? p.tiers.map(function(x){ return x[0] + ': ' + x[1]; }).join('\n') : '25000: 250\n75000: 750';
+  var who = '<div style="display:flex;flex-wrap:wrap;gap:6px 14px;margin-bottom:12px">' + team.map(function(a){ var on = !p || p.agents === 'all' || p.agents.indexOf(a.id) > -1; return '<label style="font-size:12.5px;display:flex;gap:6px;align-items:center"><input type="checkbox" id="bf-pg-a-' + a.id + '"' + (on ? ' checked' : '') + '>' + bfEsc(a.name) + '</label>'; }).join('') + '</div>';
+  var h = bfField('Name', bfInput('bf-pg-n', p ? p.name : '', 'text', kind === 'bonus' ? 'Quarterly production bonus' : 'Appointment sprint')) +
+    bfField('What it measures', bfSelect('bf-pg-m', Object.keys(BF_METRICS).map(function(k){ return [k, BF_METRICS[k].n]; }), p ? p.metric : 'placed12')) +
+    (kind === 'bonus' ? bfField('Tiers, one per line as "target: bonus"', '<textarea id="bf-pg-t" rows="3" ' + BF_INP + '>' + bfEsc(tiers) + '</textarea>') : bfField('Prize for the winner', bfInput('bf-pg-p', p ? p.prize : 500, 'number'))) +
+    '<div class="bfe-two">' + bfField('Starts', bfInput('bf-pg-s', bfLocalDate(p ? p.start : BF_T), 'date')) + bfField('Ends', bfInput('bf-pg-e', bfLocalDate(p ? p.end : bfAt(60)), 'date')) + '</div>' +
+    '<div style="font-size:12px;font-weight:700;color:var(--g600);margin-bottom:6px">Who can take part</div>' + who +
+    '<div class="bfx-note" style="margin:0">Programs cannot reward a single product. They measure overall production or activity. Brookfield compliance reviews every program before it is approved.</div>';
+  bfModal((p ? 'Edit ' : 'New ') + lc, h, p ? 'Save changes' : 'Create ' + lc, "bfProgSave('" + kind + "','" + (id || '') + "')");
+}
+function bfProgSave(kind, id) {
+  var name = bfV('bf-pg-n').trim(); if (!name) { showToast('Give the program a name'); return; }
+  var s = new Date(bfV('bf-pg-s') + 'T00:00:00').getTime(), e = new Date(bfV('bf-pg-e') + 'T00:00:00').getTime(); if (!(s > 0) || !(e > s)) { showToast('Choose an end date after the start date'); return; }
+  var team = BF_AGENTS.filter(function(a){ return a.ag === _bfv.agency; }), sel = team.filter(function(a){ var c = bfEl('bf-pg-a-' + a.id); return c && c.checked; }).map(function(a){ return a.id; }); if (!sel.length) { showToast('Choose at least one agent'); return; }
+  var rec = { kind: kind, name: name, metric: BF_METRICS[bfV('bf-pg-m')] ? bfV('bf-pg-m') : 'placed12', start: s, end: e, agents: sel.length === team.length ? 'all' : sel };
+  if (kind === 'bonus') {
+    var tiers = bfV('bf-pg-t').split('\n').map(function(l){ var m = l.split(':'); return [parseFloat((m[0] || '').replace(/[^0-9.]/g, '')), parseFloat((m[1] || '').replace(/[^0-9.]/g, ''))]; }).filter(function(x){ return x[0] > 0 && x[1] > 0; }).sort(function(a, b){ return a[0] - b[0]; });
+    if (!tiers.length) { showToast('Add at least one tier, for example 25000: 250'); return; } rec.tiers = tiers;
+  } else { var pr = parseFloat(bfV('bf-pg-p')); if (!(pr > 0)) { showToast('Enter a prize above zero'); return; } rec.prize = pr; }
+  if (id) { var p = BF_PROGS.filter(function(x){ return x.id === id; })[0]; Object.keys(rec).forEach(function(k){ p[k] = rec[k]; }); p.review = 'Pending review'; bfAudit('Rule change', null, bfAgency(_bfv.agency).name + ' changed the ' + kind + ' "' + name + '". Sent for Brookfield review.'); }
+  else { rec.id = 'pg' + (BF_PG_SEQ++); rec.agency = _bfv.agency; rec.status = 'Active'; rec.review = 'Pending review'; BF_PROGS.push(rec); bfAudit('Rule change', null, bfAgency(_bfv.agency).name + ' created the ' + kind + ' "' + name + '". Sent for Brookfield review.'); }
+  bfModalClose(); showToast(kind === 'bonus' ? 'Bonus saved and sent for review' : 'Contest saved and sent for review'); bfRender();
+}
+function bfProgEnd(id) { var p = BF_PROGS.filter(function(x){ return x.id === id; })[0]; if (!p) return; p.status = 'Ended'; p.end = Math.min(p.end, BF_T); bfAudit('Rule change', null, bfAgency(p.agency).name + ' ended the ' + p.kind + ' "' + p.name + '".'); showToast('Ended'); bfRender(); }
+function bfProgReview(id, how) { var p = BF_PROGS.filter(function(x){ return x.id === id; })[0]; if (!p) return; p.review = how; bfAudit('Review', null, 'Brookfield marked "' + p.name + '" (' + bfAgency(p.agency).name + ') as ' + how.toLowerCase() + '.'); showToast(how === 'Approved' ? 'Program approved' : 'Changes requested'); bfRender(); }
+
+/* ═══ Brookfield demo: household members, and connected accounts (Plaid, simulated) ═══ */
+/* Everything is written to the shared household record, so the Agent, Agency and Brookfield views stay in step. */
+function bfCanEdit(c) { return (_bfv.tier === 'agent' || _bfv.tier === 'agency') && bfCanSeeClient(c); }
+
+/* ── household members ── */
+var BF_REL = ['Spouse or partner', 'Child', 'Parent', 'Other family', 'Other'];
+function bfMemCard(c, m, i) {
+  var edit = bfCanEdit(c);
+  return '<div class="bfh-mem"><div class="n">' + bfEsc(m.name) + (i === 0 ? ' <span class="bfo-more">Primary</span>' : (i === 1 ? ' <span class="bfo-more">Secondary contact</span>' : '')) + '</div><div class="r">' + bfEsc(m.role) + (m.age ? ' (' + m.age + ' years old)' : '') + '</div><div class="c">' + bfEsc(m.email) + '</div><div class="c">' + bfEsc(m.phone) + '</div>' +
+    (edit && i > 1 ? '<div style="margin-top:6px;display:flex;gap:6px"><button class="bfx-btn" ' + bfOc('bfMemSecondary', c.id, i) + '>Make secondary contact</button>' + (m.added ? '<button class="bfx-btn" ' + bfOc('bfMemRemove', c.id, i) + '>Remove</button>' : '') + '</div>' : (edit && m.added ? '<div style="margin-top:6px"><button class="bfx-btn" ' + bfOc('bfMemRemove', c.id, i) + '>Remove</button></div>' : '')) + '</div>';
+}
+function bfMemDropdown(c) {
+  var mem = bfMembers(c), edit = bfCanEdit(c);
+  return bfDd('mem', 'Household members', mem.map(function(m, i){ return bfMemCard(c, m, i); }).join('') + (edit ? '<div style="margin-top:8px"><button class="bfx-btn pri" ' + bfOc('bfMemAsk', c.id) + '>Add household member</button></div>' : ''), mem.length + (mem.length === 1 ? ' person' : ' people'));
+}
+(function() {
+  var o = bfRecLeftHtml;
+  bfRecLeftHtml = function(c, canSee, sc) {
+    var h = o.apply(this, arguments); if (!canSee) return h;
+    var i = h.indexOf('<summary><span>Primary contact'); if (i < 0) return h;
+    var j = h.lastIndexOf('<details', i); if (j < 0) return h;
+    return h.slice(0, j) + bfMemDropdown(c) + h.slice(j);
+  };
+  var d0 = bfDdSet; bfDdSet = function(k, v) { var d = _bfv.rec.dd || (_bfv.rec.dd = { hh: true, pc: true, fp: false }); d[k] = v; };
+})();
+function bfMemAsk(cid) {
+  var c = BF.byId[cid], mem = bfMembers(c), has = mem.length > 1;
+  bfModal('Add a household member', '<div class="bfe-two">' + bfField('First name <span class="bfe-req">*</span>', bfInput('bf-mb-f', '', 'text', '')) + bfField('Last name', bfInput('bf-mb-l', c.last, 'text', '')) + '</div>' +
+    bfField('Relationship', bfSelect('bf-mb-r', BF_REL, has ? 'Child' : 'Spouse or partner')) + bfField('Age', bfInput('bf-mb-a', '', 'number', '')) + bfField('Email', bfInput('bf-mb-e', '', 'text', 'name@example.com')) + bfField('Phone', bfInput('bf-mb-p', '', 'text', '(555) 010-0000')) +
+    '<div class="bfx-note" style="margin:0">' + (has ? 'The second person in a household is the secondary contact. You can change that after adding.' : 'This person becomes the secondary contact for the household.') + '</div>', 'Add member', "bfMemDo('" + cid + "')");
+}
+function bfMemDo(cid) {
+  var c = BF.byId[cid], f = bfV('bf-mb-f').trim(); if (!f) { showToast('Enter a first name'); return; }
+  var l = bfV('bf-mb-l').trim() || c.last, age = parseInt(bfV('bf-mb-a'), 10), em = bfV('bf-mb-e').trim(), ph = bfV('bf-mb-p').trim();
+  if (bfV('bf-mb-a') && !(age >= 0 && age <= 110)) { showToast('Enter an age between 0 and 110'); return; }
+  if (em && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)) { showToast('Enter a valid email address'); return; }
+  var role = bfV('bf-mb-r') || 'Other';
+  bfMembers(c).push({ first: f, name: f + ' ' + l, role: role, age: isNaN(age) ? null : age, email: em || 'Not recorded', phone: ph || 'Not recorded', added: true });
+  if (role === 'Child') c.dependents = (c.dependents || 0) + 1;
+  c.profileUpdated = 0; bfModalClose(); bfLog(cid, 'Note', 'Added ' + f + ' ' + l + ' (' + role.toLowerCase() + ') to the household.'); bfAudit('Profile', cid, 'Added a household member.'); showToast('Household member added'); bfRender();
+}
+function bfMemRemove(cid, i) {
+  var c = BF.byId[cid], mem = bfMembers(c), m = mem[+i]; if (!m || !m.added) return;
+  mem.splice(+i, 1); if (m.role === 'Child' && c.dependents) c.dependents--; bfLog(cid, 'Note', 'Removed ' + m.name + ' from the household.'); bfAudit('Profile', cid, 'Removed a household member.'); showToast('Removed'); bfRender();
+}
+function bfMemSecondary(cid, i) {
+  var c = BF.byId[cid], mem = bfMembers(c), m = mem[+i]; if (!m || +i < 2) return;
+  mem.splice(+i, 1); mem.splice(1, 0, m); bfLog(cid, 'Note', m.name + ' is now the secondary contact.'); bfAudit('Profile', cid, 'Changed the secondary contact.'); showToast('Secondary contact updated'); bfRender();
+}
+
+/* ── connected accounts (Plaid, simulated) ── */
+var BF_INSTS = [
+  { n: 'Fidelity Investments', a: ['Brokerage', 'Traditional IRA'] }, { n: 'Charles Schwab', a: ['Roth IRA', 'Brokerage'] }, { n: 'Vanguard', a: ['401(k)', 'Traditional IRA'] },
+  { n: 'Chase', a: ['Savings / money market'] }, { n: 'Wells Fargo', a: ['Savings / money market', 'Brokerage'] }
+];
+var BF_ACCT_RANGE = { 'Brokerage': [60, 400], 'Traditional IRA': [80, 500], 'Roth IRA': [30, 200], '401(k)': [120, 600], 'Savings / money market': [20, 150] };
+function bfPlaidOf(c) { return c.plaid || null; }
+function bfPlaidCard(c) {
+  var pl = bfPlaidOf(c), edit = bfCanEdit(c), busy = !!c._fetching;
+  var left = pl ? '<div><div style="font-size:13.5px;font-weight:700">Connected through Plaid</div><div style="font-size:12.5px;color:var(--g500);margin-top:3px">' + pl.insts.map(bfEsc).join(', ') + ' &middot; last updated ' + bfFmtDay(pl.last) + ' ' + bfLocalTime(pl.last) + '</div></div>' : '<div><div style="font-size:13.5px;font-weight:700">Accounts are entered by hand</div><div style="font-size:12.5px;color:var(--g500);margin-top:3px">' + (edit ? 'Connect the client\'s banks and investment accounts to keep balances up to date.' : 'No accounts are connected for this household.') + '</div></div>';
+  var btns = edit ? '<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="bfx-btn pri" ' + (busy ? 'disabled ' : '') + bfOc('bfPlaidFetch', c.id) + '>' + (busy ? 'Fetching...' : 'Fetch new data') + '</button><button class="bfx-btn" ' + bfOc('bfPlaidAsk', c.id) + '>' + (pl ? 'Connect another account' : 'Connect accounts') + '</button></div>' : '';
+  return '<div class="bfx-card" style="display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap">' + left + btns + '</div>';
+}
+(function() {
+  var o = bfAccountsTab;
+  bfAccountsTab = function(c, edit) { return bfPlaidCard(c) + o.call(this, c, edit || bfCanEdit(c)); };
+})();
+function bfPlaidAsk(cid) {
+  var c = BF.byId[cid], have = (bfPlaidOf(c) || { insts: [] }).insts;
+  bfModal('Connect accounts', '<div style="font-size:12.5px;color:var(--g600);line-height:1.6;margin-bottom:10px">The client signs in to each institution through Plaid. Goals.com receives balances and account details, and never sees the client\'s password. This demo simulates the connection.</div>' +
+    BF_INSTS.map(function(x, i){ return '<label class="bfd-opt" style="display:flex;gap:9px;padding:7px 0;font-size:13px"><input type="checkbox" id="bf-pl-' + i + '"' + (have.indexOf(x.n) > -1 ? ' disabled' : '') + '><span>' + x.n + (have.indexOf(x.n) > -1 ? ' <span class="bfo-more">Connected</span>' : '') + '</span></label>'; }).join('') +
+    '<label class="bfd-opt" style="display:flex;gap:9px;padding:10px 0 0;font-size:12.5px;border-top:1px solid var(--g100);margin-top:6px"><input type="checkbox" id="bf-pl-ok"><span>The client agreed to share this account data.</span></label>', 'Connect', "bfPlaidDo('" + cid + "')");
+}
+function bfPlaidDo(cid) {
+  var c = BF.byId[cid], pick = BF_INSTS.filter(function(x, i){ var e = bfEl('bf-pl-' + i); return e && e.checked && !e.disabled; });
+  if (!pick.length) { showToast('Choose at least one institution'); return; }
+  var ok = bfEl('bf-pl-ok'); if (!ok || !ok.checked) { showToast('Confirm that the client agreed to share their data'); return; }
+  c.accounts = c.accounts || []; var pl = c.plaid || (c.plaid = { insts: [], last: BF_T }); var added = 0, before = bfOppFor(cid);
+  pick.forEach(function(x) {
+    var r = bfRng(cid + x.n + 'pl' + pl.insts.length);
+    x.a.forEach(function(t) { var rg = BF_ACCT_RANGE[t], bal = Math.round((rg[0] + r() * (rg[1] - rg[0])) * 1000); c.accounts.push({ type: t, inst: x.n, bal: bal, rate: t === 'Savings / money market' ? Math.round((3.5 + r()) * 10) / 10 : null, qualified: /IRA|401/.test(t), benef: r() > 0.3, src: 'Plaid', verified: BF_T }); if (t === 'Savings / money market') c.cash = (c.cash || 0) + bal; added++; });
+    pl.insts.push(x.n);
+  });
+  pl.last = BF_T; c.profileUpdated = 0; var o = bfRecompute(cid);
+  bfModalClose(); bfLog(cid, 'Note', 'Connected ' + pick.map(function(x){ return x.n; }).join(', ') + ' through Plaid (' + added + ' accounts).'); bfAudit('Profile', cid, 'Connected accounts through Plaid with client consent.');
+  showToast(added + ' accounts connected' + (!before && o ? '. An opportunity was identified.' : '')); bfRender();
+}
+function bfPlaidFetch(cid) {
+  var c = BF.byId[cid]; if (!bfPlaidOf(c)) { bfPlaidAsk(cid); return; }
+  if (c._fetching) return; c._fetching = true; bfRender();
+  setTimeout(function() { bfPlaidFetchDone(cid); }, 1100);
+}
+function bfPlaidFetchDone(cid) {
+  var c = BF.byId[cid], n = 0, r = bfRng(cid + 'fetch' + Date.now()); c._fetching = false;
+  (c.accounts || []).forEach(function(a) { if (a.src !== 'Plaid') return; var ch = (r() - 0.42) * 0.05; a.bal = Math.max(0, Math.round(a.bal * (1 + ch) / 100) * 100); a.verified = Date.now(); n++; });
+  c.plaid.last = Date.now(); var o = bfRecompute(cid); bfLog(cid, 'Note', 'Fetched the latest balances from Plaid (' + n + ' accounts).'); bfAudit('Profile', cid, 'Fetched new account data from Plaid.');
+  showToast(n + ' accounts updated'); bfRender();
+}
+
+/* ═══ Brookfield demo: cleaner Actions list on the household record ═══ */
+function bfActionCard(a, canEdit) {
+  var done = bfActIsDone(a), kind = a.kind === 'Appointment' ? 'Meeting' : a.kind, d = new Date(a.when), over = !done && a.when < BF_T && a.kind !== 'Call';
+  var who = a.assigned ? bfAgent(a.assigned).name : bfAgent(a.agent).name, h = d.getHours(), ap = h >= 12 ? 'PM' : 'AM';
+  var line = [kind, BF_MN[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear() + ' at ' + (h % 12 || 12) + ':' + bfPad(d.getMinutes()) + ' ' + ap];
+  if (a.dur) line.push(a.dur + ' min'); if (a.kind === 'Call' && (a.to || a.phone)) line.push('To ' + (a.to || '') + (a.phone ? ' ' + a.phone : '')); if (a.loc) line.push(a.loc); line.push(who);
+  var note = a.notes && bfHasText(a.notes) ? String(a.notes).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim() : '';
+  var btns = canEdit ? (done ? '' : '<button class="bfx-btn ok" ' + bfOc('bfActComplete', a.id) + '>Mark complete</button>') + '<span class="bfa2-more"><button class="bfx-btn" ' + bfOc('bfActEdit', a.id) + '>Edit</button><button class="bfx-btn del" ' + bfOc('bfActDel', a.id) + '>Delete</button></span>' : (done ? '<span class="bfa2-done">Completed</span>' : '');
+  return '<div class="bfa2' + (done ? ' dn' : '') + '"><div class="bfa2-d' + (over ? ' over' : '') + '"><b>' + d.getDate() + '</b><span>' + BF_MN[d.getMonth()] + '</span></div><div class="bfa2-m"><div class="bfa2-t">' + bfEsc(a.text) + (over ? ' <span class="bfa2-od">Overdue</span>' : '') + '</div><div class="bfa2-s"><span class="bfa-chip ' + kind.toLowerCase() + '">' + kind + '</span>' + line.slice(1).map(bfEsc).join(' &middot; ') + '</div>' + (note ? '<div class="bfa2-n">' + bfEsc(note.slice(0, 160)) + (note.length > 160 ? '...' : '') + '</div>' : '') + '</div><div class="bfa2-b">' + btns + '</div></div>';
+}
+function bfActionsTab(c, canEdit) {
+  var list = BF.acts.filter(function(a){ return a.client === c.id && ['Task', 'Call', 'Meeting', 'Appointment'].indexOf(a.kind) > -1; });
+  var up = list.filter(function(a){ return !bfActIsDone(a); }).sort(function(x, y){ return x.when - y.when; }), dn = list.filter(bfActIsDone).sort(function(x, y){ return y.when - x.when; });
+  var top = '<div class="bfa2-hd"><div class="bfa2-ti">Open actions <span>' + up.length + ' upcoming, ' + dn.length + ' completed</span></div>' + (canEdit ? '<div class="bfa2-add"><button class="bfx-btn pri" ' + bfOc('bfTaskAsk', c.id) + '>New task</button><button class="bfx-btn" ' + bfOc('bfCallAsk', c.id) + '>Log a call</button><button class="bfx-btn" ' + bfOc('bfMeetAsk', c.id) + '>Schedule meeting</button></div>' : '') + '</div>';
+  return top + '<div class="bfa2-g">Upcoming</div><div class="bfa2-l">' + (up.map(function(a){ return bfActionCard(a, canEdit); }).join('') || '<div class="bfx-note">Nothing scheduled.</div>') + '</div>' +
+    '<div class="bfa2-g">Completed</div><div class="bfa2-l">' + (dn.slice(0, 12).map(function(a){ return bfActionCard(a, canEdit); }).join('') || '<div class="bfx-note">Nothing completed yet.</div>') + (dn.length > 12 ? '<div class="bfx-note">Showing the 12 most recent of ' + dn.length + '.</div>' : '') + '</div>';
+}
+(function() {
+  var st = document.createElement ? document.createElement('style') : null; if (!st || !document.head) return;
+  st.textContent = '.bfa2-hd{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}.bfa2-ti{font-size:16px;font-weight:600;font-family:var(--serif,Georgia,serif)}.bfa2-ti span{font-family:var(--font);font-size:12px;font-weight:400;color:var(--g500);margin-left:8px}.bfa2-add{display:flex;gap:6px;flex-wrap:wrap}' +
+    '.bfa2-g{font-family:var(--mono);font-size:10px;letter-spacing:.7px;text-transform:uppercase;color:var(--g400);margin:16px 0 8px}.bfa2-l{background:#fff;border:1px solid var(--g200);border-radius:14px;overflow:hidden}.bfa2-l .bfx-note{margin:12px 16px}' +
+    '.bfa2{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:14px;align-items:center;padding:14px 16px;border-top:1px solid var(--g100)}.bfa2:first-child{border-top:0}.bfa2:hover{background:var(--g50)}' +
+    '.bfa2-d{width:48px;height:52px;border-radius:11px;background:var(--g100);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.1}.bfa2-d b{font-size:17px}.bfa2-d span{font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--g500);margin-top:2px}.bfa2-d.over{background:rgba(239,68,68,.1)}.bfa2-d.over b,.bfa2-d.over span{color:#dc2626}' +
+    '.bfa2-t{font-size:14px;font-weight:600;line-height:1.35}.bfa2-od{font-size:10.5px;font-weight:700;color:#dc2626;background:rgba(239,68,68,.1);border-radius:999px;padding:1px 8px;margin-left:6px}.bfa2-s{font-size:12px;color:var(--g500);margin-top:5px;display:flex;flex-wrap:wrap;align-items:center;gap:0 4px}.bfa2-s .bfa-chip{margin-right:6px;padding:1px 9px;font-size:11px}' +
+    '.bfa2-n{font-size:12.5px;color:var(--g600);margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:560px}.bfa2-b{display:flex;gap:6px;align-items:center;white-space:nowrap}.bfa2-more{display:flex;gap:6px;opacity:0;transition:opacity .15s}.bfa2:hover .bfa2-more,.bfa2:focus-within .bfa2-more{opacity:1}.bfa2.dn .bfa2-t{color:var(--g500)}.bfa2-done{font-size:12px;color:var(--g400)}' +
+    '@media(max-width:900px){.bfa2{grid-template-columns:44px minmax(0,1fr)}.bfa2-b{grid-column:2}.bfa2-more{opacity:1}}';
+  document.head.appendChild(st);
+})();
+
+try { localStorage.removeItem('bf_bg'); } catch (e) {}
+try { setTimeout(function(){ document.body.classList.remove('bf-booting'); }, 2500); } catch (e) {}
 /* ── keep the same view after a refresh (per browser tab) ── */
 var _bfSaved = null;
 var _bfSrc = 'none', _bfAddr = null;
@@ -33632,7 +34041,8 @@ try { window.addEventListener('pagehide', bfSaveState); window.addEventListener(
 })();
 
 /* ── Brookfield boot ── */
-function bfInit() {
+function bfInit() { try { bfInit0(); } finally { try { document.body.classList.remove('bf-booting'); } catch (e) {} } }
+function bfInit0() {
   bfRenderSwitch(); bfRenderNav();
   if (typeof showPage === 'function') showPage('bf-app', null);
   bfRenderNav(); bfRender();
