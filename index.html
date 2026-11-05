@@ -33569,11 +33569,31 @@ function bfEsc2(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;
 
 /* ── keep the same view after a refresh (per browser tab) ── */
 var _bfSaved = null;
-var _bfSrc = 'none';
-try { var _bfH = /[#&]bf=([^&]*)/.exec(location.hash || ''); if (_bfH) { _bfSaved = JSON.parse(decodeURIComponent(_bfH[1])); _bfSrc = 'address'; } } catch (e) {}
-if (!_bfSaved) { try { _bfSaved = JSON.parse(sessionStorage.getItem('bf_nav_v1') || 'null'); if (_bfSaved) _bfSrc = 'session'; } catch (e) {} }
-if (!_bfSaved) { try { _bfSaved = JSON.parse(localStorage.getItem('bf_nav_v1') || 'null'); if (_bfSaved) _bfSrc = 'local'; } catch (e) {} }
-if (!_bfSaved) { try { _bfSaved = JSON.parse(window.name && window.name.indexOf('bf_nav_v1:') === 0 ? window.name.slice(10) : 'null'); } catch (e) {} }
+var _bfSrc = 'none', _bfAddr = null;
+/* the address looks like #agent/a1/dashboard, #agency/ag2/reports or #bws/agencies, with an optional /household/tab on the end */
+function bfAddrParse(h) {
+  var p = String(h || '').replace(/^#\/?/, '').split('/'); if (!/^(agent|agency|bws)$/.test(p[0])) return null;
+  for (var i = 0; i < p.length; i++) if (!/^[A-Za-z0-9]+$/.test(p[i])) return null;
+  var t = p[0], o = { tier: t }, k = 1;
+  if (t !== 'bws') { if (!p[1]) return null; if (t === 'agent') o.agent = p[1]; else o.agency = p[1]; k = 2; }
+  o.page = p[k] || 'dashboard'; o.rec = /^c\d+$/.test(p[k + 1] || '') ? { id: p[k + 1], tab: p[k + 2] || 'overview' } : null;
+  return o;
+}
+function bfAddrBuild(st) {
+  var who = st.tier === 'agent' ? st.agent : (st.tier === 'agency' ? st.agency : null);
+  return '#' + st.tier + (who ? '/' + who : '') + (st.page && st.page !== 'dashboard' || st.rec ? '/' + st.page : '') + (st.rec ? '/' + st.rec.id + '/' + (st.rec.tab || 'overview') : '');
+}
+try { _bfAddr = bfAddrParse(location.hash); } catch (e) {}
+var _bfStore = null;
+try { _bfStore = JSON.parse(sessionStorage.getItem('bf_nav_v1') || 'null'); if (_bfStore) _bfSrc = 'session'; } catch (e) {}
+if (!_bfStore) { try { _bfStore = JSON.parse(localStorage.getItem('bf_nav_v1') || 'null'); if (_bfStore) _bfSrc = 'local'; } catch (e) {} }
+if (!_bfStore) { try { _bfStore = JSON.parse(window.name && window.name.indexOf('bf_nav_v1:') === 0 ? window.name.slice(10) : 'null'); if (_bfStore) _bfSrc = 'window'; } catch (e) {} }
+/* the address decides where you are; the browser storage adds filters and the trail when it matches the address */
+if (_bfAddr) {
+  _bfSaved = _bfAddr; _bfSrc = 'address';
+  if (_bfStore && _bfStore.tier === _bfAddr.tier && _bfStore.page === _bfAddr.page && (_bfAddr.tier === 'bws' || (_bfAddr.tier === 'agent' ? _bfStore.agent === _bfAddr.agent : _bfStore.agency === _bfAddr.agency))) { _bfSaved = _bfStore; _bfSrc = 'address+storage'; }
+} else { _bfSaved = _bfStore; }
+
 function bfSaveState() {
   try {
     var r = _bfv.rec && _bfv.rec.id ? { id: _bfv.rec.id, tab: _bfv.rec.tab } : null;
@@ -33581,9 +33601,9 @@ function bfSaveState() {
     try { sessionStorage.setItem('bf_nav_v1', js); } catch (e) {}
     try { localStorage.setItem('bf_nav_v1', js); } catch (e) {}
     try { window.name = 'bf_nav_v1:' + js; } catch (e) {}
-    if (js.length > 1800) { st.f = {}; js = JSON.stringify(st); }
-    try { window.history.replaceState(null, '', '#bf=' + encodeURIComponent(js)); }
-    catch (e2) { try { location.replace('#bf=' + encodeURIComponent(js)); } catch (e3) {} }
+    var ad = bfAddrBuild(st);
+    try { window.history.replaceState(null, '', ad); }
+    catch (e2) { try { location.replace(ad); } catch (e3) {} }
   } catch (e) {}
 }
 function bfRestoreState() {
