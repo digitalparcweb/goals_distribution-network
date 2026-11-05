@@ -2100,6 +2100,34 @@ body.bf-theme #user-switcher-panel{width:300px!important}body.bf-theme #trial-av
 .bfl-step{border:1px solid var(--g200);border-radius:12px;padding:10px 12px;background:var(--g50);display:flex;flex-direction:column;gap:3px;align-items:flex-start}
 .bfl-step.live{background:#fff;border-color:#b9dccb}.bfl-step .n{font-family:var(--mono);font-size:10px;color:var(--g400)}.bfl-step .t{font-size:13px;font-weight:600}.bfl-step .c{font-size:11.5px;color:var(--g500);margin-bottom:4px}.bfl-step.live .c{color:var(--teal2);font-weight:600}
 .bfl-step .bfx-bdg{margin-left:0;top:0}
+/* layout polish: headers, badges, equal-height cards, spacing */
+.bfx-bdg{top:0;margin-left:0;line-height:1.3;white-space:nowrap}
+.bfx-sech .t{display:flex;align-items:center;gap:10px;flex-wrap:wrap;line-height:1.25}
+.bfx-sech{margin:26px 0 12px}.bfx-sech:first-child{margin-top:6px}
+.bfg-ai{display:flex;flex-direction:column}
+.bfg-ai .hd{margin-top:0;margin-bottom:12px;align-items:center;gap:10px}
+.bfg-ai .hd .bfx-sech{margin:0}.bfg-ai .hd .bfx-sech .t{font-size:17px;letter-spacing:-.2px}
+.bfg-ai .tag{white-space:nowrap;line-height:1.3}
+.bfg-trio{margin-top:auto;padding-top:16px}
+.bfx-row{align-items:stretch}.bfx-row>.bfx-card{display:flex;flex-direction:column;min-width:0}
+.bfx-card{padding:20px 22px}
+.bfx-card h3{line-height:1.3;margin:0 0 14px}
+.bfx-card h3+div[style*="font-size:12"]{margin-top:-8px}
+.bfx-kpis{margin-bottom:16px}
+.bfx-tbl th,.bfx-tbl td{padding:10px 12px;vertical-align:middle}
+.bfx-btn{white-space:nowrap}
+.bfo-tw{overflow-x:auto}.bfo-t th.r,.bfo-t td.r{text-align:right}.bfo-t td{vertical-align:middle;padding:14px 12px}
+.bfo-cl b{font-size:13.5px}.bfo-sub{font-size:11.5px;color:var(--g500);margin-top:2px}
+.bfo-why{max-width:320px}.bfo-chips{display:flex;gap:5px;flex-wrap:wrap;align-items:center}.bfo-more{font-size:11px;font-weight:600;color:var(--g500);background:var(--g100);border-radius:999px;padding:2px 8px}
+.bfo-fact{font-size:12px;color:var(--g600);margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:300px}
+.bfo-amt{font-weight:700;font-size:13.5px;white-space:nowrap}.bfo-amt .bfo-sub{font-weight:400}
+.bfo-next{font-size:11.5px;color:var(--g500);margin-top:4px;max-width:170px}
+.bfo-act{white-space:nowrap;text-align:right}.bfo-act .bfx-btn{margin-left:4px}.bfo-act .bfx-btn:not(:first-child){opacity:0;transition:opacity .15s}.bfo-t tr:hover .bfo-act .bfx-btn,.bfo-t tr:focus-within .bfo-act .bfx-btn{opacity:1}
+/* dropdowns: one consistent arrow with room around it */
+body.bf-theme select:not([multiple]),body.bf-theme .bfx-sel{-webkit-appearance:none!important;-moz-appearance:none!important;appearance:none!important;padding-right:34px!important;padding-top:8px;padding-bottom:8px;padding-left:12px;background-repeat:no-repeat!important;background-position:right 12px center!important;background-size:12px!important;line-height:1.3;border:1px solid var(--g200);border-radius:9px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237a7260' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")!important;background-color:#fff!important;cursor:pointer;color:var(--dark)}
+body.bf-theme select:not([multiple]):hover{border-color:var(--g300)}
+body.bf-theme select:not([multiple]):focus{outline:0;border-color:var(--teal);box-shadow:0 0 0 3px rgba(29,158,117,.15)}
+.bfag-f{gap:5px}.bfag-f span,.bfag-f label{font-size:10.5px;letter-spacing:.3px}
 @media(max-width:1100px){.bfl-row{grid-template-columns:repeat(2,minmax(0,1fr))}.bfg-trio{grid-template-columns:1fr}}
 
 /* record actions, editor, quick add */
@@ -29992,13 +30020,30 @@ var BF_AGENCIES = [
   { id: 'ag2', name: 'Cedar Point Advisory', city: 'Austin, TX', access: false, region: 'South' },
   { id: 'ag3', name: 'Willow Bend Partners', city: 'Charlotte, NC', access: false, region: 'South' },
   { id: 'ag4', name: 'Harbor Advisors', city: 'Boston, MA', access: false, region: 'Northeast' },
-  { id: 'ag5', name: 'Summit Financial', city: 'Denver, CO', access: false, region: 'West' }
+  { id: 'ag5', name: 'Summit Financial', city: 'Denver, CO', access: false, region: 'West' },
+  { id: 'ag6', name: 'Lakeshore Wealth Partners', city: 'Chicago, IL', access: false, region: 'Midwest' },
+  { id: 'ag7', name: 'Pinecrest Advisory', city: 'Atlanta, GA', access: false, region: 'South' },
+  { id: 'ag8', name: 'Redwood Financial', city: 'Portland, OR', access: false, region: 'West' },
+  { id: 'ag9', name: 'Beacon Hill Associates', city: 'Hartford, CT', access: false, region: 'Northeast' },
+  { id: 'ag10', name: 'Prairie Wind Advisors', city: 'Omaha, NE', access: true, region: 'Midwest' },
+  { id: 'ag11', name: 'Sunbelt Retirement Group', city: 'Phoenix, AZ', access: false, region: 'West' },
+  { id: 'ag12', name: 'Keystone Planning', city: 'Pittsburgh, PA', access: false, region: 'Northeast' },
+  { id: 'ag13', name: 'Gulf Coast Advisory', city: 'Tampa, FL', access: false, region: 'South' }
 ];
 var BF_AGENTS = [
   { id: 'a1', ag: 'ag1', name: 'Maya Chen' }, { id: 'a2', ag: 'ag1', name: 'Daniel Okafor' }, { id: 'a3', ag: 'ag1', name: 'Priya Raman' },
   { id: 'a4', ag: 'ag2', name: 'Thomas Reilly' }, { id: 'a5', ag: 'ag2', name: 'Sofia Alvarez' }, { id: 'a6', ag: 'ag2', name: 'Marcus Bell' },
   { id: 'a7', ag: 'ag3', name: 'Hannah Lindqvist' }, { id: 'a8', ag: 'ag3', name: 'Victor Santos' }, { id: 'a9', ag: 'ag3', name: 'Grace Whitfield' },
-  { id: 'a10', ag: 'ag4', name: 'Julian Frost' }, { id: 'a11', ag: 'ag4', name: 'Nora Vance' }, { id: 'a12', ag: 'ag5', name: 'Owen Pritchard' }, { id: 'a13', ag: 'ag5', name: 'Leah Brandt' }
+  { id: 'a10', ag: 'ag4', name: 'Julian Frost' }, { id: 'a11', ag: 'ag4', name: 'Nora Vance' }, { id: 'a12', ag: 'ag5', name: 'Owen Pritchard' }, { id: 'a13', ag: 'ag5', name: 'Leah Brandt' },
+  { id: 'a14', ag: 'ag6', name: 'Emily Hartmann' }, { id: 'a15', ag: 'ag6', name: 'Raj Patel' }, { id: 'a16', ag: 'ag6', name: 'Colleen Doyle' },
+  { id: 'a17', ag: 'ag7', name: 'Andre Jackson' }, { id: 'a18', ag: 'ag7', name: 'Mei Tanaka' }, { id: 'a19', ag: 'ag7', name: 'Brooke Sullivan' },
+  { id: 'a20', ag: 'ag7', name: 'Luis Ferreira' }, { id: 'a21', ag: 'ag8', name: 'Sienna Park' }, { id: 'a22', ag: 'ag8', name: 'Wyatt Collins' },
+  { id: 'a23', ag: 'ag8', name: 'Imani Brooks' }, { id: 'a24', ag: 'ag9', name: 'Declan Murphy' }, { id: 'a25', ag: 'ag9', name: 'Ava Rosen' },
+  { id: 'a26', ag: 'ag9', name: 'Peter Lombardi' }, { id: 'a27', ag: 'ag10', name: 'Tessa Nilsson' }, { id: 'a28', ag: 'ag10', name: 'Gordon Vickers' },
+  { id: 'a29', ag: 'ag10', name: 'Farah Haddad' }, { id: 'a30', ag: 'ag11', name: 'Carlos Mendoza' }, { id: 'a31', ag: 'ag11', name: 'Jenna Whitlock' },
+  { id: 'a32', ag: 'ag11', name: 'Dev Kapoor' }, { id: 'a33', ag: 'ag11', name: 'Rosa Delgado' }, { id: 'a34', ag: 'ag12', name: 'Henry Zielinski' },
+  { id: 'a35', ag: 'ag12', name: 'Naomi Frazier' }, { id: 'a36', ag: 'ag12', name: 'Owen McBride' }, { id: 'a37', ag: 'ag13', name: 'Tamika Reed' },
+  { id: 'a38', ag: 'ag13', name: 'Greg Oliveira' }, { id: 'a39', ag: 'ag13', name: 'Sasha Petrov' }
 ];
 var BF_OPP_STAGES = ['identified', 'reviewed', 'contacted', 'appointment', 'illustration', 'application', 'issued'];
 var BF_STAGE_LABEL = { identified: 'Identified', reviewed: 'Reviewed', contacted: 'Contacted', appointment: 'Appointment', illustration: 'Illustration', application: 'Application', issued: 'Issued', snoozed: 'Snoozed', dismissed: 'Dismissed' };
@@ -30478,7 +30523,7 @@ function bfClientDo() {
 /* ── Household record (a person card built around the household) ──
    Tabs: Signals, Holdings, Email, Meetings, Phone, Tasks, Notes.
    Side panel: Household, Records, Comments. Everything reads from the same shared records. */
-var BF_MANAGERS = { ag1: 'Rebecca Holt', ag2: 'Anthony Marsh', ag3: 'Lena Ortiz', ag4: 'Michael Dunne', ag5: 'Carla Mendes' };
+var BF_MANAGERS = { ag1: 'Rebecca Holt', ag2: 'Anthony Marsh', ag3: 'Lena Ortiz', ag4: 'Michael Dunne', ag5: 'Carla Mendes', ag6: 'Joanna Whitfield', ag7: 'Marcus Greer', ag8: 'Elena Soto', ag9: 'Patrick Hale', ag10: 'Ingrid Larsen', ag11: 'Victor Ramos', ag12: 'Diane Kowalczyk', ag13: 'Andrea Boyd' };
 var BF_STREETS = ['Maple Ridge Dr', 'Cedar Lane', 'Oak Hollow Rd', 'Willow Creek Way', 'Birchwood Ave', 'Harbor View Ct', 'Prairie Wind Blvd', 'Lakeshore Dr'];
 function bfFirst(c) { return bfMembers(c)[0].first; }
 function bfMembers(c) {
@@ -30832,12 +30877,16 @@ function bfOppActions(o) {
 function bfOppsTable(rows) {
   var t = _bfv.tier;
   if (!rows.length) return '<div class="bfx-note">No opportunities match these filters.</div>';
-  return '<div style="overflow-x:auto"><table class="bfx-tbl"><thead><tr><th>Client</th><th>Score</th><th>Why it was flagged</th>' + (t !== 'agent' ? '<th>Agent</th>' : '') + '<th>Status</th><th>Next action</th><th></th></tr></thead><tbody>' +
+  return '<div class="bfo-tw"><table class="bfx-tbl bfo-t"><thead><tr><th>Client</th><th>Score</th><th>Why flagged</th><th class="r">In play</th><th>Status</th><th></th></tr></thead><tbody>' +
     rows.map(function(o){
-      var c = BF.byId[o.client];
-      return '<tr class="click"><td ' + bfOc('bfOpenClient', c.id, 'signals').replace('onclick', 'onclick') + '><b>' + bfName(c) + '</b>' + (t === 'bws' ? '<div style="font-size:11px;color:var(--g500)">' + bfEsc(bfAgency(c.agency).name) + '</div>' : '') + '</td><td>' + bfTierBadge(c.score) + '</td>' +
-        '<td style="max-width:330px">' + c.score.signals.map(function(s){ return '<div style="margin-bottom:5px">' + bfChip(s.type) + ' <span style="font-size:11.5px;color:var(--g600)">' + bfEsc(s.fact) + '</span></div>'; }).join('') + '<div style="font-size:11px;color:var(--g400)">' + bfMoney(bfOppAssets(o)) + ' in play · data ' + c.score.complete + '% complete</div></td>' +
-        (t !== 'agent' ? '<td>' + bfEsc(bfAgent(o.agent).name) + '</td>' : '') + '<td>' + bfStatusPill(o.status) + (o.reason ? '<div style="font-size:11px;color:var(--g500);margin-top:3px;max-width:140px">' + bfEsc(o.reason) + '</div>' : '') + '</td><td style="font-size:12px;color:var(--g600)">' + bfEsc(o.next) + '</td><td style="white-space:nowrap">' + bfOppActions(o) + '</td></tr>';
+      var c = BF.byId[o.client], sg = c.score.signals, sub = [(t !== 'agent' ? bfAgent(o.agent).name : null), (t === 'bws' ? bfAgency(c.agency).name : null), c.age ? 'Age ' + c.age : null].filter(Boolean).join(' · ');
+      var chips = sg.slice(0, 2).map(function(s){ return bfChip(s.type); }).join('') + (sg.length > 2 ? '<span class="bfo-more" title="' + bfEsc(sg.slice(2).map(function(s){ return BF_SIGNAL_DEFS[s.type].short; }).join(', ')) + '">+' + (sg.length - 2) + '</span>' : '');
+      var fact = sg.length ? '<div class="bfo-fact" title="' + bfEsc(sg.map(function(s){ return s.fact; }).join(' | ')) + '">' + bfEsc(sg[0].fact) + '</div>' : '';
+      return '<tr class="click"><td class="bfo-cl" ' + bfOc('bfOpenClient', c.id, 'signals') + '><b>' + bfName(c) + '</b><div class="bfo-sub">' + bfEsc(sub) + '</div></td><td>' + bfTierBadge(c.score) + '</td>' +
+        '<td class="bfo-why"><div class="bfo-chips">' + chips + '</div>' + fact + '</td>' +
+        '<td class="r bfo-amt">' + bfMoneyK(bfOppAssets(o)) + '<div class="bfo-sub">data ' + c.score.complete + '%</div></td>' +
+        '<td class="bfo-st">' + bfStatusPill(o.status) + '<div class="bfo-next">' + bfEsc(o.reason || o.next) + '</div></td>' +
+        '<td class="bfo-act">' + bfOppActions(o) + '</td></tr>';
     }).join('') + '</tbody></table></div>';
 }
 var BF_STAGE_COLOR = { identified: '#c9b78f', reviewed: '#d9a441', contacted: '#c8794a', appointment: '#b7704f', illustration: '#7f9a6a', application: '#5aa88a', issued: '#1d9e75' };
@@ -31607,7 +31656,7 @@ function bfProdBlock(level) {
   var insight = '<div class="bfx-card bfg-ai"><div class="hd">' + bfSecHead('AI insight', 'Foundation') + '<span class="tag">Illustrative</span></div><div style="font-size:13px;line-height:1.65">' + bfEsc(ins.text) + '</div>' + trio + '</div>';
   var recs = [['Coach ' + flagged.length + ' producers', 'No submission in ' + BF_COACH_DAYS + '+ days', 'goals', 'gFlag=1'], ['Clear ' + stalled.length + ' stalled cases', 'Missing requirements or long waits', 'cases', 'cStall=1'], ['Focus on ' + ins.focus, 'Largest gap to goal', ins.focusSpec[0], ins.focusSpec[1]]];
   var rec = '<div class="bfx-card"><h3>Ace recommends</h3>' + recs.map(function(x){ return '<div class="bfg-rec" ' + bfOc('bfJump', x[2], x[3]) + '><div><b>' + x[0] + '</b><div>' + x[1] + '</div></div><span>&rsaquo;</span></div>'; }).join('') + '<div style="font-size:11px;color:var(--g400);margin-top:8px">Suggestions come from simple visible rules on the demo data.</div></div>';
-  return bfSecHead('Production', level === 'bws' ? 'Custom build' : 'Foundation', level === 'bws' ? 'Executive production overview across the distribution network.' : 'How the agency is producing against goal.') + kp + '<div class="bfx-row">' + chart + perf + '</div><div class="bfx-row">' + insight + rec + '</div>' + (level === 'bws' ? bfLifecycleStrip() : '') + bfSecHead('Annuity opportunities', 'Custom build', 'The annuity opportunity engine: signals, reasons and what is being worked.');
+  return bfSecHead('Production', level === 'bws' ? 'Custom build' : 'Foundation', level === 'bws' ? 'Executive production overview across the distribution network.' : (level === 'agent' ? 'How you are producing against your goal.' : 'How the agency is producing against goal.')) + kp + '<div class="bfx-row">' + chart + perf + '</div><div class="bfx-row">' + insight + rec + '</div>' + (level === 'bws' ? bfLifecycleStrip() : '') + bfSecHead('Annuity opportunities', 'Custom build', 'The annuity opportunity engine: signals, reasons and what is being worked.');
 }
 (function(){
   var oB = BF_PAGES['bws:dashboard'], oA = BF_PAGES['agency:dashboard'];
@@ -33281,29 +33330,279 @@ function bfDashGroup(b) {
   };
 })();
 
+/* ═══ Brookfield demo: calmer Agent and Agency dashboards ═══ */
+var BF_DT = {
+  agent: { tabs: [['today', 'Today'], ['production', 'Production']], rules: [['production', /^(Production Foundation|Submitted premium|Production by month|AI insight)/]], dflt: 'today' },
+  agency: { tabs: [['today', 'Today'], ['team', 'Team'], ['production', 'Production'], ['opps', 'Opportunities']],
+    rules: [['team', /^(Agent leaderboard|Pipeline coverage)/], ['production', /^(Production Foundation|Submitted premium|Production by month|AI insight|Premium by line)/], ['opps', /^(Annuity opportunities Custom|Production, 12 months|Top annuity)/]], dflt: 'today' }
+};
+(function() {
+  var x = bfDashExtra;
+  bfDashExtra = function(t, html) {
+    html = x(t, html); var cfg = BF_DT[t]; if (!cfg) return html;
+    var MK = '<!--bf-head-end-->', i = html.indexOf(MK); if (i < 0) return html;
+    var head = html.slice(0, i + MK.length), blocks = bfSplitTop(html.slice(i + MK.length)), f = _bfv.f;
+    if (!cfg.tabs.some(function(d){ return d[0] === f.dTab; })) f.dTab = cfg.dflt;
+    var attn = '', keep = [], last = cfg.dflt;
+    blocks.forEach(function(b) {
+      var txt = b.html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim(), g = last;
+      if (b.div) { g = cfg.dflt; cfg.rules.forEach(function(r){ if (r[1].test(txt)) g = r[0]; }); if (/^Needs your attention/.test(txt)) g = 'attn'; if (g !== 'attn') last = g; }
+      if (g === 'attn') attn += b.html; else if (g === f.dTab) keep.push(b.html);
+    });
+    return head + attn + bfTabs('dTab', cfg.tabs, f.dTab) + keep.join('');
+  };
+})();
+
+/* ═══ Brookfield demo: global search (Cmd+K / Ctrl+K and the top search box) ═══ */
+var _bfk = { open: false, q: '', sel: 0, items: [] };
+function bfKStr(o, depth) {
+  if (o == null) return ''; if (typeof o === 'string') return o.replace(/<[^>]*>/g, ' '); if (typeof o === 'number') return String(o);
+  if (depth > 2) return ''; if (Array.isArray(o)) return o.map(function(x){ return bfKStr(x, depth + 1); }).join(' ');
+  if (typeof o === 'object') return Object.keys(o).map(function(k){ return typeof o[k] === 'string' ? o[k].replace(/<[^>]*>/g, ' ') : (typeof o[k] === 'object' ? bfKStr(o[k], depth + 1) : ''); }).join(' ');
+  return '';
+}
+function bfKScore(hay, toks, title) {
+  var h = hay.toLowerCase(), s = 0;
+  for (var i = 0; i < toks.length; i++) { var k = h.indexOf(toks[i]); if (k < 0) return 0; s += k === 0 ? 3 : (h.charAt(k - 1) === ' ' ? 2 : 1); }
+  if (title) { var t = title.toLowerCase(); toks.forEach(function(x){ if (t.indexOf(x) === 0) s += 3; else if (t.indexOf(x) > -1) s += 1; }); }
+  return s;
+}
+function bfKPages() {
+  var t = _bfv.tier, out = BF_NAV[t].map(function(n){ return { t: n[3] || n[1], s: 'Page', k: n[1], go: ['bfGo', n[0]] }; });
+  var more = [
+    ['Calendar, full screen', 'calendar events schedule', ['bfCalFull']], ['Notifications', 'alerts bell updates', ['togglePanel', 'notif-panel']]
+  ];
+  if (t === 'agent') more.push(['Import households from CSV', 'upload csv import leads', ['bfGo', 'import']], ['Quarterly book scan', 'scan printable quarterly', ['bfGo', 'scan']], ['Opportunity Inbox', 'hot warm watch review', ['bfGo', 'inbox']], ['Reports: Scorecard', 'reports score', ['bfJump', 'reports', 'rTab=score']], ['Reports: Audit trail', 'audit log history', ['bfJump', 'reports', 'rTab=audit']]);
+  if (t === 'agency') more.push(['Import households from CSV', 'upload csv import leads', ['bfGo', 'import']], ['Quarterly book scan', 'scan printable quarterly', ['bfGo', 'scan']], ['Principal review queue', 'approve review large cases', ['bfGo', 'review']], ['Reports: Funnel and leakage', 'funnel leak conversion', ['bfJump', 'reports', 'rTab=funnel']], ['Reports: Audit trail', 'audit log history', ['bfJump', 'reports', 'rTab=audit']]);
+  if (t === 'bws') more.push(['Reports: Revenue at risk', 'persistency chargeback licensing', ['bfJump', 'reports', 'rTab=risk']], ['Reports: Pilot scorecard', 'targets pilot score', ['bfJump', 'reports', 'rTab=score']], ['Reports: Audit trail', 'audit log history', ['bfJump', 'reports', 'rTab=audit']], ['Reports: Data quality', 'completeness missing', ['bfJump', 'reports', 'rTab=quality']], ['Reports: Funnel and leakage', 'funnel leak conversion', ['bfJump', 'reports', 'rTab=funnel']], ['Quarterly book scan', 'scan printable quarterly', ['bfJump', 'reports', 'rTab=scan']], ['Rules: Triggers and tiers', 'thresholds hot warm watch points', ['bfJump', 'rules', 'rlTab=triggers']], ['Rules: State availability', 'states products available', ['bfJump', 'rules', 'rlTab=states']], ['Rules: Compliance', 'quiet hours consent disclosure suitability', ['bfJump', 'rules', 'rlTab=compliance']], ['Rules: Products', 'catalog annuity products', ['bfJump', 'rules', 'rlTab=products']]);
+  more.forEach(function(m){ out.push({ t: m[0], s: 'Page', k: m[1], go: m[2] }); });
+  return out;
+}
+function bfKIndex() {
+  var S = bfScope(), t = _bfv.tier, items = [], clients = {};
+  S.clients.forEach(function(c) {
+    var see = bfCanSeeClient(c); clients[c.id] = c;
+    var comm = c._comms ? bfKStr([c._comms.notes, c._comms.emails, c._comms.meetings], 0) : '';
+    items.push({ g: 'Households', id: c.id, t: see ? c.name : 'Client ' + c.code, sub: (see ? c.code + ' · ' : '') + [c.city, c.state].filter(Boolean).join(', ') + ' · ' + bfAgent(c.agent).name + ' · ' + c.status,
+      k: (see ? [c.name, c.email, c.phone].join(' ') : '') + ' ' + c.code + ' ' + (c.city || '') + ' ' + (c.state || '') + ' ' + c.status + ' ' + bfAgent(c.agent).name + ' ' + bfAgency(c.agency).name + (see ? ' ' + comm : ''), go: ['bfOpenClient', c.id, 'overview'] });
+  });
+  S.policies.forEach(function(p) {
+    var c = clients[p.client]; if (!c) return;
+    items.push({ g: 'Policies', t: p.product + ' · ' + p.carrier, sub: bfCanSeeClient(c) || true ? (bfCanSeeClient(c) ? c.name : 'Client ' + c.code) + ' · ' + p.lob + ' · ' + p.status : '', k: [p.id, p.product, p.carrier, p.lob, p.status, c.code, bfCanSeeClient(c) ? c.name : ''].join(' '), go: ['bfOpenClient', p.client, 'policies'] });
+  });
+  S.cases.forEach(function(cs) {
+    var c = clients[cs.client]; if (!c) return;
+    items.push({ g: 'Cases', t: (bfCanSeeClient(c) ? c.name : 'Client ' + c.code) + ' · ' + cs.stage, sub: 'Case ' + cs.id + (cs.req ? ' · waiting on requirements' : ''), k: [cs.id, cs.stage, cs.req || '', c.code, bfCanSeeClient(c) ? c.name : ''].join(' '), go: ['bfJump', 'cases', ''] });
+  });
+  S.opps.forEach(function(o) {
+    var c = clients[o.client]; if (!c || !c.score) return;
+    var sg = c.score.signals.map(function(s){ return BF_SIGNAL_DEFS[s.type] ? BF_SIGNAL_DEFS[s.type].label : s.type; }).join(', ');
+    items.push({ g: 'Opportunities', t: (bfCanSeeClient(c) ? c.name : 'Client ' + c.code) + ' · ' + (BF_STAGE_LABEL[o.status] || o.status), sub: (BF_TIER_NAME[c.score.tier] || '') + (sg ? ' · ' + sg : ''), k: [o.id, o.status, BF_STAGE_LABEL[o.status], BF_TIER_NAME[c.score.tier], sg, c.code, bfCanSeeClient(c) ? c.name : ''].join(' '), go: ['bfOpenClient', o.client, 'annuity'] });
+  });
+  S.acts.forEach(function(x) {
+    var c = clients[x.client]; if (!c || !bfCanSeeClient(c)) return;
+    items.push({ g: 'Activity', t: String(x.text || x.kind).replace(/<[^>]*>/g, ' ').slice(0, 90), sub: x.kind + ' · ' + c.name, k: [x.kind, x.text, x.notes || '', c.name].join(' '), go: ['bfOpenClient', x.client, 'actions'] });
+  });
+  S.agents.forEach(function(a) { items.push({ g: 'People', t: a.name, sub: 'Agent · ' + bfAgency(a.ag).name, k: a.name + ' ' + bfAgency(a.ag).name, go: t === 'bws' ? ['bfOpenAgency', a.ag] : (t === 'agency' ? ['bfGo', 'agents'] : ['bfGo', 'dashboard']) }); });
+  if (t === 'bws') BF_AGENCIES.forEach(function(g) { items.push({ g: 'Agencies', t: g.name, sub: [g.city, g.state, g.region].filter(Boolean).join(', ') + ' · ' + (BF_MANAGERS[g.id] || ''), k: [g.name, g.city, g.state, g.region, BF_MANAGERS[g.id]].join(' '), go: ['bfOpenAgency', g.id] }); });
+  return items.concat(bfKPages());
+}
+function bfKSearch(q) {
+  var toks = q.toLowerCase().split(/\s+/).filter(Boolean), idx = bfKIndex(), by = {};
+  if (!toks.length) return bfKPages().filter(function(p){ return p.s === 'Page'; }).slice(0, 8).map(function(p){ p.g = 'Jump to'; return p; });
+  idx.forEach(function(it) { var s = bfKScore(it.k || it.t, toks, it.t); if (s) { it.s2 = s; var g = it.g || 'Pages'; (by[g] = by[g] || []).push(it); } });
+  var order = ['Households', 'Opportunities', 'Policies', 'Cases', 'Activity', 'People', 'Agencies', 'Pages'], out = [];
+  order.forEach(function(g) {
+    var l = by[g]; if (!l) return; l.sort(function(a, b){ return b.s2 - a.s2; });
+    l.slice(0, g === 'Households' ? 6 : 4).forEach(function(x){ x.grp = g; x.more = l.length; out.push(x); });
+  });
+  return out;
+}
+function bfKHtml() {
+  var items = _bfk.items, cur = '', h = '';
+  items.forEach(function(it, i) {
+    var g = it.g === 'Page' || !it.g ? 'Pages' : it.g; if (it.grp) g = it.grp;
+    if (g !== cur) { cur = g; h += '<div class="bfk-g">' + g + '</div>'; }
+    h += '<div class="bfk-i' + (i === _bfk.sel ? ' on' : '') + '" data-i="' + i + '" onmousemove="bfKHover(' + i + ')" onclick="bfKGo(' + i + ')"><div class="bfk-t">' + bfEsc(it.t) + '</div><div class="bfk-s">' + bfEsc(it.sub || (it.s === 'Page' ? 'Page' : '')) + '</div></div>';
+  });
+  if (!items.length) h = '<div class="bfk-e">No matches for "' + bfEsc(_bfk.q) + '". Try a name, policy, carrier, state, or a note.</div>';
+  return h;
+}
+function bfKPaint() { var r = bfEl('bfk-res'); if (r) r.innerHTML = bfKHtml(); var on = document.querySelector && document.querySelector('.bfk-i.on'); if (on && on.scrollIntoView) on.scrollIntoView({ block: 'nearest' }); }
+function bfKOpen(prefill) {
+  var el = bfEl('bfk');
+  if (!el) {
+    el = document.createElement('div'); el.id = 'bfk'; el.className = 'bfk';
+    el.innerHTML = '<div class="bfk-bd" onclick="bfKClose()"></div><div class="bfk-box"><div class="bfk-in"><span class="bfk-ic">&#8981;</span><input id="bfk-q" type="text" autocomplete="off" spellcheck="false" placeholder="Search households, policies, cases, notes, agents, pages" oninput="bfKInput(this.value)" onkeydown="bfKKey(event)"><span class="bfk-esc">Esc</span></div><div id="bfk-res" class="bfk-res"></div><div class="bfk-ft"><span>&uarr;&darr; move</span><span>Enter open</span><span>Esc close</span></div></div>';
+    document.body.appendChild(el);
+  }
+  _bfk.open = true; el.style.display = 'flex'; var q = bfEl('bfk-q'); q.value = prefill || ''; _bfk.q = q.value; _bfk.sel = 0; _bfk.items = bfKSearch(_bfk.q); bfKPaint(); q.focus();
+}
+function bfKClose() { _bfk.open = false; var el = bfEl('bfk'); if (el) el.style.display = 'none'; }
+function bfKInput(v) { _bfk.q = v; _bfk.sel = 0; _bfk.items = bfKSearch(v); bfKPaint(); }
+function bfKHover(i) { if (_bfk.sel === i) return; var a = document.querySelector('.bfk-i.on'); if (a) a.classList.remove('on'); _bfk.sel = i; var b = document.querySelector('.bfk-i[data-i="' + i + '"]'); if (b) b.classList.add('on'); }
+function bfKKey(e) {
+  var n = _bfk.items.length;
+  if (e.key === 'ArrowDown') { _bfk.sel = n ? (_bfk.sel + 1) % n : 0; bfKPaint(); e.preventDefault(); }
+  else if (e.key === 'ArrowUp') { _bfk.sel = n ? (_bfk.sel + n - 1) % n : 0; bfKPaint(); e.preventDefault(); }
+  else if (e.key === 'Enter') { bfKGo(_bfk.sel); e.preventDefault(); }
+  else if (e.key === 'Escape') { bfKClose(); e.preventDefault(); e.stopPropagation(); }
+}
+function bfKGo(i) {
+  var it = _bfk.items[i]; if (!it) return; bfKClose();
+  var fn = window[it.go[0]] || (typeof eval === 'function' ? null : null); var args = it.go.slice(1);
+  try { (typeof window[it.go[0]] === 'function' ? window[it.go[0]] : eval(it.go[0])).apply(null, args); } catch (e) { try { console.warn('search jump', e); } catch (e1) {} }
+}
+(function() {
+  try {
+    document.addEventListener('keydown', function(e) {
+      if ((e.metaKey || e.ctrlKey) && String(e.key).toLowerCase() === 'k') { e.preventDefault(); e.stopImmediatePropagation(); _bfk.open ? bfKClose() : bfKOpen(''); }
+      else if (e.key === 'Escape' && _bfk.open) { bfKClose(); e.stopImmediatePropagation(); }
+    }, true);
+    document.addEventListener('focusin', function(e) {
+      var t = e.target; if (t && t.closest && t.closest('.tb-search') && !_bfk.open) { var v = t.value || ''; t.value = ''; t.blur(); bfKOpen(v); }
+    }, true);
+    document.addEventListener('click', function(e) { var t = e.target; if (t && t.closest && t.closest('.tb-search') && !_bfk.open) bfKOpen(''); }, true);
+  } catch (e) {}
+})();
+(function() {
+  var st = document.createElement ? document.createElement('style') : null; if (!st || !document.head) return;
+  st.textContent = '.bfk{position:fixed;inset:0;z-index:100000;display:none;align-items:flex-start;justify-content:center;padding-top:11vh}.bfk-bd{position:absolute;inset:0;background:rgba(30,26,18,.38)}' +
+    '.bfk-box{position:relative;width:min(680px,92vw);max-height:70vh;display:flex;flex-direction:column;background:#fff;border:1px solid var(--g200);border-radius:16px;box-shadow:0 24px 60px rgba(30,26,18,.28);overflow:hidden}' +
+    '.bfk-in{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--g100)}.bfk-ic{font-size:18px;color:var(--g400)}.bfk-in input{flex:1;border:0;outline:0;font-size:16px;font-family:var(--font);background:none;color:var(--dark)}' +
+    '.bfk-esc{font-size:10.5px;font-weight:600;color:var(--g500);border:1px solid var(--g200);border-radius:6px;padding:2px 7px}.bfk-res{overflow-y:auto;padding:6px 8px 10px}' +
+    '.bfk-g{font-family:var(--mono);font-size:10px;letter-spacing:.6px;text-transform:uppercase;color:var(--g400);padding:12px 10px 6px}.bfk-i{padding:9px 12px;border-radius:10px;cursor:pointer}.bfk-i.on{background:rgba(29,158,117,.12)}' +
+    '.bfk-t{font-size:13.5px;font-weight:600;color:var(--dark);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.bfk-s{font-size:12px;color:var(--g500);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}' +
+    '.bfk-e{padding:28px 16px;text-align:center;font-size:13px;color:var(--g500)}.bfk-ft{display:flex;gap:16px;padding:9px 18px;border-top:1px solid var(--g100);font-size:11.5px;color:var(--g400)}';
+  document.head.appendChild(st);
+})();
+
+/* ═══ Brookfield demo: click through from Brookfield to an agency, and from an agency to an agent ═══ */
+/* _bfv.dive is a stack of where you came from; empty means you are in your own view */
+function bfDiveOn() { return !!(_bfv.dive && _bfv.dive.length); }
+function bfCanSeeClient(c) { var o = bfDiveOn() ? _bfv.dive[0] : null; return (_bfv.tier !== 'bws' && !(o && o.tier === 'bws')) || bfAgency(c.agency).access; }
+function bfDiveSnap() { return { tier: _bfv.tier, agent: _bfv.agent, agency: _bfv.agency, page: _bfv.page, agencyDetail: _bfv.agencyDetail, label: _bfv.tier === 'bws' ? 'Brookfield' : (_bfv.tier === 'agency' ? bfAgency(_bfv.agency).name : bfAgent(_bfv.agent).name) }; }
+function bfDive(kind, id) {
+  if (!_bfv.dive) _bfv.dive = [];
+  if (kind === 'agent' && _bfv.tier === 'agent' && _bfv.agent === id) return;
+  if (kind === 'agency' && _bfv.tier === 'agency' && _bfv.agency === id) return;
+  _bfv.dive.push(bfDiveSnap());
+  if (kind === 'agent') { _bfv.tier = 'agent'; _bfv.agent = id; _bfv.agency = bfAgent(id).ag; }
+  else { _bfv.tier = 'agency'; _bfv.agency = id; }
+  _bfv.page = 'dashboard'; _bfv.agentDetail = null; _bfv.agencyDetail = null; _bfv.f.dTab = null; bfCloseRecord();
+  bfRenderSwitch(); bfRenderNav(); bfRender();
+}
+function bfDiveBack(n) {
+  if (!bfDiveOn()) return; var s = null;
+  for (var i = 0; i < (n || 1) && _bfv.dive.length; i++) s = _bfv.dive.pop(); if (!s) return;
+  _bfv.tier = s.tier; _bfv.agent = s.agent; _bfv.agency = s.agency; _bfv.page = s.page; _bfv.agencyDetail = s.agencyDetail || null; _bfv.agentDetail = null; _bfv.f.dTab = null; bfCloseRecord();
+  bfRenderSwitch(); bfRenderNav(); bfRender();
+}
+function bfDiveBar() {
+  if (!bfDiveOn()) return '';
+  var crumbs = _bfv.dive.map(function(s, i) { return '<a href="#" class="bfdv-c" onclick="bfDiveBack(' + (_bfv.dive.length - i) + ');return false">' + bfEsc(s.label) + '</a><span class="bfdv-s">&rsaquo;</span>'; }).join('');
+  var now = _bfv.tier === 'agent' ? bfAgent(_bfv.agent).name : bfAgency(_bfv.agency).name;
+  return '<div class="bfdv"><button class="bfx-btn" onclick="bfDiveBack(1)">&larr; Back</button><div class="bfdv-t">' + crumbs + '<b>' + bfEsc(now) + '</b></div><span class="bfdv-n">Viewing as the ' + (_bfv.tier === 'agent' ? 'agent' : 'agency principal') + '</span></div>';
+}
+
+/* click handling */
+var bfLkS = { agents: null, agencies: null, re: null, clients: null };
+function bfLkBuild() {
+  var esc = function(s){ return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); };
+  var names = {}, parts = [];
+  if (_bfv.tier !== 'agent') BF_AGENTS.forEach(function(a){ names[a.name] = ['agent', a.id]; });
+  if (_bfv.tier === 'bws') BF_AGENCIES.forEach(function(a){ names[a.name] = ['agency', a.id]; });
+  Object.keys(names).sort(function(a, b){ return b.length - a.length; }).forEach(function(n){ parts.push(esc(n)); });
+  bfLkS.map = names; bfLkS.re = parts.length ? new RegExp('(' + parts.join('|') + ')', 'g') : null;
+  var cl = {}; (bfScope().clients || []).forEach(function(c){ cl[bfCanSeeClient(c) ? c.name : 'Client ' + c.code] = c.id; if (bfCanSeeClient(c)) cl[c.code] = c.id; });
+  bfLkS.clients = cl; bfLkS.cre = null;
+  var ks = Object.keys(cl).sort(function(a, b){ return b.length - a.length; }); if (ks.length) bfLkS.cre = new RegExp('(' + ks.map(esc).join('|') + ')');
+}
+function bfLinkify(root) {
+  if (!root || !document.createTreeWalker) return; bfLkBuild();
+  var skip = { SCRIPT: 1, STYLE: 1, TEXTAREA: 1, SELECT: 1, OPTION: 1, INPUT: 1, BUTTON: 1, A: 1, H3: 0 };
+  /* names of agents and agencies */
+  if (bfLkS.re) {
+    var w = document.createTreeWalker(root, 4, null), list = [], n;
+    while ((n = w.nextNode())) { var p = n.parentNode; if (!p || skip[p.nodeName] || (p.closest && p.closest('.bf-lk,button,a,select,textarea,.bfdv,.bfk'))) continue; if (n.nodeValue.length > 90) continue; bfLkS.re.lastIndex = 0; if (bfLkS.re.test(n.nodeValue)) list.push(n); }
+    list.forEach(function(t) {
+      var html = bfEsc2(t.nodeValue).replace(bfLkS.re, function(m) { var d = bfLkS.map[m]; if (!d) return m; return '<span class="bf-lk" data-k="' + d[0] + '" data-id="' + d[1] + '" title="Open ' + (d[0] === 'agent' ? 'agent view' : 'agency') + '">' + m + '</span>'; });
+      var span = document.createElement('span'); span.innerHTML = html; if (t.parentNode) t.parentNode.replaceChild(span, t);
+    });
+  }
+  /* table rows that mention a household open that household */
+  var rows = root.querySelectorAll ? root.querySelectorAll('tr') : [];
+  for (var i = 0; i < rows.length; i++) {
+    var r = rows[i]; if (r.getAttribute('onclick') || r.parentNode.nodeName === 'THEAD' || r.getAttribute('data-cid')) continue;
+    if (r.querySelector && r.querySelector('[onclick]:not(button)')) continue;
+    var m = bfLkS.cre && bfLkS.cre.exec(r.textContent || ''); if (m && bfLkS.clients[m[1]]) { r.setAttribute('data-cid', bfLkS.clients[m[1]]); r.className += ' bf-rowlk'; }
+  }
+}
+function bfEsc2(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+(function() {
+  try {
+    document.addEventListener('click', function(e) {
+      var t = e.target; if (!t || !t.closest) return;
+      var lk = t.closest('.bf-lk');
+      if (lk) { e.stopPropagation(); e.preventDefault(); var k = lk.getAttribute('data-k'), id = lk.getAttribute('data-id'); if (_bfv.tier === 'bws' && k === 'agency') bfOpenAgency(id); else bfDive(k, id); return; }
+      var row = t.closest('tr[data-cid]'); if (row && !t.closest('button,a,select,input,textarea,label')) { e.stopPropagation(); bfOpenClient(row.getAttribute('data-cid'), 'annuity'); }
+    }, true);
+  } catch (e) {}
+})();
+
+/* draw: banner on top, then make names clickable */
+(function() {
+  var r0 = bfRender, s0 = bfSetTier, c0 = bfOpenClient;
+  bfRender = function() {
+    var out = r0.apply(this, arguments), root = bfEl('bf-root');
+    try { if (root) { var bar = bfDiveBar(); if (bar) root.innerHTML = bar + root.innerHTML; if (_bfv.tier === 'bws' && _bfv.agencyDetail) root.innerHTML = root.innerHTML.replace('<!--bf-head-end-->', '<!--bf-head-end--><div style="margin-bottom:14px"><button class="bfx-btn pri" onclick="bfDive(\'agency\',\'' + _bfv.agencyDetail + '\')">Open ' + bfEsc(bfAgency(_bfv.agencyDetail).name) + ' as the agency principal</button></div>'); bfLinkify(root); } } catch (e) { try { console.warn('link pass', e); } catch (e1) {} }
+    return out;
+  };
+  bfSetTier = function() { _bfv.dive = []; return s0.apply(this, arguments); };
+})();
+(function() {
+  var st = document.createElement ? document.createElement('style') : null; if (!st || !document.head) return;
+  st.textContent = '.bf-lk{cursor:pointer;border-bottom:1px dashed rgba(29,158,117,.55);color:inherit}.bf-lk:hover{color:var(--teal2);border-bottom-style:solid}.bf-rowlk{cursor:pointer}.bf-rowlk:hover td{background:rgba(29,158,117,.06)}' +
+    '.bfdv{display:flex;align-items:center;gap:14px;margin:0 0 16px;padding:10px 14px;background:rgba(29,158,117,.1);border:1px solid rgba(29,158,117,.3);border-radius:12px}.bfdv-t{flex:1;font-size:13px;color:var(--g600)}.bfdv-c{color:var(--teal2);text-decoration:none;font-weight:600}.bfdv-c:hover{text-decoration:underline}.bfdv-s{margin:0 8px;color:var(--g400)}.bfdv-n{font-size:11.5px;color:var(--g500)}';
+  document.head.appendChild(st);
+})();
+
 /* ── keep the same view after a refresh (per browser tab) ── */
 var _bfSaved = null;
-try { var _bfH = /[#&]bf=([^&]*)/.exec(location.hash || ''); if (_bfH) _bfSaved = JSON.parse(decodeURIComponent(_bfH[1])); } catch (e) {}
-if (!_bfSaved) { try { _bfSaved = JSON.parse(sessionStorage.getItem('bf_nav_v1') || 'null'); } catch (e) {} }
+var _bfSrc = 'none';
+try { var _bfH = /[#&]bf=([^&]*)/.exec(location.hash || ''); if (_bfH) { _bfSaved = JSON.parse(decodeURIComponent(_bfH[1])); _bfSrc = 'address'; } } catch (e) {}
+if (!_bfSaved) { try { _bfSaved = JSON.parse(sessionStorage.getItem('bf_nav_v1') || 'null'); if (_bfSaved) _bfSrc = 'session'; } catch (e) {} }
+if (!_bfSaved) { try { _bfSaved = JSON.parse(localStorage.getItem('bf_nav_v1') || 'null'); if (_bfSaved) _bfSrc = 'local'; } catch (e) {} }
+if (!_bfSaved) { try { _bfSaved = JSON.parse(window.name && window.name.indexOf('bf_nav_v1:') === 0 ? window.name.slice(10) : 'null'); } catch (e) {} }
 function bfSaveState() {
   try {
     var r = _bfv.rec && _bfv.rec.id ? { id: _bfv.rec.id, tab: _bfv.rec.tab } : null;
-    var st = { tier: _bfv.tier, agent: _bfv.agent, agency: _bfv.agency, page: _bfv.page, f: _bfv.f, rec: r }, js = JSON.stringify(st);
+    var st = { tier: _bfv.tier, agent: _bfv.agent, agency: _bfv.agency, page: _bfv.page, f: _bfv.f, rec: r, dive: _bfv.dive || [] }, js = JSON.stringify(st);
     try { sessionStorage.setItem('bf_nav_v1', js); } catch (e) {}
+    try { localStorage.setItem('bf_nav_v1', js); } catch (e) {}
+    try { window.name = 'bf_nav_v1:' + js; } catch (e) {}
     if (js.length > 1800) { st.f = {}; js = JSON.stringify(st); }
-    if (window.history && window.history.replaceState) window.history.replaceState(null, '', '#bf=' + encodeURIComponent(js));
+    try { window.history.replaceState(null, '', '#bf=' + encodeURIComponent(js)); }
+    catch (e2) { try { location.replace('#bf=' + encodeURIComponent(js)); } catch (e3) {} }
   } catch (e) {}
 }
 function bfRestoreState() {
-  var sv = _bfSaved; if (!sv || !BF_NAV[sv.tier]) return;
+  var sv = _bfSaved; try { console.info('[Brookfield] saved view source: ' + _bfSrc, sv); } catch (e0) {}
+  if (!sv || !BF_NAV[sv.tier]) return;
+  try { setTimeout(function() { if (_bfv.tier !== sv.tier || _bfv.page !== sv.page || (sv.tier === 'agent' && _bfv.agent !== sv.agent) || (sv.tier !== 'agent' && _bfv.agency !== sv.agency)) { _bfSaved = sv; bfRestoreState2(sv); } }, 400); } catch (e1) {}
+  bfRestoreState2(sv);
+}
+function bfRestoreState2(sv) {
   try {
+    _bfv.dive = Array.isArray(sv.dive) ? sv.dive : [];
     _bfv.tier = sv.tier; if (bfAgent(sv.agent).id) _bfv.agent = sv.agent; if (bfAgency(sv.agency).id) _bfv.agency = sv.agency;
     if (BF_NAV[sv.tier].some(function(n){ return n[0] === sv.page; }) || BF_PAGES[sv.tier + ':' + sv.page]) _bfv.page = sv.page;
     if (sv.f) Object.keys(sv.f).forEach(function(k){ _bfv.f[k] = sv.f[k]; });
-    bfRenderSwitch(); bfRenderNav(); bfRender();
-    if (sv.rec && BF.byId[sv.rec.id]) bfOpenClient(sv.rec.id, sv.rec.tab);
-  } catch (e) {}
+  } catch (e) { try { console.warn('Brookfield restore', e); } catch (e1) {} }
+  try { bfRenderSwitch(); bfRenderNav(); bfRender(); } catch (e) { try { console.warn('Brookfield render', e); } catch (e1) {} }
+  try { if (sv.rec && BF.byId[sv.rec.id]) bfOpenClient(sv.rec.id, sv.rec.tab); } catch (e) {}
 }
+try { window.addEventListener('pagehide', bfSaveState); window.addEventListener('beforeunload', bfSaveState); } catch (e) {}
 (function() {
   var o1 = bfRender, o2 = bfOpenClient, o3 = bfCloseRecord, o4 = bfRecTab;
   bfRender = function() { var r = o1.apply(this, arguments); bfSaveState(); return r; };
