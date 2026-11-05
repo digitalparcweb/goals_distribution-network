@@ -30908,7 +30908,7 @@ function bfMoveDo(oid, st) {
   bfModalClose(); bfSetOpp(oid, st); bfLog(o.client, 'Note', 'Opportunity moved to ' + BF_STAGE_LABEL[st] + ': ' + n); showToast('Moved to ' + BF_STAGE_LABEL[st]); bfRender();
 }
 function bfOppBoard(rows) {
-  var t = _bfv.tier, drag = t === 'agent', setAside = bfCount(rows, function(o){ return o.status === 'snoozed' || o.status === 'dismissed'; });
+  var t = _bfv.tier, drag = t === 'agent' || t === 'agency', setAside = bfCount(rows, function(o){ return o.status === 'snoozed' || o.status === 'dismissed'; });
   var cols = BF_OPP_STAGES.map(function(st){
     var list = rows.filter(function(o){ return o.status === st; }), tot = bfSum(list, bfOppAssets), col = BF_STAGE_COLOR[st];
     var cards = list.slice(0, 8).map(function(o){
@@ -30917,7 +30917,7 @@ function bfOppBoard(rows) {
       return '<div class="bfb-card"' + (drag ? ' draggable="true" ondragstart="bfDragStart(event,\'' + o.id + '\')"' : '') + ' ' + bfOc('bfOpenClient', c.id, 'signals') + '><div class="bfb-top"><span class="bfb-nm">' + bfName(c) + '</span><span class="bfb-tier t' + tr + '" title="' + BF_TIER_NAME[tr] + '">' + BF_TIER_NAME[tr] + '</span></div>' +
         (t === 'bws' ? '<div class="bfb-sub">' + bfEsc(bfAgency(c.agency).name) + '</div>' : '') +
         '<div class="bfb-chips">' + sg.slice(0, 2).map(function(x){ return bfChip(x.type); }).join('') + (sg.length > 2 ? '<span class="bfb-more">+' + (sg.length - 2) + '</span>' : '') + (!sg.length && o.note ? '<span class="bfb-notechip">' + bfEsc(o.note) + '</span>' : '') + (o.review && o.review.status === 'pending' ? '<span class="bfb-notechip">Awaiting review</span>' : '') + '</div>' +
-        '<div class="bfb-ft">' + who + '<b>' + bfMoneyK(bfOppAssets(o)) + '</b></div></div>';
+        '<div class="bfb-ft">' + who + '<span style="display:flex;align-items:center"><b>' + bfMoneyK(bfOppAssets(o)) + '</b>' + (drag && bfOppOpen(o) && BF_OPP_STAGES.indexOf(st) < 6 ? '<button class="bfb-nx" title="Move to ' + BF_STAGE_LABEL[BF_OPP_STAGES[BF_OPP_STAGES.indexOf(st) + 1]] + '" onclick="event.stopPropagation();bfMoveOpp(\'' + o.id + '\',\'' + BF_OPP_STAGES[BF_OPP_STAGES.indexOf(st) + 1] + '\')">&rsaquo;</button>' : '') + '</span></div></div>';
     }).join('');
     return '<div class="bfb-col" style="--col:' + col + '" ondragover="event.preventDefault();this.classList.add(\'over\')" ondragleave="this.classList.remove(\'over\')" ondrop="bfDropOn(event,\'' + st + '\')"><div class="bfb-h"><div class="t"><i></i><b>' + BF_STAGE_LABEL[st] + '</b></div><span class="ct">' + list.length + '</span></div><div class="bfb-tot">' + bfMoneyK(tot) + ' in play</div><div class="bfb-list">' + (cards || '<div class="bfb-empty">' + (drag ? 'Drop a card here' : 'Nothing here yet') + '</div>') + (list.length > 8 ? '<div class="bfb-more2">+ ' + (list.length - 8) + ' more in the list view</div>' : '') + '</div></div>';
   }).join('');
@@ -31343,7 +31343,7 @@ BF_PAGES['bws:sales'] = function() {
   else if (by === 'product') rows = bfGroup(pols, function(p){ return p.product; }).map(function(r){ return { name: r.key, n: r.n, prem: r.prem }; });
   else { var days = f.sPer === 'all' ? 0 : parseInt(f.sPer, 10); rows = bfMonthly(pols).filter(function(m){ return m.n; }).reverse().map(function(m){ return { name: m.label, n: m.n, prem: m.prem }; }); void days; }
   var mx = Math.max.apply(null, rows.map(function(r){ return r.prem; }).concat([1]));
-  var tbl = rows.length ? '<table class="bfx-tbl"><thead><tr><th>' + { agency: 'Agency', agent: 'Agent', carrier: 'Carrier', product: 'Product', period: 'Month' }[by] + '</th><th>Policies written</th><th>Premium written</th><th style="width:30%"></th></tr></thead><tbody>' + rows.map(function(r){ return '<tr><td><b>' + bfEsc(r.name) + '</b></td><td>' + r.n + '</td><td>' + bfMoney(r.prem) + '</td><td><div class="tr" style="height:8px;background:var(--g100);border-radius:5px;overflow:hidden"><div style="height:100%;width:' + Math.round(r.prem / mx * 100) + '%;background:var(--teal)"></div></div></td></tr>'; }).join('') + '</tbody></table>' : '<div class="bfx-note">No sales in this period.</div>';
+  var tbl = rows.length ? '<table class="bfx-tbl"><thead><tr><th>' + { agency: 'Agency', agent: 'Agent', carrier: 'Carrier', product: 'Product', period: 'Month' }[by] + '</th><th>Policies written</th><th>Premium written</th><th style="width:30%"></th></tr></thead><tbody>' + rows.map(function(r){ return '<tr><td><b>' + bfEsc(r.name) + '</b></td><td>' + r.n + '</td><td>' + bfMoney(r.prem) + '</td><td><div class="tr" style="height:8px;background:var(--g100);border-radius:5px;overflow:hidden"><div style="height:100%;width:' + Math.round(r.prem / mx * 100) + '%;background:var(--teal)"></div></div></td></tr>'; }).join('') + '</tbody></table>' : '<div class="bfx-note">No sales match these filters. <button class="bfx-btn" onclick="_bfv.f.sPer=\'all\';_bfv.f.sProd=\'all\';_bfv.f.sLob=\'all\';_bfv.f.sAg=\'all\';bfRender()">Clear filters</button></div>';
   var potential = bfSum(BF.opps.filter(bfOppOpen), bfOppAssets);
   return bfHead('Sales & Policies', 'Policies written and premium written, by agency, agent, carrier, product and period.', '<button class="bfx-btn" ' + bfOc('bfExportSales') + '>Export summary</button>') +
     '<div class="bfx-card">' + bfSalesControls(true) + '<div class="bfx-kpis" style="margin-bottom:0;margin-top:6px"><div class="bfx-kpi"><div class="l">Policies written</div><div class="v">' + pols.length + '</div><div class="n">Actual sales</div></div><div class="bfx-kpi"><div class="l">Premium written</div><div class="v">' + bfMoneyK(prem) + '</div><div class="n">Actual sales</div></div><div class="bfx-kpi" style="background:var(--g50);border-style:dashed"><div class="l">Potential in open opportunities</div><div class="v" style="color:var(--g500)">' + bfMoneyK(potential) + '</div><div class="n">Not sales. Shown for comparison only.</div></div><div class="bfx-kpi"><div class="l">Average policy</div><div class="v">' + bfMoneyK(pols.length ? prem / pols.length : 0) + '</div><div class="n">Premium written / policies</div></div></div></div>' +
@@ -31517,13 +31517,13 @@ function bfProdMonthly(pols) {
   return out;
 }
 function bfDualChart(series) {
-  var W = 640, H = 190, pad = 8, mx = Math.max.apply(null, series.map(function(s){ return s.sub; }).concat([1])), bw = (W - pad * 2) / series.length;
+  var W = 1100, H = 170, pad = 8, mx = Math.max.apply(null, series.map(function(s){ return s.sub; }).concat([1])), bw = (W - pad * 2) / series.length;
   var bars = series.map(function(s, i){
     var x = pad + i * bw, w = (bw - 10) / 2, hs = Math.round(s.sub / mx * (H - 46)), hp = Math.round(s.placed / mx * (H - 46));
     return '<rect x="' + (x + 3) + '" y="' + (H - 24 - hs) + '" width="' + w + '" height="' + hs + '" rx="3" fill="#cfe6da"/><rect x="' + (x + 3 + w + 2) + '" y="' + (H - 24 - hp) + '" width="' + w + '" height="' + hp + '" rx="3" fill="#1d9e75"/>' +
       '<text x="' + (x + bw / 2) + '" y="' + (H - 8) + '" text-anchor="middle" font-size="10" fill="#a0987f" font-family="DM Mono,monospace">' + s.label + '</text>';
   }).join('');
-  return '<svg viewBox="0 0 ' + W + ' ' + H + '" style="width:100%;height:auto" role="img" aria-label="Submitted and placed premium by month">' + bars + '</svg><div class="bfg-leg"><span><i style="background:#cfe6da"></i>Submitted</span><span><i style="background:#1d9e75"></i>Placed</span></div>';
+  return '<svg viewBox="0 0 ' + W + ' ' + H + '" style="width:100%;height:auto;max-height:190px" role="img" aria-label="Submitted and placed premium by month">' + bars + '</svg><div class="bfg-leg"><span><i style="background:#cfe6da"></i>Submitted</span><span><i style="background:#1d9e75"></i>Placed</span></div>';
 }
 
 /* ── data: deeper cases and goals (deterministic) ── */
@@ -32270,12 +32270,12 @@ function bfFunnelTab() {
     '<div class="bfx-card"><h3>Which triggers turn into policies</h3>' + bfSignalTable(op) + '<div style="font-size:11.5px;color:var(--g500);margin-top:8px">A trigger that rarely converts is a candidate to tighten or switch off on the Rules page.</div></div>' + bfUnworkedCard(op);
 }
 function bfQualityTab() {
-  var cl = BF.clients, cnt = {}; cl.forEach(function(c){ c.score.missing.forEach(function(m){ var k = m.replace(/Profile not updated.*/, 'Profile older than a year'); cnt[k] = (cnt[k] || 0) + 1; }); });
+  var cl = (bfScope().clients || BF.clients), cnt = {}; cl.forEach(function(c){ c.score.missing.forEach(function(m){ var k = m.replace(/Profile not updated.*/, 'Profile older than a year'); cnt[k] = (cnt[k] || 0) + 1; }); });
   var keys = Object.keys(cnt).sort(function(a, b){ return cnt[b] - cnt[a]; }), mx = Math.max.apply(null, keys.map(function(k){ return cnt[k]; }).concat([1]));
   var buckets = [['90 to 100%', 90, 101], ['70 to 89%', 70, 90], ['50 to 69%', 50, 70], ['Below 50%', 0, 50]];
   var low = cl.filter(function(c){ return c.score.complete < BF_RULES.minComplete; }).sort(function(a, b){ return a.score.complete - b.score.complete; }).slice(0, 14);
   return '<div class="bfx-row"><div class="bfx-card"><h3>What is missing most</h3>' + keys.map(function(k){ return bfBar(k, cnt[k], mx, cnt[k]); }).join('') + '</div><div class="bfx-card"><h3>Completeness of all households</h3>' + buckets.map(function(b){ var n = cl.filter(function(c){ return c.score.complete >= b[1] && c.score.complete < b[2]; }).length; return bfBar(b[0], n, cl.length, n); }).join('') + '<div style="font-size:11.5px;color:var(--g500);margin-top:8px">Households below ' + BF_RULES.minComplete + '% get a warning before any email goes out.</div></div></div>' +
-    '<div class="bfx-card"><h3>By agency</h3><table class="bfx-tbl"><thead><tr><th>Agency</th><th>Average completeness</th><th>Below ' + BF_RULES.minComplete + '%</th><th>No tax bracket</th><th>No beneficiaries</th><th>Profile over a year old</th></tr></thead><tbody>' + BF_AGENCIES.map(function(a){ var l = cl.filter(function(c){ return c.agency === a.id; }); return '<tr><td><b>' + bfEsc(a.name) + '</b></td><td>' + Math.round(bfSum(l, function(c){ return c.score.complete; }) / l.length) + '%</td><td>' + l.filter(function(c){ return c.score.complete < BF_RULES.minComplete; }).length + '</td><td>' + l.filter(function(c){ return c.tax === null; }).length + '</td><td>' + l.filter(function(c){ return c.benef === false; }).length + '</td><td>' + l.filter(function(c){ return c.profileUpdated > 365; }).length + '</td></tr>'; }).join('') + '</tbody></table></div>' +
+    (_bfv.tier !== 'bws' ? '' : '<div class="bfx-card"><h3>By agency</h3><table class="bfx-tbl"><thead><tr><th>Agency</th><th>Average completeness</th><th>Below ' + BF_RULES.minComplete + '%</th><th>No tax bracket</th><th>No beneficiaries</th><th>Profile over a year old</th></tr></thead><tbody>' + BF_AGENCIES.map(function(a){ var l = cl.filter(function(c){ return c.agency === a.id; }); return '<tr><td><b>' + bfEsc(a.name) + '</b></td><td>' + Math.round(bfSum(l, function(c){ return c.score.complete; }) / l.length) + '%</td><td>' + l.filter(function(c){ return c.score.complete < BF_RULES.minComplete; }).length + '</td><td>' + l.filter(function(c){ return c.tax === null; }).length + '</td><td>' + l.filter(function(c){ return c.benef === false; }).length + '</td><td>' + l.filter(function(c){ return c.profileUpdated > 365; }).length + '</td></tr>'; }).join('') + '</tbody></table></div>') +
     '<div class="bfx-card"><h3>Households to fix first</h3><table class="bfx-tbl"><thead><tr><th>Household</th><th>Agency</th><th>Complete</th><th>Missing</th></tr></thead><tbody>' + low.map(function(c){ return '<tr><td><b>' + bfName(c) + '</b></td><td>' + bfEsc(bfAgency(c.agency).name) + '</td><td>' + c.score.complete + '%</td><td style="font-size:12px;color:var(--g600)">' + c.score.missing.join(', ') + '</td></tr>'; }).join('') + '</tbody></table></div>';
 }
 function bfAuditTab() {
@@ -33972,6 +33972,148 @@ function bfActionsTab(c, canEdit) {
     '.bfa2-n{font-size:12.5px;color:var(--g600);margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:560px}.bfa2-b{display:flex;gap:6px;align-items:center;white-space:nowrap}.bfa2-more{display:flex;gap:6px;opacity:0;transition:opacity .15s}.bfa2:hover .bfa2-more,.bfa2:focus-within .bfa2-more{opacity:1}.bfa2.dn .bfa2-t{color:var(--g500)}.bfa2-done{font-size:12px;color:var(--g400)}' +
     '@media(max-width:900px){.bfa2{grid-template-columns:44px minmax(0,1fr)}.bfa2-b{grid-column:2}.bfa2-more{opacity:1}}';
   document.head.appendChild(st);
+})();
+
+/* ═══ Brookfield demo: fuller Inbox, board moves, live badges and live updates ═══ */
+var BF_ITABS = [['review', 'To review'], ['followup', 'Follow-ups'], ['waiting', 'Waiting on principal'], ['done', 'Won and set aside']];
+function bfInboxSet(S) {
+  var open = S.opps.filter(bfOppOpen);
+  return {
+    review: S.opps.filter(function(o){ return o.status === 'identified' || o.status === 'reviewed'; }),
+    followup: open.filter(function(o){ return BF_OPP_STAGES.indexOf(o.status) >= 2 && !(o.review && (o.review.status === 'pending' || o.review.status === 'returned')); }),
+    waiting: S.opps.filter(function(o){ return o.review && (o.review.status === 'pending' || o.review.status === 'returned') && o.status !== 'issued'; }),
+    done: S.opps.filter(function(o){ return o.status === 'issued' || o.status === 'snoozed' || o.status === 'dismissed'; })
+  };
+}
+function bfInboxFilter(list) {
+  var f = _bfv.f, q = String(f.iq || '').toLowerCase(), order = { A: 0, B: 1, C: 2 };
+  var out = list.filter(function(o) {
+    var c = BF.byId[o.client], sc = c.score;
+    if (f.iTier && f.iTier !== 'all' && sc.tier !== f.iTier) return false;
+    if (f.iSig && f.iSig !== 'all' && !sc.signals.some(function(s){ return s.type === f.iSig; })) return false;
+    if (q) { var hay = (bfCanSeeClient(c) ? c.name + ' ' + c.email : '') + ' ' + c.code + ' ' + c.city + ' ' + sc.signals.map(function(s){ return BF_SIGNAL_DEFS[s.type].label; }).join(' '); if (hay.toLowerCase().indexOf(q) < 0) return false; }
+    return true;
+  });
+  var by = f.iSort || 'priority';
+  out.sort(function(a, b) {
+    var ca = BF.byId[a.client].score, cb = BF.byId[b.client].score;
+    if (by === 'assets') return bfOppAssets(b) - bfOppAssets(a);
+    if (by === 'newest') return b.found - a.found;
+    if (by === 'oldest') return (a.updated || a.found) - (b.updated || b.found);
+    return (order[ca.tier] - order[cb.tier]) || (cb.assets - ca.assets);
+  });
+  return out;
+}
+function bfInboxSearch(v) { _bfv.f.iq = v; bfRender(); var el = bfEl('bfi-q'); if (el) { el.focus(); try { el.setSelectionRange(v.length, v.length); } catch (e) {} } }
+function bfNextStage(o) { var i = BF_OPP_STAGES.indexOf(o.status); return i > -1 && i < BF_OPP_STAGES.length - 1 ? BF_OPP_STAGES[i + 1] : null; }
+function bfFollowCard(o) {
+  var c = BF.byId[o.client], sc = c.score, nx = bfNextStage(o), idle = Math.max(0, Math.round((BF_T - (o.updated || o.found)) / BF_DAY)), stale = idle >= 14, rv = o.review;
+  return '<div class="bfi-card"><div class="bfi-main"><div class="bfi-top">' + bfTierBadge(sc) + '<b class="bfi-nm" ' + bfOc('bfOpenClient', c.id, 'annuity') + '>' + bfName(c) + '</b>' + bfStatusPill(o.status) + (stale ? '<span class="bfx-st risk">' + idle + ' days quiet</span>' : '') + (rv && rv.status === 'returned' ? '<span class="bfx-st risk">Returned by principal</span>' : '') + (rv && rv.status === 'pending' ? '<span class="bfx-st new">Waiting on principal</span>' : '') + '<span class="bfi-as">' + bfMoney(bfOppAssets(o)) + ' in play</span></div>' +
+    '<div class="bfi-why">' + sc.signals.slice(0, 2).map(function(s){ return '<div>' + bfChip(s.type) + ' <span>' + bfEsc(s.fact) + '</span></div>'; }).join('') + '</div><div class="bfi-meta">Next: ' + bfEsc(o.next || '') + '. ' + (idle ? 'Last touched ' + idle + ' days ago.' : 'Updated today.') + (rv && rv.note ? ' Principal note: ' + bfEsc(rv.note) : '') + '</div></div>' +
+    '<div class="bfi-act">' + (o.status === 'issued' || !bfOppOpen(o) ? '<button class="bfx-btn" ' + bfOc('bfOpenClient', c.id, 'annuity') + '>Open</button>' + (o.status === 'snoozed' || o.status === 'dismissed' ? '<button class="bfx-btn pri" ' + bfOc('bfOppAct', o.id, 'reopen') + '>Reopen</button>' : '') :
+      '<button class="bfx-btn pri" ' + bfOc('bfSendAsk', o.id) + '>Send follow-up</button><button class="bfx-btn" ' + bfOc('bfOppCall', o.id) + '>Create call task</button>' + (nx && rv !== undefined && rv && rv.status === 'pending' ? '' : (nx ? '<button class="bfx-btn" ' + bfOc('bfMoveOpp', o.id, nx) + '>Move to ' + BF_STAGE_LABEL[nx] + '</button>' : '')) + '<button class="bfx-btn" ' + bfOc('bfOppAct', o.id, 'snooze') + '>Snooze</button>') + '</div></div>';
+}
+function bfInboxPlan(sets) {
+  var items = [], hot = sets.review.filter(function(o){ return BF.byId[o.client].score.tier === 'A' && o.status === 'identified'; }), stale = sets.followup.filter(function(o){ return (BF_T - (o.updated || o.found)) / BF_DAY >= 14; }), ret = sets.waiting.filter(function(o){ return o.review.status === 'returned'; });
+  if (hot.length) items.push(['Review ' + hot.length + ' Hot ' + (hot.length === 1 ? 'household' : 'households'), 'Highest priority, not yet looked at', 'review']);
+  if (ret.length) items.push(['Answer ' + ret.length + ' returned by your principal', 'Address the note and send again', 'waiting']);
+  if (stale.length) items.push(['Follow up with ' + stale.length + ' that went quiet', '14 or more days since the last touch', 'followup']);
+  var due = BF.acts.filter(function(a){ return a.agent === _bfv.agent && !bfActIsDone(a) && bfDaysFrom(a.when) <= 0 && bfDaysFrom(a.when) > -1; }).length;
+  if (due) items.push([due + ' ' + (due === 1 ? 'task is' : 'tasks are') + ' due today', 'From your calls, tasks and meetings', null]);
+  if (!items.length) return '';
+  return '<div class="bfx-card"><h3>Your plan for today</h3>' + items.slice(0, 4).map(function(x){ return '<div class="bfg-rec" ' + (x[2] ? bfOc('bfSetF', 'iTab', x[2]) : bfOc('bfGo', 'acts')) + '><div><b>' + x[0] + '</b><div>' + x[1] + '</div></div><span>&rsaquo;</span></div>'; }).join('') + '</div>';
+}
+BF_PAGES['agent:inbox'] = function() {
+  var f = _bfv.f, S = bfScope(), sets = bfInboxSet(S); if (!BF_ITABS.some(function(x){ return x[0] === f.iTab; })) f.iTab = 'review'; if (!f.iTier) f.iTier = 'all';
+  var tab = f.iTab, rows = bfInboxFilter(sets[tab]);
+  var hot = sets.review.filter(function(o){ return BF.byId[o.client].score.tier === 'A'; }).length, fresh = sets.review.filter(function(o){ return bfDaysFrom(o.found) >= -7; }).length, quiet = sets.followup.filter(function(o){ return (BF_T - (o.updated || o.found)) / BF_DAY >= 14; }).length;
+  var kpis = '<div class="bfx-kpis">' + bfKpi('To review', sets.review.length, hot + ' Hot') + bfKpi('Follow-ups', sets.followup.length, quiet + ' gone quiet') + bfKpi('Waiting on principal', sets.waiting.length, 'Cannot move until decided') + bfKpi('Assets in play', bfMoneyK(bfSum(sets.review.concat(sets.followup, sets.waiting), bfOppAssets)), fresh + ' found this week') + '</div>';
+  var tabs = bfTabs('iTab', BF_ITABS.map(function(x){ return [x[0], x[1] + ' (' + sets[x[0]].length + ')']; }), tab);
+  var sigs = bfFilterChips('iSig', [['all', 'All'], ['cd', 'CD maturing'], ['ret', 'Retirement + income'], ['sur', 'Surrender ending'], ['csh', 'Principal protection'], ['age', 'Age window'], ['ren', 'Rate review']], f.iSig || 'all');
+  var bar = '<div class="bfpl-bar"><div class="bfo-f"><span>Priority</span>' + bfFilterChips('iTier', [['all', 'All'], ['A', 'Hot'], ['B', 'Warm'], ['C', 'Watch']], f.iTier) + '</div><div class="bfo-f"><span>Trigger</span>' + sigs + '</div></div>' +
+    '<div class="bfpl-bar" style="margin-top:0"><input id="bfi-q" class="bfag-q" style="width:260px" type="text" placeholder="Search households or triggers" value="' + bfEsc(f.iq || '') + '" oninput="bfInboxSearch(this.value)"><div class="bfo-f"><span>Sort</span>' + bfFilterChips('iSort', [['priority', 'Priority'], ['assets', 'Assets'], ['newest', 'Newest'], ['oldest', 'Quiet longest']], f.iSort || 'priority') + '</div></div>';
+  var list = rows.length ? rows.slice(0, 40).map(tab === 'review' ? bfInboxCard : bfFollowCard).join('') : '<div class="bfx-card"><div class="bfx-note">' + (sets[tab].length ? 'Nothing matches these filters.' : ({ review: 'Nothing is waiting. New opportunities appear here when a household meets a trigger.', followup: 'No opportunities are in progress.', waiting: 'Nothing is waiting on your principal.', done: 'Nothing here yet.' })[tab]) + '</div></div>';
+  var live = '<button class="bfx-btn' + (_bfv.live ? ' pri' : '') + '" ' + bfOc('bfLiveToggle') + ' title="Simulates new data arriving, so you can see the inbox update on its own">' + (_bfv.live ? 'Live updates on' : 'Simulate live updates') + '</button>';
+  return bfHead('Opportunity Inbox', 'Households worth a conversation, with the reasons. Each email uses wording approved by Brookfield. This is a prompt to consider a conversation, never advice.', live) + (tab === 'review' ? bfInboxPlan(sets) : '') + kpis + tabs + bar + list + (rows.length > 40 ? '<div class="bfx-note">Showing 40 of ' + rows.length + '.</div>' : '');
+};
+
+/* live updates: a new household event arrives every so often */
+var _bfLiveTimer = null;
+function bfLiveToggle() {
+  _bfv.live = !_bfv.live;
+  if (_bfLiveTimer) { clearInterval(_bfLiveTimer); _bfLiveTimer = null; }
+  if (_bfv.live) { _bfLiveTimer = setInterval(bfLiveTick, 20000); showToast('Live updates on. A new event arrives about every 20 seconds.'); } else showToast('Live updates off');
+  bfRender();
+}
+function bfLiveTick() {
+  if (!_bfv.live) return;
+  var S = bfScope(), r = Math.random(), pool = S.clients.filter(function(c){ return c.status === 'Client' && !bfOppFor(c.id) && bfCanSeeClient(c); }); if (!pool.length) return;
+  var c = pool[Math.floor(r * pool.length)], kind = Math.floor(Math.random() * 2);
+  if (kind === 0) { c.cds = c.cds || []; c.cdsKnown = true; c.cds.push({ amt: Math.round((90000 + Math.random() * 250000) / 5000) * 5000, matures: bfAt(14 + Math.floor(Math.random() * 40)) }); }
+  else { c.cash = (c.cash || 0) + 150000 + Math.round(Math.random() * 200000 / 1000) * 1000; c.risk = c.risk || 'Conservative'; }
+  c.profileUpdated = 0; var o = bfRecompute(c.id);
+  if (o) { bfLog(c.id, 'Note', 'New data arrived and an annuity opportunity was identified.'); showToast('New opportunity: ' + (bfCanSeeClient(c) ? c.name : 'Client ' + c.code)); }
+  bfRender();
+}
+
+/* sidebar badges */
+function bfNavBadges() {
+  try {
+    var t = _bfv.tier, S = bfScope(), n = {};
+    if (t === 'agent') n.inbox = S.opps.filter(function(o){ return o.status === 'identified'; }).length;
+    if (t === 'agency') n.review = S.opps.filter(function(o){ return o.review && o.review.status === 'pending'; }).length;
+    if (t === 'bws') n.agencies = 0;
+    var items = document.querySelectorAll('.sb-item');
+    for (var i = 0; i < items.length; i++) {
+      var m = /bfGo\('([a-z]+)'\)/.exec(items[i].getAttribute('onclick') || ''); if (!m) continue;
+      var old = items[i].querySelector('.bfnav-b'); if (old) old.parentNode.removeChild(old);
+      if (n[m[1]] > 0) { var b = document.createElement('span'); b.className = 'bfnav-b'; b.textContent = n[m[1]]; items[i].appendChild(b); }
+    }
+  } catch (e) {}
+}
+(function() {
+  var r0 = bfRender; bfRender = function() { var x = r0.apply(this, arguments); bfNavBadges(); return x; };
+  var st = document.createElement ? document.createElement('style') : null; if (!st || !document.head) return;
+  st.textContent = '.sb-item{position:relative}.bfnav-b{position:absolute;top:4px;right:6px;min-width:17px;height:17px;border-radius:9px;background:var(--teal);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 5px}' +
+    '.bfb-card.dragging{opacity:.35;transform:rotate(1deg)}.bfb-col.over{outline:2px dashed var(--teal);outline-offset:-4px}.bfb-nx{border:1px solid var(--g200);background:#fff;border-radius:8px;width:24px;height:24px;font-size:15px;line-height:1;cursor:pointer;color:var(--g600);opacity:0;transition:opacity .15s;margin-left:6px}.bfb-card:hover .bfb-nx{opacity:1}.bfb-nx:hover{background:var(--teal);color:#fff;border-color:var(--teal)}.bfb-ft{align-items:center}';
+  document.head.appendChild(st);
+  var d0 = bfDragStart; bfDragStart = function(e, oid) { d0(e, oid); try { var el = e.target && e.target.closest ? e.target.closest('.bfb-card') : null; if (el) setTimeout(function(){ el.classList.add('dragging'); }, 0); } catch (x) {} };
+  document.addEventListener('dragend', function() { var a = document.querySelectorAll('.bfb-card.dragging,.bfb-col.over'); for (var i = 0; i < a.length; i++) { a[i].classList.remove('dragging'); a[i].classList.remove('over'); } });
+})();
+
+/* ═══ Brookfield demo: agents see only their own results, never colleagues' bonuses or numbers ═══ */
+function bfOrd(n) { var s = ['th', 'st', 'nd', 'rd'], v = n % 100; return n + (s[(v - 20) % 10] || s[v] || s[0]); }
+function bfRankOf(metric, agentId, pool) {
+  var m = BF_METRICS[metric] || BF_METRICS.placed12, vals = pool.map(function(a){ return { id: a.id, v: m.v(a) }; }).sort(function(x, y){ return y.v - x.v; });
+  for (var i = 0; i < vals.length; i++) if (vals[i].id === agentId) return { rank: i + 1, of: vals.length, v: vals[i].v, m: m };
+  return { rank: vals.length, of: vals.length, v: 0, m: m };
+}
+function bfAgentProgCard(p) {
+  var me = bfAgent(_bfv.agent), m = BF_METRICS[p.metric] || BF_METRICS.placed12, pool = bfProgAgents(p), rk = bfRankOf(p.metric, me.id, pool.length ? pool : [me]), days = Math.max(0, Math.round((p.end - BF_T) / BF_DAY));
+  var rule = p.kind === 'bonus' ? p.tiers.map(function(x){ return bfFmtM(m, x[0]) + ' earns ' + bfMoney(x[1]); }).join(', ') : 'Winner receives ' + bfMoney(p.prize);
+  var body = '';
+  if (p.kind === 'bonus') {
+    var earned = 0, next = null; p.tiers.forEach(function(x){ if (rk.v >= x[0]) earned = x[1]; else if (!next) next = x; });
+    var pc = next ? Math.min(100, Math.round(rk.v / next[0] * 100)) : 100;
+    body = '<div style="font-size:13px;margin-bottom:6px">Your result: <b>' + bfFmtM(m, rk.v) + '</b>' + (earned ? ' &middot; <span style="color:var(--teal2)">' + bfMoney(earned) + ' earned so far</span>' : '') + '</div><div style="height:8px;background:var(--g100);border-radius:6px;overflow:hidden"><div style="height:100%;width:' + pc + '%;background:var(--teal)"></div></div><div class="bfo-sub">' + (next ? pc + '% of the way to ' + bfFmtM(m, next[0]) + ' for ' + bfMoney(next[1]) : 'You reached the top tier') + '</div>';
+  } else {
+    body = '<div style="font-size:13px">Your result: <b>' + bfFmtM(m, rk.v) + '</b></div><div style="margin-top:8px"><span class="bfx-chip ret">You are ' + bfOrd(rk.rank) + ' of ' + rk.of + '</span></div>';
+  }
+  return '<div class="bfx-card"><div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap"><div><h3 style="margin-bottom:4px">' + bfEsc(p.name) + '</h3><div style="font-size:12.5px;color:var(--g500)">' + m.n + ' · ' + bfFmtDay(p.start) + ' to ' + bfFmtDay(p.end) + ' · ' + days + ' days left</div></div><span class="bfx-st submitted">Active</span></div><div style="font-size:12.5px;color:var(--g600);margin:10px 0">' + rule + '</div>' + body + '</div>';
+}
+(function() {
+  var pc0 = bfProgCard; bfProgCard = function(p) { return _bfv.tier === 'agent' ? bfAgentProgCard(p) : pc0(p); };
+  var ct0 = bfContestTab;
+  bfContestTab = function() {
+    if (_bfv.tier !== 'agent') return ct0();
+    var me = bfAgent(_bfv.agent), all = BF_AGENTS;
+    var kp = '<div class="bfx-kpis">' + bfKpi('Active contests', BF_CONTESTS.length, 'Network wide') + bfKpi('Prize pool', bfMoney(bfSum(BF_CONTESTS, function(c){ return c.prize; })), 'Funded by Brookfield') + bfKpi('Producers taking part', all.length, 'Across Brookfield') + bfKpi('Days to deadline', Math.min.apply(null, BF_CONTESTS.map(function(c){ return c.left; })), 'Next contest to close') + '</div>';
+    var cards = BF_CONTESTS.map(function(c) {
+      var rk = bfRankOf(c.key === 'appt' ? 'appt' : 'sub90', me.id, all), fmt = c.key === 'appt' ? rk.v + (rk.v === 1 ? ' appointment' : ' appointments') : bfMoneyK(rk.v);
+      return '<div class="bfx-card"><div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start"><div><h3 style="margin-bottom:4px">' + c.name + '</h3><div style="font-size:12.5px;color:var(--g500)">' + c.desc + '</div></div><span class="bfx-chip ret">' + c.left + ' days left</span></div><div style="font-size:12px;color:var(--g600);margin:10px 0">Prize ' + bfMoney(c.prize) + '</div><div style="font-size:13px">Your result: <b>' + fmt + '</b></div><div style="margin-top:8px"><span class="bfx-chip ret">You are ' + bfOrd(rk.rank) + ' of ' + rk.of + '</span></div><div style="font-size:11.5px;color:var(--g400);margin-top:10px">Other producers\' results are not shown.</div></div>';
+    });
+    return kp + bfRow2(cards[0], cards[1]) + bfProgSection('contest');
+  };
 })();
 
 try { localStorage.removeItem('bf_bg'); } catch (e) {}
