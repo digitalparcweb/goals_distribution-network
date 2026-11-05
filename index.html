@@ -33161,11 +33161,163 @@ function bfRiskCard() {
   };
 })();
 
+/* ═══ Brookfield demo: leadership and agency daily views ═══ */
+function bfChg(a, b) { return b ? Math.round((a - b) / b * 100) : 0; }
+function bfChgChip(p) { return '<span class="bfx-st ' + (p >= 5 ? 'submitted' : (p <= -5 ? 'risk' : 'new')) + '">' + (p > 0 ? '+' : '') + p + '%</span>'; }
+function bfRow2(a, b) { return '<div class="bfx-row">' + a + b + '</div>'; }
+function bfTbl(head, rows) { return '<table class="bfx-tbl"><thead><tr>' + head.map(function(h){ return '<th>' + h + '</th>'; }).join('') + '</tr></thead><tbody>' + rows.join('') + '</tbody></table>'; }
+
+/* Brookfield */
+function bfMomentumCard() {
+  var rows = BF_AGENCIES.map(function(g) {
+    var pols = BF.policies.filter(function(p){ return p.agency === g.id; }), a = bfSubmitted(pols, 90), b = bfSubmitted(pols, 180, -90);
+    return { g: g, a: a, b: b, c: bfChg(a, b) };
+  }).sort(function(x, y){ return y.c - x.c; });
+  return '<div class="bfx-card"><h3>Momentum by agency</h3><div style="font-size:12.5px;color:var(--g500);margin-bottom:8px">Submitted premium, last 90 days against the 90 days before.</div>' +
+    bfTbl(['Agency', 'Last 90 days', 'Before', 'Change'], rows.map(function(r){ return '<tr><td><b>' + bfEsc(r.g.name) + '</b></td><td>' + bfMoneyK(r.a) + '</td><td>' + bfMoneyK(r.b) + '</td><td>' + bfChgChip(r.c) + '</td></tr>'; })) + '</div>';
+}
+function bfConcCard() {
+  var list = BF_AGENTS.map(function(a){ return { a: a, v: bfAgentPlaced(a) }; }).sort(function(x, y){ return y.v - x.v; }), tot = bfSum(list, function(x){ return x.v; }) || 1;
+  var top3 = bfSum(list.slice(0, 3), function(x){ return x.v; }), pct = Math.round(top3 / tot * 100), mx = list[0].v || 1;
+  return '<div class="bfx-card"><h3>Production concentration</h3><div style="display:flex;align-items:baseline;gap:8px;margin-bottom:8px"><span style="font-size:26px;font-weight:700">' + pct + '%</span><span style="font-size:12.5px;color:var(--g500)">of placed premium comes from the top 3 producers ' + (pct > 45 ? '(above the 45% watch line)' : '(under the 45% watch line)') + '</span></div>' +
+    list.slice(0, 6).map(function(x){ return bfBar(x.a.name + ' &middot; ' + bfAgency(x.a.ag).name, x.v, mx, bfMoneyK(x.v)); }).join('') + '</div>';
+}
+var BF_RAMP = { a11: 38, a13: 74, a5: 61 };
+function bfRampCard() {
+  var rows = Object.keys(BF_RAMP).map(function(id) {
+    var a = BF_AGENTS.filter(function(x){ return x.id === id; })[0], d = BF_RAMP[id], sub = bfSubmitted(BF.policies.filter(function(p){ return p.agent === id; }), d), tgt = 30000 * Math.min(1, d / 90), pc = bfPct(sub, tgt);
+    return '<tr><td><b>' + bfEsc(a.name) + '</b></td><td>' + bfEsc(bfAgency(a.ag).name) + '</td><td>' + d + ' days</td><td>' + bfMoneyK(sub) + '</td><td><span class="bfx-st ' + (pc >= 100 ? 'submitted' : (pc >= 60 ? 'new' : 'risk')) + '">' + pc + '% of ramp target</span></td></tr>';
+  });
+  return '<div class="bfx-card"><h3>New producer ramp</h3><div style="font-size:12.5px;color:var(--g500);margin-bottom:8px">Producers in their first 90 days against a $30K submitted-premium target.</div>' + bfTbl(['Producer', 'Agency', 'Contracted', 'Submitted', 'Against target'], rows) + '</div>';
+}
+function bfPipeCard() {
+  var by = {}; BF.cases.forEach(function(cs) {
+    if (cs.stage === 'Issued') return; var p = BF.policies.filter(function(x){ return x.id === cs.policy; })[0], car = p ? p.carrier : 'Other';
+    var r = by[car] = by[car] || { n: 0, req: 0, days: 0 }; r.n++; if (cs.req) r.req++; r.days += cs.daysInStage || 0;
+  });
+  var rows = Object.keys(by).map(function(k){ var r = by[k], nr = bfPc(r.req, r.n); return '<tr><td><b>' + bfEsc(k) + '</b></td><td>' + r.n + '</td><td><span class="bfx-st ' + (nr > 40 ? 'risk' : 'new') + '">' + nr + '%</span></td><td>' + Math.round(r.days / r.n) + ' days</td></tr>'; });
+  return '<div class="bfx-card"><h3>Pipeline health by carrier</h3><div style="font-size:12.5px;color:var(--g500);margin-bottom:8px">Open cases, how many are waiting on requirements, and average time in the current stage.</div>' + bfTbl(['Carrier', 'Open cases', 'Missing items', 'Avg in stage'], rows) + '</div>';
+}
+function bfAdoptCard() {
+  var rows = BF_AGENCIES.map(function(g) {
+    var op = BF.opps.filter(function(o){ return o.agency === g.id; }), old = op.filter(function(o){ return bfDaysFrom(o.found) < -14; }), rv = old.filter(function(o){ return o.status !== 'identified'; }).length, iss = op.filter(function(o){ return o.status === 'issued'; }).length;
+    var p = bfPc(rv, old.length);
+    return '<tr><td><b>' + bfEsc(g.name) + '</b></td><td>' + op.filter(bfOppOpen).length + '</td><td><span class="bfx-st ' + (p >= 70 ? 'submitted' : (p >= 40 ? 'new' : 'risk')) + '">' + p + '%</span></td><td>' + iss + '</td></tr>';
+  });
+  return '<div class="bfx-card"><h3>Opportunity engine adoption</h3><div style="font-size:12.5px;color:var(--g500);margin-bottom:8px">Whether each agency is working what the engine finds.</div>' + bfTbl(['Agency', 'Open', 'Reviewed within 14 days', 'Issued'], rows) + '</div>';
+}
+
+/* Agency */
+function bfWeekCard() {
+  var S = bfScope(), items = [];
+  S.acts.forEach(function(x) { if (x.done) return; var d = bfDaysFrom(x.when);
+    if (x.kind === 'Task' && d <= 7) items.push({ when: x.when, k: d < 0 ? 'Overdue task' : 'Task', t: x.text, c: x.client, ag: x.agent, f: d < 0 });
+    if (x.kind === 'Appointment' && d >= 0 && d <= 7) items.push({ when: x.when, k: 'Appointment', t: x.text, c: x.client, ag: x.agent }); });
+  S.policies.forEach(function(p) { var d = bfDaysFrom(p.renewal); if (p.status === 'Active' && p.lob !== 'Annuity' && d >= 0 && d <= 30) items.push({ when: p.renewal, k: 'Policy date', t: p.product + ' renews', c: p.client, ag: p.agent }); });
+  items.sort(function(a, b){ return a.when - b.when; });
+  var h = items.slice(0, 8).map(function(w) { return '<div style="display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--g100);cursor:pointer" ' + bfOc('bfOpenClient', w.c) + '><span class="bfx-chip" style="' + (w.f ? 'background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.3);color:#dc2626' : '') + '">' + w.k + '</span><div style="flex:1;font-size:13px">' + bfEsc(w.t) + '<div style="font-size:11.5px;color:var(--g500)">' + bfEsc(bfAgent(w.ag).name) + '</div></div></div>'; }).join('') || '<div class="bfx-note">Nothing due this week.</div>';
+  return '<div class="bfx-card"><h3>This week across the team</h3>' + h + '</div>';
+}
+function bfPaceCard() {
+  var S = bfScope(), day = new Date(BF_T).getDate(), dim = new Date(new Date(BF_T).getFullYear(), new Date(BF_T).getMonth() + 1, 0).getDate(), exp = day / dim;
+  var rows = S.agents.map(function(a) {
+    var mtd = bfSubmitted(BF.policies.filter(function(p){ return p.agent === a.id; }), day), mg = (BF.goals[a.id] || 0) / 12, pc = bfPct(mtd, mg * exp);
+    return bfBar(a.name, mtd, Math.max(mtd, mg) || 1, bfMoneyK(mtd) + ' <span style="color:var(--g400)">&middot; ' + pc + '% of pace</span>', pc < 70 ? '#dc2626' : null);
+  }).join('');
+  return '<div class="bfx-card"><h3>Pace to month end</h3><div style="font-size:12.5px;color:var(--g500);margin-bottom:8px">Submitted this month against a straight-line share of each monthly goal.</div>' + rows + '</div>';
+}
+function bfCoverCard() {
+  var S = bfScope(), rows = S.agents.map(function(a) {
+    var op = S.opps.filter(function(o){ return o.agent === a.id && bfOppOpen(o); }), v = bfSum(op, bfOppAssets);
+    return '<tr><td><b>' + bfEsc(a.name) + '</b></td><td>' + op.length + '</td><td>' + bfMoneyK(v) + '</td><td><span class="bfx-st ' + (op.length < 3 ? 'risk' : 'submitted') + '">' + (op.length < 3 ? 'Thin' : 'Covered') + '</span></td></tr>';
+  });
+  return '<div class="bfx-card"><h3>Pipeline coverage by producer</h3><div style="font-size:12.5px;color:var(--g500);margin-bottom:8px">Open annuity opportunities per producer. Fewer than 3 is thin.</div>' + bfTbl(['Producer', 'Open', 'Assets in play', 'Coverage'], rows) + '</div>';
+}
+(function() {
+  var x = bfDashExtra;
+  bfDashExtra = function(t, html) {
+    html = x(t, html); var add = '';
+    try {
+      if (t === 'bws') add = bfRow2(bfMomentumCard(), bfConcCard()) + bfRow2(bfPipeCard(), bfAdoptCard()) + bfRampCard();
+      if (t === 'agency') add = bfRow2(bfWeekCard(), bfPaceCard()) + bfCoverCard();
+    } catch (e) { return html; }
+    return html + add;
+  };
+})();
+
+/* ═══ Brookfield demo: calmer network dashboard (attention first, then four tabs) ═══ */
+function bfAttnMore() { _bfv.f.attnAll = !_bfv.f.attnAll; bfRender(); }
+function bfAttnCard(t) {
+  var items = bfAttnItems(t), all = !!_bfv.f.attnAll, shown = all ? items : items.slice(0, 4);
+  var col = { r: '#dc2626', a: '#a16207', b: '#2f5fd0' };
+  var body = shown.map(function(x) {
+    return '<div style="display:flex;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--g100)"><span style="width:8px;height:8px;border-radius:50%;background:' + col[x[0]] + ';flex:none"></span><div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:700">' + bfEsc(x[1]) + '</div><div style="font-size:12px;color:var(--g500);margin-top:2px">' + bfEsc(x[2]) + '</div></div><button class="bfx-btn" ' + bfOc('bfJump', x[3], x[4]) + '>Open</button></div>';
+  }).join('') || '<div class="bfx-note">Nothing needs attention right now.</div>';
+  var more = items.length > 4 ? '<div style="padding-top:10px;border-top:1px solid var(--g100)"><button class="bfx-btn" ' + bfOc('bfAttnMore') + '>' + (all ? 'Show fewer' : 'Show ' + (items.length - 4) + ' more') + '</button></div>' : '';
+  return '<div class="bfx-card"><div style="display:flex;justify-content:space-between;align-items:baseline"><h3>Needs your attention</h3><span style="font-size:12px;color:var(--g500)">' + items.length + ' item' + (items.length === 1 ? '' : 's') + ', most urgent first</span></div>' + body + more + '</div>';
+}
+var BF_DTABS = [['overview', 'Overview'], ['agencies', 'Agencies'], ['opps', 'Opportunities'], ['pilot', 'Pilot and lifecycle']];
+function bfDashGroup(b) {
+  var t = b.html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+  if (/^Needs your attention/.test(t)) return 'attn';
+  if (/^(Agency comparison|Momentum by agency|New producer ramp|Participating agencies|Premium written by month)/.test(t)) return 'agencies';
+  if (/^(Annuity opportunities|Period|Premium written|Annuity opportunity funnel|Which signals|Pipeline health by carrier)/.test(t)) return 'opps';
+  if (/^(Pilot scorecard|The production lifecycle)/.test(t)) return 'pilot';
+  return 'overview';
+}
+(function() {
+  var x = bfDashExtra;
+  bfDashExtra = function(t, html) {
+    html = x(t, html); if (t !== 'bws') return html;
+    var MK = '<!--bf-head-end-->', i = html.indexOf(MK); if (i < 0) return html;
+    var head = html.slice(0, i + MK.length), blocks = bfSplitTop(html.slice(i + MK.length)), f = _bfv.f;
+    if (!BF_DTABS.some(function(d){ return d[0] === f.dTab; })) f.dTab = 'overview';
+    var attn = '', keep = [], last = 'overview';
+    blocks.forEach(function(b) {
+      var g = b.div ? bfDashGroup(b) : last; if (b.div) last = g === 'attn' ? last : g;
+      if (g === 'attn') attn += b.html; else if (g === f.dTab) keep.push(b.html);
+    });
+    return head + attn + bfTabs('dTab', BF_DTABS, f.dTab) + keep.join('');
+  };
+})();
+
+/* ── keep the same view after a refresh (per browser tab) ── */
+var _bfSaved = null;
+try { var _bfH = /[#&]bf=([^&]*)/.exec(location.hash || ''); if (_bfH) _bfSaved = JSON.parse(decodeURIComponent(_bfH[1])); } catch (e) {}
+if (!_bfSaved) { try { _bfSaved = JSON.parse(sessionStorage.getItem('bf_nav_v1') || 'null'); } catch (e) {} }
+function bfSaveState() {
+  try {
+    var r = _bfv.rec && _bfv.rec.id ? { id: _bfv.rec.id, tab: _bfv.rec.tab } : null;
+    var st = { tier: _bfv.tier, agent: _bfv.agent, agency: _bfv.agency, page: _bfv.page, f: _bfv.f, rec: r }, js = JSON.stringify(st);
+    try { sessionStorage.setItem('bf_nav_v1', js); } catch (e) {}
+    if (js.length > 1800) { st.f = {}; js = JSON.stringify(st); }
+    if (window.history && window.history.replaceState) window.history.replaceState(null, '', '#bf=' + encodeURIComponent(js));
+  } catch (e) {}
+}
+function bfRestoreState() {
+  var sv = _bfSaved; if (!sv || !BF_NAV[sv.tier]) return;
+  try {
+    _bfv.tier = sv.tier; if (bfAgent(sv.agent).id) _bfv.agent = sv.agent; if (bfAgency(sv.agency).id) _bfv.agency = sv.agency;
+    if (BF_NAV[sv.tier].some(function(n){ return n[0] === sv.page; }) || BF_PAGES[sv.tier + ':' + sv.page]) _bfv.page = sv.page;
+    if (sv.f) Object.keys(sv.f).forEach(function(k){ _bfv.f[k] = sv.f[k]; });
+    bfRenderSwitch(); bfRenderNav(); bfRender();
+    if (sv.rec && BF.byId[sv.rec.id]) bfOpenClient(sv.rec.id, sv.rec.tab);
+  } catch (e) {}
+}
+(function() {
+  var o1 = bfRender, o2 = bfOpenClient, o3 = bfCloseRecord, o4 = bfRecTab;
+  bfRender = function() { var r = o1.apply(this, arguments); bfSaveState(); return r; };
+  bfOpenClient = function() { var r = o2.apply(this, arguments); bfSaveState(); return r; };
+  bfCloseRecord = function() { var r = o3.apply(this, arguments); bfSaveState(); return r; };
+  bfRecTab = function() { var r = o4.apply(this, arguments); bfSaveState(); return r; };
+})();
+
 /* ── Brookfield boot ── */
 function bfInit() {
   bfRenderSwitch(); bfRenderNav();
   if (typeof showPage === 'function') showPage('bf-app', null);
   bfRenderNav(); bfRender();
+  bfRestoreState();
   /* Deep links for demos: ?bftier=agent|agency|bws &bfpage=opps &bfview=board|list &bfrec=<household id> &bftab=<record tab> &bfwho=<agent or agency id> */
   try {
     var q = new URLSearchParams(location.search), tr = q.get('bftier');
