@@ -32172,7 +32172,7 @@ function bfSuitDo(oid, st) {
   if (n < BF_SUIT.length) { showToast('Confirm all ' + BF_SUIT.length + ' points to continue'); return; }
   var o = bfOppById(oid); o.suit = { by: bfPersona().name, at: Date.now(), items: n };
   bfAudit('Suitability', o.client, 'Suitability checklist completed (' + n + ' of ' + BF_SUIT.length + ').', oid); bfLog(o.client, 'Note', 'Suitability checklist completed.');
-  bfModalClose(); bfMoveOpp(oid, st);
+  bfModalClose(); bfMoveOpp(oid, st, true);
 }
 /* principal review */
 function bfRevDo(oid, how) {
