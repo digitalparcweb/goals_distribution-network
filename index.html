@@ -32315,7 +32315,7 @@ function bfTrigCount(k) { return BF.clients.filter(function(c){ return c.score.s
 function bfRulesTab(tab) {
   var R = BF_RULES;
   if (tab === 'products') {
-    return '<div class="bfx-card"><h3>Product Catalog</h3><table class="bfx-tbl"><thead><tr><th>Product</th><th>Type</th><th>Minimum</th><th>Terms</th><th>Description</th><th>Available in</th></tr></thead><tbody>' + BF_CATALOG.map(function(p){ return '<tr><td><b>' + bfEsc(p.name) + '</b></td><td>' + p.kind + '</td><td>' + bfMoney(p.min) + '</td><td>' + p.terms + '</td><td style="max-width:240px;font-size:12.5px">' + p.feature + '</td><td>' + (BF_STATES.length - p.off.length) + ' of ' + BF_STATES.length + ' states</td></tr>'; }).join('') + '</tbody></table><div class="bfx-note" style="margin-top:10px">Product details are for reference. This pilot does not match products to households. Agents decide what to discuss after a suitability review.</div></div>';
+    return '<div class="bfx-card"><h3>Product Catalog</h3><table class="bfx-tbl"><thead><tr><th>Product</th><th>Type</th><th>Minimum</th><th>Terms</th><th>Description</th><th>Available In</th></tr></thead><tbody>' + BF_CATALOG.map(function(p){ return '<tr><td><b>' + bfEsc(p.name) + '</b></td><td>' + p.kind + '</td><td>' + bfMoney(p.min) + '</td><td>' + p.terms + '</td><td style="max-width:240px;font-size:12.5px">' + p.feature + '</td><td>' + (BF_STATES.length - p.off.length) + ' of ' + BF_STATES.length + ' states</td></tr>'; }).join('') + '</tbody></table><div class="bfx-note" style="margin-top:10px">Product details are for reference. This pilot does not match products to households. Agents decide what to discuss after a suitability review.</div></div>';
   }
   if (tab === 'states') {
     var blocked = BF.clients.filter(function(c){ return !c.score.stateOk; }).length;
@@ -33224,7 +33224,7 @@ function bfRulesRo(t) {
   var f = _bfv.f;
   if (t === 'agent') {
     if (f.rlTab !== 'products' && f.rlTab !== 'states') f.rlTab = 'products';
-    return bfHead('Products and states', 'What you can offer and where each product is available. Brookfield keeps this list up to date.') +
+    return bfHead('Products and States', 'What you can offer and where each product is available. Brookfield keeps this list up to date.') +
       bfTabs('rlTab', [['products', 'Products'], ['states', 'State Availability']], f.rlTab) +
       bfReadOnly(bfWithScope(function(){ return bfRulesTab(f.rlTab); }));
   }
