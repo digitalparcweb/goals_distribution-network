@@ -21742,8 +21742,8 @@ function _iwStepOptions() {
 // ── STEP 3: Map ──────────────────────────────────────────────
 // status: 'auto' = Ace confidently mapped it | 'review' = mapped but low confidence | 'nomatch' = no existing field, needs custom field | 'newpipeline' = looks like a pipeline stage column with unrecognized values
 var _iwMappings = [
-  {col:'Full Name',    samples:['Maya Chen','Jordan Lee'],      field:'Person name',       entity:'Person',  status:'auto', confidence:98,  note:'Ace matched "Full Name" to Person name'},
-  {col:'email',        samples:['m.chen@example.com','j.lee@example.com'], field:'Email (Work)', entity:'Person', status:'auto', confidence:96, note:'Ace figured out "email" means Email (Work)'},
+  {col:'Full Name',    samples:['Chad Keppler','Jordan Lee'],      field:'Person name',       entity:'Person',  status:'auto', confidence:98,  note:'Ace matched "Full Name" to Person name'},
+  {col:'email',        samples:['c.keppler@example.com','j.lee@example.com'], field:'Email (Work)', entity:'Person', status:'auto', confidence:96, note:'Ace figured out "email" means Email (Work)'},
   {col:'Telephone',    samples:['415-555-1111','305-555-2222'], field:'Phone (Work)',       entity:'Person',  status:'auto', confidence:91,  note:'Ace figured out "Telephone" means Phone (Work)'},
   {col:'Company',      samples:['Northstar Labs','Blue Harbor Media'], field:'Organization name', entity:'Organization', status:'auto', confidence:94, note:'Ace matched "Company" to Organization name'},
   {col:'Job Title',    samples:['VP Operations','Marketing Director'], field:'Person label',  entity:'Person',  status:'review', confidence:63, note:'Ace found a possible match, but confidence is low — please confirm'},
@@ -22314,13 +22314,13 @@ function _iwStep4() {
     html += '</tbody></table>';
   } else if (_iwPreviewTab === 'People') {
     html += '<table style="width:100%;border-collapse:collapse;font-size:12px"><thead><tr style="background:var(--g50)"><th style="padding:10px 14px;text-align:left;font-weight:600;border-bottom:1px solid var(--g200)">Name</th><th style="padding:10px 14px;text-align:left;font-weight:600;border-bottom:1px solid var(--g200)">Email</th><th style="padding:10px 14px;text-align:left;font-weight:600;border-bottom:1px solid var(--g200)">Phone</th><th style="padding:10px 14px;text-align:left;font-weight:600;border-bottom:1px solid var(--g200)">Organization</th><th style="padding:10px 14px;font-weight:600;border-bottom:1px solid var(--g200)">Status</th></tr></thead><tbody>';
-    [['Maya Chen','m.chen@example.com','415-555-1111','Northstar Labs','ok'],['Jordan Lee','j.lee@example.com','305-555-2222','Blue Harbor Media','ok'],['Angela Ross','a.ross@riverside.com','312-555-4411','Riverside Financial Group','warn'],['Tom Liu','t.liu@harborview.com','619-555-8820','Harborview Medical Center','ok']].forEach(function(r){
+    [['Chad Keppler','c.keppler@example.com','415-555-1111','Northstar Labs','ok'],['Jordan Lee','j.lee@example.com','305-555-2222','Blue Harbor Media','ok'],['Angela Ross','a.ross@riverside.com','312-555-4411','Riverside Financial Group','warn'],['Tom Liu','t.liu@harborview.com','619-555-8820','Harborview Medical Center','ok']].forEach(function(r){
       html += '<tr style="border-bottom:1px solid var(--g100)"><td style="padding:9px 14px;font-weight:600;color:var(--dark)">' + r[0] + '</td><td style="padding:9px 14px;color:var(--g500)">' + r[1] + '</td><td style="padding:9px 14px;color:var(--g500)">' + r[2] + '</td><td style="padding:9px 14px;color:var(--g500)">' + r[3] + '</td><td style="padding:9px 14px">' + (r[4]==='ok'?'<span style="background:#dcfce7;color:#16a34a;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px">✓ Ready</span>':'<span style="background:#fef9c3;color:var(--amber);font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px">⚠ Duplicate?</span>') + '</td></tr>';
     });
     html += '</tbody></table>';
   } else {
     html += '<table style="width:100%;border-collapse:collapse;font-size:12px"><thead><tr style="background:var(--g50)"><th style="padding:10px 14px;text-align:left;font-weight:600;border-bottom:1px solid var(--g200)">Note content</th><th style="padding:10px 14px;text-align:left;font-weight:600;border-bottom:1px solid var(--g200)">Linked to</th><th style="padding:10px 14px;font-weight:600;border-bottom:1px solid var(--g200)">Status</th></tr></thead><tbody>';
-    [['Decision maker — high priority','Maya Chen','ok'],['Interested in automation tools','Jordan Lee','ok'],['Follow up after Q3','Angela Ross','ok']].forEach(function(r){
+    [['Decision maker — high priority','Chad Keppler','ok'],['Interested in automation tools','Jordan Lee','ok'],['Follow up after Q3','Angela Ross','ok']].forEach(function(r){
       html += '<tr style="border-bottom:1px solid var(--g100)"><td style="padding:9px 14px;color:var(--dark)">' + r[0] + '</td><td style="padding:9px 14px;color:var(--g500)">' + r[1] + '</td><td style="padding:9px 14px"><span style="background:#dcfce7;color:#16a34a;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px">✓ Ready</span></td></tr>';
     });
     html += '</tbody></table>';
@@ -30036,7 +30036,7 @@ var BF_AGENCIES = [
   { id: 'ag13', name: 'Gulf Coast Advisory', city: 'Tampa, FL', access: false, region: 'South' }
 ];
 var BF_AGENTS = [
-  { id: 'a1', ag: 'ag1', name: 'Maya Chen' }, { id: 'a2', ag: 'ag1', name: 'Daniel Okafor' }, { id: 'a3', ag: 'ag1', name: 'Priya Raman' },
+  { id: 'a1', ag: 'ag1', name: 'Chad Keppler' }, { id: 'a2', ag: 'ag1', name: 'Daniel Okafor' }, { id: 'a3', ag: 'ag1', name: 'Priya Raman' },
   { id: 'a4', ag: 'ag2', name: 'Thomas Reilly' }, { id: 'a5', ag: 'ag2', name: 'Sofia Alvarez' }, { id: 'a6', ag: 'ag2', name: 'Marcus Bell' },
   { id: 'a7', ag: 'ag3', name: 'Hannah Lindqvist' }, { id: 'a8', ag: 'ag3', name: 'Victor Santos' }, { id: 'a9', ag: 'ag3', name: 'Grace Whitfield' },
   { id: 'a10', ag: 'ag4', name: 'Julian Frost' }, { id: 'a11', ag: 'ag4', name: 'Nora Vance' }, { id: 'a12', ag: 'ag5', name: 'Owen Pritchard' }, { id: 'a13', ag: 'ag5', name: 'Leah Brandt' },
@@ -31497,7 +31497,7 @@ function bfGoalStatus(pct) {
   if (pct >= 60) return { t: 'Behind', cls: 'new', col: '#d9a441' };
   return { t: 'Off pace', cls: 'risk', col: '#c8794a' };
 }
-function bfBadge(kind) { return '<span class="bfx-bdg ' + (kind === 'Foundation' ? 'fnd' : 'cst') + '" title="' + (kind === 'Foundation' ? 'Builds on existing Goals.com capabilities' : 'Scoped as an enterprise customization project') + '">' + kind + '</span>'; }
+function bfBadge(kind) { if (kind === 'Custom build') return ''; return '<span class="bfx-bdg ' + (kind === 'Foundation' ? 'fnd' : 'cst') + '" title="' + (kind === 'Foundation' ? 'Builds on existing Goals.com capabilities' : 'Scoped as an enterprise customization project') + '">' + kind + '</span>'; }
 function bfSecHead(title, badge, sub) { return '<div class="bfx-sech"><div class="t">' + title + (badge ? ' ' + bfBadge(badge) : '') + '</div>' + (sub ? '<div class="s">' + sub + '</div>' : '') + '</div>'; }
 function bfPctBar(pct) { var st = bfGoalStatus(pct); return '<div class="bfg-bar"><i style="width:' + Math.min(100, pct) + '%;background:' + st.col + '"></i></div>'; }
 function bfAgentSub(a) { return bfSubmitted(BF.policies.filter(function(p){ return p.agent === a.id; })); }
@@ -31588,7 +31588,7 @@ function bfCasesPage() {
     return '<tr><td><b>' + bfEsc(p.product) + '</b><div style="font-size:11.5px;color:var(--g500)">' + bfEsc(p.carrier) + ' &middot; ' + p.number + '</div></td><td class="click" style="cursor:pointer" ' + bfOc('bfOpenClient', c.id, 'policies') + '>' + bfName(c) + '</td>' + (t !== 'agent' ? '<td>' + bfEsc(t === 'bws' ? bfAgency(cs.agency).name : bfAgent(cs.agent).name) + '</td>' : '') +
       '<td><div class="bfg-steps">' + BF_CASE_STAGES.map(function(s, i){ return '<i class="' + (i < idx ? 'd' : (i === idx ? 'c' : '')) + '" title="' + s + '"></i>'; }).join('') + '</div><div style="font-size:11.5px;margin-top:3px">' + cs.stage + '</div></td><td>' + (cs.stage === 'Issued' ? '<span class="bfx-mask">Done</span>' : cs.daysInStage + ' days') + (st ? ' <span class="bfx-st risk">Stalled</span>' : '') + '</td><td style="font-size:12px">' + (cs.req ? bfEsc(cs.req) : '<span class="bfx-mask">Nothing missing</span>') + '</td><td>' + bfMoney(p.premium) + '</td><td style="white-space:nowrap">' + act + '</td></tr>';
   }).join('') + '</tbody></table></div>' : '<div class="bfx-note">No cases match these filters.</div>';
-  return bfHead('Cases ' + bfBadge('Custom build'), 'Follow business from application to issued policy. Stalled cases are flagged so nothing waits unnoticed.') + kp + '<div class="bfx-card"><h3 style="margin-bottom:6px">' + rows.length + ' ' + (rows.length === 1 ? 'case' : 'cases') + '</h3>' + chips + tbl + '</div>';
+  return bfHead('Cases', 'Follow business from application to issued policy. Stalled cases are flagged so nothing waits unnoticed.') + kp + '<div class="bfx-card"><h3 style="margin-bottom:6px">' + rows.length + ' ' + (rows.length === 1 ? 'case' : 'cases') + '</h3>' + chips + tbl + '</div>';
 }
 BF_PAGES['agent:cases'] = bfCasesPage; BF_PAGES['agency:cases'] = bfCasesPage; BF_PAGES['bws:cases'] = bfCasesPage;
 
