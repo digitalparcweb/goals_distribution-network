@@ -30674,7 +30674,7 @@ function bfLsec(t) { return '<div class="bfh-sec">' + t + '</div>'; }
 function bfRecLeftHtml(c, canSee, sc) {
   var cm = bfComms(c), ag = bfAgency(c.agency), agent = bfAgent(c.agent), mask = '<span class="bfx-mask">Not recorded</span>';
   var topics = sc.signals.map(function(s){ return BF_SIGNAL_DEFS[s.type].short; }), lobs = BF_LOB.filter(function(l){ return bfClientPolicies(c.id).some(function(p){ return p.lob === l; }); });
-  var tags = topics.concat(lobs).map(function(t){ return '<span class="bfr-pill">' + bfEsc(t) + '</span>'; }).join('') || '<span class="bfx-mask">None</span>';
+  var tags = topics.concat(lobs).filter(function(t, i, a){ return a.map(function(z){ return String(z).toLowerCase(); }).indexOf(String(t).toLowerCase()) === i; }).map(function(t){ return '<span class="bfr-pill">' + bfEsc(t) + '</span>'; }).join('') || '<span class="bfx-mask">None</span>';
   if (!canSee) return bfLsec('Details') + bfLk('Agency', bfEsc(ag.name)) + bfLk('Status', 'Not shared') + bfLsec('Tags') + '<div class="bfh-tags">' + tags + '</div><div class="bfx-note" style="margin-top:16px">Household details are not shared with Brookfield for this agency.</div>';
   var mem = bfMembers(c), last = BF.acts.filter(function(a){ return a.client === c.id && a.done; }).sort(function(a, b){ return b.when - a.when; })[0], nd = bfNextDue(c.id);
   var o = bfOppFor(c.id), pend = bfClientPolicies(c.id).filter(function(p){ return p.case; });
@@ -31230,9 +31230,9 @@ function bfCloseAgent() { _bfv.agentDetail = null; bfRender(); }
 BF_PAGES['agency:agents'] = function() {
   if (_bfv.agentDetail) return bfAgentDetail(_bfv.agentDetail);
   var S = bfScope(), stats = S.agents.map(function(a){ return bfAgentStats(a.id); });
-  var tbl = '<table class="bfx-tbl"><thead><tr><th>Agent</th><th>Households</th><th>Leads</th><th>Open opportunities</th><th>Worked</th><th>Policies sold</th><th>Premium written</th><th>Needs attention</th></tr></thead><tbody>' +
-    stats.map(function(s){ return '<tr class="click" ' + bfOc('bfOpenAgent', s.id) + '><td><b>' + bfEsc(bfAgent(s.id).name) + '</b></td><td>' + s.clients + '</td><td>' + s.leads + '</td><td>' + s.openOpps + '</td><td>' + s.worked + ' of ' + s.opps + '</td><td>' + s.sold + '</td><td>' + bfMoney(s.prem) + '</td><td style="font-size:12px;color:' + (s.overdue + s.unworked ? '#dc2626' : 'var(--g500)') + '">' + (s.overdue + s.unworked ? s.overdue + ' overdue, ' + s.unworked + ' unworked' : 'On track') + '</td></tr>'; }).join('') + '</tbody></table>';
-  return bfHead('Agents', 'Your team at a glance. Select an agent to see their pipeline, follow-ups and sales.') + '<div class="bfx-card">' + tbl + '</div>';
+  var tbl = '<table class="bfx-tbl"><thead><tr><th>Agent</th><th>Households</th><th>Leads</th><th>Open opportunities</th><th title="Opportunities the agent has opened and moved past Identified">Worked</th><th>Goal progress</th><th>Policies sold</th><th>Premium written</th><th>Needs attention</th></tr></thead><tbody>' +
+    stats.map(function(s){ var ag_ = bfAgent(s.id), gl_ = BF.goals[s.id], gp_ = bfPct(bfAgentPlaced(ag_), gl_); return '<tr class="click" ' + bfOc('bfOpenAgent', s.id) + '><td><span style="display:inline-flex;align-items:center;gap:8px">' + bfAv(ag_.name, 28) + '<b>' + bfEsc(ag_.name) + '</b></span></td><td>' + s.clients + '</td><td>' + s.leads + '</td><td>' + s.openOpps + '</td><td>' + s.worked + ' of ' + s.opps + '</td><td><div style="display:flex;align-items:center;gap:8px;min-width:110px"><div style="flex:1;height:6px;background:var(--g100);border-radius:4px;overflow:hidden"><div style="height:100%;width:' + Math.min(100, gp_) + '%;background:var(--teal)"></div></div><b style="font-size:12px">' + gp_ + '%</b></div></td><td>' + s.sold + '</td><td>' + bfMoney(s.prem) + '</td><td style="font-size:12px;color:' + (s.overdue + s.unworked ? '#dc2626' : 'var(--g500)') + '">' + (s.overdue + s.unworked ? s.overdue + ' overdue, ' + s.unworked + ' unworked' : 'On track') + '</td></tr>'; }).join('') + '</tbody></table>';
+  return bfHead('Agents', 'Your team at a glance. Worked means an opportunity the agent has opened and moved past Identified. Select an agent to see their pipeline, follow-ups and sales.') + '<div class="bfx-card">' + tbl + '</div>';
 };
 function bfAgentDetail(id) {
   var a = bfAgent(id), s = bfAgentStats(id), pols = BF.policies.filter(function(p){ return p.agent === id; }), rec = bfWritten(pols, 365);
@@ -31298,7 +31298,7 @@ function bfBookBody() {
 }
 BF_PAGES['agency:book'] = function() {
   var S = bfScope(), f = _bfv.f, act = S.policies.filter(function(p){ return p.status === 'Active'; });
-  var lobCards = '<div class="bfx-kpis">' + BF_LOB.map(function(l){ var ps = act.filter(function(p){ return p.lob === l; }); return bfKpi(l, ps.length, bfMoneyK(bfSum(ps, function(p){ return p.premium; })) + (l === 'Annuity' ? ' in annuity value' : ' annual premium')); }).join('') + '</div>';
+  var lobCards = '<div class="bfx-kpis">' + BF_LOB.map(function(l){ var ps = act.filter(function(p){ return p.lob === l; }); return bfKpi(l, bfMoneyK(bfSum(ps, function(p){ return p.premium; })), ps.length + (ps.length === 1 ? ' policy' : ' policies') + (l === 'Annuity' ? ', annuity value' : ', annual premium')); }).join('') + '</div>';
   var brk = '<div class="bfx-row">' + bfGroupCard('Book by carrier', bfGroup(act, function(p){ return p.carrier; }).slice(0, 6)) + bfGroupCard('Book by agent', bfGroup(act, function(p){ return p.agent; }), function(k){ return bfEsc(bfAgent(k).name); }) + '</div>';
   var tabs = '<div class="bfx-filters">' + bfFilterChips('bTab', [['clients', 'Households'], ['policies', 'Policies'], ['cases', 'Cases']], f.bTab) + '</div>';
   var flt = f.bTab === 'clients' ? '<div class="bfx-filters"><input value="' + bfEsc(f.cq) + '" placeholder="Search clients" oninput="bfSetQ(\'cq\',this.value,\'book\')" style="border:1px solid var(--g200);border-radius:9px;padding:8px 12px;font-size:13px;font-family:var(--font);width:240px"><span style="font-size:11px;color:var(--g400)">Find gaps</span>' + bfFilterChips('bFlt', [['all', 'All'], ['pc-no-ann', 'P&C, no annuity'], ['life-no-ann', 'Life, no annuity'], ['med-no-ann', 'Medicare, no annuity'], ['none', 'No policies'], ['incomplete', 'Incomplete records']], f.bFlt) + '</div>'
@@ -32285,7 +32285,7 @@ BF_PAGES['agency:review'] = function() {
       '<div class="bfi-act"><button class="bfx-btn pri" ' + bfOc('bfRevDo', o.id, 'approved') + '>Approve</button><button class="bfx-btn" ' + bfOc('bfRevReturn', o.id) + '>Return to agent</button><button class="bfx-btn" ' + bfOc('bfOpenClient', c.id, 'signals') + '>Open household</button></div></div>';
   };
   var hist = done.length ? '<div class="bfx-card"><h3>Recently decided</h3><table class="bfx-tbl"><thead><tr><th>Household</th><th>Agent</th><th>Decision</th><th>When</th></tr></thead><tbody>' + done.map(function(o){ return '<tr><td><b>' + bfName(BF.byId[o.client]) + '</b></td><td>' + bfEsc(bfAgent(o.agent).name) + '</td><td>' + (o.review.status === 'approved' ? '<span class="bfx-st submitted">Approved</span>' : '<span class="bfx-st risk">Returned</span>' + (o.review.note ? '<div style="font-size:11px;color:var(--g500);max-width:260px">' + bfEsc(o.review.note) + '</div>' : '')) + '</td><td>' + bfDate(o.review.decided) + '</td></tr>'; }).join('') + '</tbody></table></div>' : '';
-  return bfHead('Principal review queue', 'Applications at or above ' + bfMoney(BF_RULES.reviewAssets) + ' in play wait here for your approval before they can be issued.') +
+  return bfHead('Principal Review Queue', 'Applications at or above ' + bfMoney(BF_RULES.reviewAssets) + ' in play wait here for your approval before they can be issued.') +
     '<div class="bfx-kpis">' + bfKpi('Waiting for review', pend.length, 'Needs your decision') + bfKpi('Approved', S.opps.filter(function(o){ return o.review && o.review.status === 'approved'; }).length, 'Cleared to issue') + bfKpi('Returned', S.opps.filter(function(o){ return o.review && o.review.status === 'returned'; }).length, 'With the agent') + '</div>' +
     (pend.length ? pend.map(card).join('') : '<div class="bfx-card"><div class="bfx-note">Nothing is waiting for review.</div></div>') + hist;
 };
@@ -32411,8 +32411,9 @@ function bfFunnelTab() {
     '<div class="bfx-card"><h3>Where opportunities leak</h3><table class="bfx-tbl"><thead><tr><th>Step</th><th>Entered</th><th>Moved on</th><th>Not yet moved</th><th></th><th>Drop</th></tr></thead><tbody>' + leak + '</tbody></table></div>' +
     '<div class="bfx-card"><h3>Which triggers turn into policies</h3>' + bfSignalTable(op) + '<div style="font-size:11.5px;color:var(--g500);margin-top:8px">A trigger that rarely converts is a candidate to tighten or switch off on the Rules page.</div></div>' + bfUnworkedCard(op);
 }
+var BF_GAP_TXT = { 'Retirement date': 'These households have no target retirement date on file.', 'Cash holdings': 'These households have no cash holdings recorded.', 'Risk preference': 'These households have no risk preference recorded.', 'CD and maturity details': 'These households are missing CD and maturity details.', 'Profile not updated in over a year': 'These household profiles have not been updated in over a year.' };
 function bfQualityTab() {
-  var cl = (bfScope().clients || BF.clients), cnt = {}; cl.forEach(function(c){ c.score.missing.forEach(function(m){ var k = m.replace(/Profile not updated.*/, 'Profile older than a year'); cnt[k] = (cnt[k] || 0) + 1; }); });
+  var cl = (bfScope().clients || BF.clients), cnt = {}; cl.forEach(function(c){ c.score.missing.forEach(function(m){ var k = BF_GAP_TXT[m] || BF_GAP_TXT['Profile not updated in over a year']; cnt[k] = (cnt[k] || 0) + 1; }); });
   var keys = Object.keys(cnt).sort(function(a, b){ return cnt[b] - cnt[a]; }), mx = Math.max.apply(null, keys.map(function(k){ return cnt[k]; }).concat([1]));
   var buckets = [['90 to 100%', 90, 101], ['70 to 89%', 70, 90], ['50 to 69%', 50, 70], ['Below 50%', 0, 50]];
   var low = cl.filter(function(c){ return c.score.complete < BF_RULES.minComplete; }).sort(function(a, b){ return a.score.complete - b.score.complete; }).slice(0, 14);
@@ -32758,7 +32759,7 @@ function bfDd(k, title, body, sub) {
 function bfRecLeftHtml(c, canSee, sc) {
   var ag = bfAgency(c.agency), agent = bfAgent(c.agent), mask = '<span class="bfx-mask">Not recorded</span>';
   var topics = sc.signals.map(function(s){ return BF_SIGNAL_DEFS[s.type].short; }), lobs = BF_LOB.filter(function(l){ return bfClientPolicies(c.id).some(function(p){ return p.lob === l; }); });
-  var tags = topics.concat(lobs).map(function(t){ return '<span class="bfr-pill">' + bfEsc(t) + '</span>'; }).join('') || '<span class="bfx-mask">None</span>';
+  var tags = topics.concat(lobs).filter(function(t, i, a){ return a.map(function(z){ return String(z).toLowerCase(); }).indexOf(String(t).toLowerCase()) === i; }).map(function(t){ return '<span class="bfr-pill">' + bfEsc(t) + '</span>'; }).join('') || '<span class="bfx-mask">None</span>';
   var who = '<div class="bfdd-who">' + bfAv(agent.name, 30) + '<div><b>' + bfEsc(agent.name) + '</b><i>Assigned agent &middot; ' + bfEsc(ag.name) + '</i></div></div>';
   if (!canSee) return who + bfLsec('Details') + bfLk('Agency', bfEsc(ag.name)) + bfLk('Status', 'Not shared') + bfLsec('Tags') + '<div class="bfh-tags">' + tags + '</div><div class="bfx-note" style="margin-top:16px">Household details are not shared with Brookfield for this agency.</div>';
   var mem = bfMembers(c), p = mem[0], s2 = mem[1], g = bfG(c), cm = bfContact(c), edit = _bfv.tier === 'agent', cnt = bfGCount(c), pend = bfClientPolicies(c.id).filter(function(x){ return x.case; });
@@ -33293,7 +33294,7 @@ function bfDashExtra(t, html) {
       add = bfProdBlock('agent') + bfDashCard('Opportunity Inbox', 'New households to review, Hot first.', hot, 'Hot and not yet reviewed', 'inbox', '', 'Open inbox');
     } else if (t === 'agency') {
       var pend = S.opps.filter(function(o){ return o.review && o.review.status === 'pending'; }).length;
-      add = bfDashCard('Principal review', 'Larger cases wait here for approval.', pend, 'waiting for your decision', 'review', '', 'Open queue');
+      add = bfDashCard('Principal Review', 'Larger cases wait here for approval.', pend, 'waiting for your decision', 'review', '', 'Open queue');
     } else {
       var ms = bfScoreMetrics(), met = 0; ms.forEach(function(m){ var x = BF_TARGETS[m.k]; if (m.hi ? m.a >= x : m.a <= x) met++; });
       add = bfDashCard('Pilot scorecard', 'Results against the pilot targets.', met + ' of ' + ms.length, 'targets met', 'reports', 'rTab=score', 'Open scorecard');
@@ -33348,7 +33349,7 @@ function bfAttnCard(t) {
 }
 function bfLicCard(agents) {
   var rows = bfLicRows(agents);
-  return '<div class="bfx-card"><h3>Licensing and appointments</h3><div style="font-size:12.5px;color:var(--g500);margin-bottom:8px">Due in the next 60 days, or pending.</div>' + (rows.length ? '<table class="bfx-tbl"><thead><tr><th>Producer</th><th>Agency</th><th>Item</th><th>Status</th></tr></thead><tbody>' + rows.map(function(x){
+  return '<div class="bfx-card"><h3>Licensing and Appointments</h3><div style="font-size:12.5px;color:var(--g500);margin-bottom:8px">Due in the next 60 days, or pending.</div>' + (rows.length ? '<table class="bfx-tbl"><thead><tr><th>Producer</th><th>Agency</th><th>Item</th><th>Status</th></tr></thead><tbody>' + rows.map(function(x){
     return '<tr><td><b>' + bfEsc(x.a.name) + '</b></td><td>' + bfEsc(x.ag.name) + '</td><td>' + x.what + '</td><td><span class="bfx-st ' + (x.d && x.d <= 30 ? 'risk' : 'new') + '">' + x.txt + '</span></td></tr>';
   }).join('') + '</tbody></table>' : '<div class="bfx-note">Nothing expiring in the next 60 days.</div>') + '</div>';
 }
@@ -33477,9 +33478,9 @@ function bfCoverCard() {
 function bfAttnMore() { _bfv.f.attnAll = !_bfv.f.attnAll; bfRender(); }
 function bfAttnCard(t) {
   var items = bfAttnItems(t), all = !!_bfv.f.attnAll, shown = all ? items : items.slice(0, 4);
-  var col = { r: '#dc2626', a: '#a16207', b: '#2f5fd0' };
+  var col = { r: '#dc2626', a: '#d97706', b: '#2f5fd0' }, bgc = { r: 'rgba(239,68,68,.08)', a: 'rgba(245,158,11,.10)', b: 'rgba(59,130,246,.07)' }, lab = { r: 'Urgent', a: 'Soon', b: 'Routine' };
   var body = shown.map(function(x) {
-    return '<div style="display:flex;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--g100)"><span style="width:8px;height:8px;border-radius:50%;background:' + col[x[0]] + ';flex:none"></span><div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:700">' + bfEsc(x[1]) + '</div><div style="font-size:12px;color:var(--g500);margin-top:2px">' + bfEsc(x[2]) + '</div></div><button class="bfx-btn" ' + bfOc('bfJump', x[3], x[4]) + '>Open</button></div>';
+    return '<div style="display:flex;gap:12px;align-items:center;padding:8px 12px;margin-top:6px;border-radius:8px;border-left:4px solid ' + col[x[0]] + ';background:' + bgc[x[0]] + '"><span style="font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:' + col[x[0]] + ';width:52px;flex:none">' + lab[x[0]] + '</span><div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:700">' + bfEsc(x[1]) + '</div><div style="font-size:12px;color:var(--g500);margin-top:2px">' + bfEsc(x[2]) + '</div></div><button class="bfx-btn" ' + bfOc('bfJump', x[3], x[4]) + '>Open</button></div>';
   }).join('') || '<div class="bfx-note">Nothing needs attention right now.</div>';
   var more = items.length > 4 ? '<div style="padding-top:10px;border-top:1px solid var(--g100)"><button class="bfx-btn" ' + bfOc('bfAttnMore') + '>' + (all ? 'Show fewer' : 'Show ' + (items.length - 4) + ' more') + '</button></div>' : '';
   return '<div class="bfx-card"><div style="display:flex;justify-content:space-between;align-items:baseline"><h3>Needs your attention</h3><span style="font-size:12px;color:var(--g500)">' + items.length + ' item' + (items.length === 1 ? '' : 's') + ', most urgent first</span></div>' + body + more + '</div>';
@@ -33513,7 +33514,7 @@ function bfDashGroup(b) {
 var BF_DT = {
   agent: { tabs: [['today', 'Today'], ['production', 'Production']], rules: [['production', /^(Production Foundation|Submitted premium|Production by month|AI insight)/]], dflt: 'today' },
   agency: { tabs: [['today', 'Overview'], ['production', 'Production']],
-    rules: [['production', /^(Production|Submitted premium|Production by month|AI insight|Book of business|Premium by|Annuity opportunities|Top annuity|Opportunity funnel)/]], drop: /^(Team$|Needs attention|Agent leaderboard|Pipeline coverage|Cross-sell)/, after: [/^Principal review/, bfAgencyTeamCard], dflt: 'today' }
+    rules: [['production', /^(Production|Submitted premium|Production by month|AI insight|Book of business|Premium by|Annuity opportunities|Top annuity|Opportunity funnel)/]], drop: /^(Team$|Needs attention|Agent leaderboard|Pipeline coverage|Cross-sell)/, after: [/^Principal Review/, bfAgencyTeamCard], dflt: 'today' }
 };
 function bfAgencyTeamCard() {
   var S = bfScope(), rows = S.agents.map(function(a) {
@@ -33799,7 +33800,7 @@ function bfCommTab() {
   var monthly = '<div class="bfx-card"><div style="display:flex;justify-content:space-between;align-items:center"><h3>Monthly breakdown</h3><button class="bfx-btn" ' + bfOc('bfCommExport') + '>Export CSV</button></div><table class="bfx-tbl"><thead><tr><th>Month</th><th>Policies</th><th>Premium</th><th>' + bfCommLabel() + '</th><th>Chargebacks</th><th>Net</th><th>Status</th></tr></thead><tbody>' + mrows.join('') + '</tbody></table></div>';
   var bp = {}; ytd.forEach(function(p){ var k = p.lob === 'Annuity' ? p.product : p.lob; bp[k] = (bp[k] || 0) + bfSigned(p); });
   var keys = Object.keys(bp).sort(function(a, b){ return bp[b] - bp[a]; }), mx = Math.max.apply(null, keys.map(function(k){ return Math.abs(bp[k]); }).concat([1]));
-  var byProd = '<div class="bfx-card"><h3>By product, this year</h3>' + keys.map(function(k){ return bfBar(k, Math.abs(bp[k]), mx, bfMoneyK(bp[k])); }).join('') + '<div style="font-size:11.5px;color:var(--g500);margin-top:8px">Annuity rates: Multi-Year Guarantee 5.0%, Fixed Index 6.5%, Income 4.5%. Life, property and casualty, and Medicare use their own rates.</div></div>';
+  var byProd = '<div class="bfx-card"><h3>By product, this year</h3><div style="font-size:12.5px;color:var(--g500);margin-bottom:8px">Each bar shows the commission earned this year from that product, after chargebacks.</div>' + keys.map(function(k){ var pr = BF_RATE_PROD[k] != null ? BF_RATE_PROD[k] : BF_RATE_LOB[k]; return bfBar(k + (pr != null ? ' (paid at ' + Math.round(pr * 1000) / 10 + '% of premium)' : ''), Math.abs(bp[k]), mx, bfMoneyK(bp[k])); }).join('') + '<div style="font-size:11.5px;color:var(--g500);margin-top:8px">Commission is paid as a percentage of premium. Annuity products pay 5.0% for Multi-Year Guarantee, 6.5% for Fixed Index and 4.5% for Income. Life, property and casualty, and Medicare each use their own rate.</div></div>';
   var who = '';
   if (t !== 'agent') {
     var grp = t === 'agency' ? bfScope().agents : BF_AGENCIES, rows = grp.map(function(g) {
