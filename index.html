@@ -1944,6 +1944,8 @@ body.bf-theme .sb-label{max-width:80px;overflow:hidden;text-overflow:ellipsis}
 .bf-fullnm .bfx-bar .nm{width:150px;white-space:normal;overflow:visible;text-overflow:clip;line-height:1.25}
 .bfx-sp{border:1px solid var(--g200);background:#fff;border-radius:999px;padding:3px 12px;font-size:11.5px;font-weight:700;font-family:var(--font);cursor:pointer;min-width:46px}.bfx-sp.on{background:rgba(29,158,117,.12);border-color:rgba(29,158,117,.4);color:var(--teal2)}.bfx-sp.off{background:var(--g100);color:var(--g500)}
 .bfx-dl{white-space:nowrap}
+@keyframes bfRecPulse{0%,100%{opacity:1}50%{opacity:.25}}.bf-rec-dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:#dc2626;animation:bfRecPulse 1.2s infinite;margin-right:8px}
+.bf-pm-sel{border:1px solid var(--g200);border-radius:8px;padding:5px 8px;font-size:12.5px;font-family:var(--font);background:#fff}
 .bfh-panel .bfx-tbl{min-width:560px}.bfh-panel{overflow-x:auto}
 @media(max-width:1000px){.bfx-row{grid-template-columns:minmax(0,1fr)}}
 
@@ -30421,7 +30423,7 @@ function bfRenderSwitch() {
   var list = items.length ? '<div class="bfp-lab">' + label + '</div><div class="bfp-list">' + items.map(function(x){ return '<button type="button" class="bfs-item' + (x.id === curId ? ' on' : '') + '" ' + st('bfWhoPick', x.id) + '>' + bfAv(x.name, 24) + '<span class="t"><b>' + bfEsc(x.name) + '</b>' + (x.sub ? '<i>' + bfEsc(x.sub) + '</i>' : '') + '</span></button>'; }).join('') + '</div>' : '<div class="bfp-note">Brookfield sees the whole network. Names appear only for agencies that agreed to share them.</div>';
   box.innerHTML = '<div class="bfp-head">' + bfAv(P.name, 40) + '<div class="t"><b>' + bfEsc(P.name) + '</b><i>' + bfEsc(P.role) + '</i></div></div>' +
     '<div class="bfp-sec" id="bf-switch"><div class="bfp-lab">View as</div><div class="bfx-seg bfp-seg">' + seg + '</div>' + list + '</div>' +
-    '<div class="bfp-foot"><button type="button" class="profile-menu-item" onclick="showToast(\'Help center opening…\');toggleUserSwitcher()">Help &amp; support</button></div>';
+    '<div class="bfp-foot"><button type="button" class="profile-menu-item" onclick="toggleUserSwitcher();bfGo(\'settings\')">Settings &amp; Permissions</button><button type="button" class="profile-menu-item" onclick="showToast(\'Help center opening…\');toggleUserSwitcher()">Help &amp; support</button></div>';
   var nm = bfEl('topbar-name'), tt = bfEl('topbar-title'), ph = bfEl('topbar-photo');
   if (nm) nm.textContent = P.name; if (tt) tt.textContent = BF_TIER_LABEL[_bfv.tier];
   if (ph && ph.setAttribute) { var ini = P.name.split(' ').filter(function(w){ return w !== 'and'; }).slice(0, 2).map(function(w){ return w[0]; }).join('').toUpperCase();
@@ -32425,7 +32427,7 @@ function bfQualityTab() {
     '<div class="bfx-card"><h3>Households to Update First</h3><table class="bfx-tbl"><thead><tr><th>Household</th><th>Agency</th><th>Complete</th><th>Missing</th></tr></thead><tbody>' + low.map(function(c){ return '<tr><td><b>' + bfName(c) + '</b></td><td>' + bfEsc(bfAgency(c.agency).name) + '</td><td>' + c.score.complete + '%</td><td style="font-size:12px;color:var(--g600)">' + c.score.missing.join(', ') + '</td></tr>'; }).join('') + '</tbody></table></div>';
 }
 function bfAuditTab() {
-  var f = _bfv.f, kinds = ['all', 'Identified', 'Stage', 'Email', 'Suitability', 'Review', 'Rule change', 'Alert', 'Dismissed'];
+  var f = _bfv.f, kinds = ['all', 'Identified', 'Stage', 'Email', 'Suitability', 'Review', 'Rule change', 'Alert', 'Recording', 'Dismissed'];
   var rows = BF.audit.filter(function(a){ return f.auK === 'all' || !f.auK || a.kind === f.auK || (f.auK === 'Email' && a.kind === 'Email queued'); }).slice().sort(function(a, b){ return b.when - a.when; });
   var chips = '<div class="bfo-f"><span>Type</span>' + bfFilterChips('auK', kinds.map(function(k){ return [k, k === 'all' ? 'All' : k]; }), f.auK || 'all') + '</div>';
   return '<div class="bfx-card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px"><h3 style="margin:0">Audit Trail</h3><button class="bfx-btn" ' + bfOc('bfAuditExport') + '>Export CSV</button></div>' + chips + '<div style="font-size:12px;color:var(--g500);margin:8px 0">' + rows.length + ' entries. Every stage change, email, suitability check, review and rule change is recorded.</div>' +
@@ -32982,10 +32984,11 @@ function bfAnnuityTab(c, sc, o, canSee, isAgent, prev) {
 /* ── Actions ── */
 function bfActionsHub(c, edit, prev) {
   var f = _bfv.f, sub = f.aSub || 'tasks', cm = bfComms(c), n = {
-    tasks: BF.acts.filter(function(a){ return a.client === c.id && (a.kind === 'Task' || a.kind === 'Appointment') && !a.done; }).length, calls: bfPhoneData(c).calls.length, email: cm.sent.concat(cm.emails).length, meetings: cm.meetings.length, notes: bfNoteList(c).length };
-  var chips = [['tasks', 'Open Actions'], ['calls', 'Calls and Texts'], ['email', 'Emails'], ['meetings', 'Meetings'], ['notes', 'Notes']].map(function(x){ return '<button class="filter-chip' + (sub === x[0] ? ' active' : '') + '" ' + bfOc('bfSetF', 'aSub', x[0]) + '>' + x[1] + ' <span style="opacity:.6">' + n[x[0]] + '</span></button>'; }).join('');
+    tasks: BF.acts.filter(function(a){ return a.client === c.id && (a.kind === 'Task' || a.kind === 'Appointment') && !a.done; }).length, calls: bfPhoneData(c).calls.length, email: cm.sent.concat(cm.emails).length, meetings: cm.meetings.length, notes: bfNoteList(c).length, rec: (_bfRecs[c.id] || []).length };
+  var chips = [['tasks', 'Open Actions'], ['calls', 'Calls and Texts'], ['email', 'Emails'], ['meetings', 'Meetings'], ['notes', 'Notes'], ['rec', 'Recordings']].map(function(x){ return '<button class="filter-chip' + (sub === x[0] ? ' active' : '') + '" ' + bfOc('bfSetF', 'aSub', x[0]) + '>' + x[1] + ' <span style="opacity:.6">' + n[x[0]] + '</span></button>'; }).join('');
   var body, old = _bfv.rec.tab;
   if (sub === 'calls') body = bfPhoneTab(c, edit);
+  else if (sub === 'rec') body = bfMeetingRecTab(c, edit);
   else if (sub === 'notes') body = bfNotesTab(c, edit);
   else if (sub === 'tasks') body = bfActionsTab(c, edit);
   else { _bfv.rec.tab = sub === 'email' ? 'email' : 'meetings'; try { body = prev(c, c.score, bfOppFor(c.id), true, edit); } finally { _bfv.rec.tab = old; } }
@@ -34549,6 +34552,146 @@ function bfAgencyGoalDo(gid) {
   var o = BF_PAGES['bws:goals'];
   BF_PAGES['bws:goals'] = function() { return o() + bfAgencyGoalCard(); };
 })();
+/* ═══ Meeting recordings (demo): record, transcribe, summarize, and read the client's concerns ═══ */
+var _bfRecs = {}, _bfRecAct = null, _bfRecTimer = null;
+var BF_REC_SCEN = [
+  { fit: 'better', concerns: ['Inflation eroding savings', 'Running out of money in retirement'], prefs: ['Wants guaranteed income', 'Wants to talk it over with a spouse before deciding'], sum: 'The household is worried that rising prices will eat into savings and that the money will not last. They like the idea of dependable income and want a follow-up with their spouse present.',
+    tr: [['Advisor', 'Thanks for making time. How are you feeling about retirement?'], ['Client', 'Honestly, prices keep climbing and I worry we will run out of money.'], ['Advisor', 'Would dependable monthly income help with that?'], ['Client', 'Yes, that would take a lot of stress away. I would want my spouse to hear this too.'], ['Advisor', 'Of course. Let us set a second meeting with both of you.']] },
+  { fit: 'lower', concerns: ['Wants access to cash', 'Dislikes surrender charges'], prefs: ['Keeps liquidity first'], sum: 'The household values easy access to their money and is uneasy about surrender charges. An annuity is not ruled out, but it is a weaker fit for now.',
+    tr: [['Advisor', 'What matters most to you with this money?'], ['Client', 'That I can get to it if something comes up. I do not like being locked in.'], ['Advisor', 'Some contracts have surrender periods. Is that a concern?'], ['Client', 'Yes, that bothers me. I would rather keep it flexible for now.']] },
+  { fit: 'poor', concerns: ['Does not want an annuity'], prefs: ['Prefers to keep money in CDs and cash'], sum: 'The client said clearly that they do not want an annuity and prefer to keep their money in CDs and cash. This opportunity is not a good fit.',
+    tr: [['Advisor', 'Have you thought about guaranteed income options?'], ['Client', 'I have, and I do not want an annuity. I am comfortable with my CDs.'], ['Advisor', 'Understood. I will note that and not push it.'], ['Client', 'Thank you. I would rather keep things as they are.']] }
+];
+function bfMeetingRecTab(c, edit) {
+  var list = _bfRecs[c.id] || [], act = _bfRecAct && _bfRecAct.cid === c.id;
+  var top = act
+    ? '<div class="bfx-card" style="border-color:rgba(220,38,38,.35)"><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><span class="bf-rec-dot"></span><b style="font-size:14px">Recording in progress</b><span id="bf-rec-t" style="font-family:var(--mono);font-size:13px">' + bfRecClock() + '</span><span style="margin-left:auto;display:flex;gap:8px"><button class="bfx-btn pri" ' + bfOc('bfRecStop', c.id) + '>Stop and Summarize</button><button class="bfx-btn" ' + bfOc('bfRecDiscard') + '>Discard</button></span></div><div style="font-size:12.5px;color:var(--g500);margin-top:8px">This is a demo. No audio is captured. Stopping creates a sample transcript and summary.</div></div>'
+    : '<div class="bfx-card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><div><h3 style="margin:0">Meeting Recordings</h3><div style="font-size:12.5px;color:var(--g500);margin-top:4px">Record a meeting to get a transcript, a summary, and the concerns and preferences the client mentioned. These help judge whether an annuity fits.</div></div>' + (edit ? '<button class="bfx-btn pri" ' + bfOc('bfRecAsk', c.id) + '>Record a Meeting</button>' : '') + '</div></div>';
+  var rows = list.map(function(r, i) {
+    var fit = { better: ['submitted', 'Better fit'], lower: ['new', 'Lower fit'], poor: ['risk', 'Poor fit'] }[r.fit];
+    var opp = bfOppFor(c.id), can = r.fit === 'poor' && edit && opp && opp.status !== 'dismissed' && opp.status !== 'issued';
+    return '<div class="bfx-card"><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><b style="font-size:14px">' + bfDate(r.at) + '</b><span style="font-size:12px;color:var(--g500)">' + r.mins + ' min &middot; recorded by ' + bfEsc(r.by) + ' &middot; client agreed to recording</span><span class="bfx-st ' + fit[0] + '" style="margin-left:auto">' + fit[1] + '</span></div>' +
+      '<div style="font-size:13px;line-height:1.6;margin:10px 0">' + bfEsc(r.sum) + '</div>' +
+      '<div style="font-size:12px;font-weight:700;color:var(--g600);margin-bottom:4px">Concerns</div><div style="margin-bottom:8px">' + r.concerns.map(function(x){ return '<span class="bfr-pill">' + bfEsc(x) + '</span>'; }).join('') + '</div>' +
+      '<div style="font-size:12px;font-weight:700;color:var(--g600);margin-bottom:4px">Preferences</div><div style="margin-bottom:8px">' + r.prefs.map(function(x){ return '<span class="bfr-pill">' + bfEsc(x) + '</span>'; }).join('') + '</div>' +
+      (r.fit === 'poor' ? '<div class="bfx-note" style="margin-bottom:8px">Suggestion: set this opportunity aside, since the client said they do not want an annuity.</div>' : '') +
+      '<details><summary style="cursor:pointer;font-size:12.5px;font-weight:700">Transcript</summary><div style="margin-top:8px;font-size:12.5px;line-height:1.7">' + r.tr.map(function(l){ return '<div><b>' + l[0] + ':</b> ' + bfEsc(l[1]) + '</div>'; }).join('') + '</div></details>' +
+      '<div style="display:flex;gap:8px;margin-top:10px"><button class="bfx-btn" ' + bfOc('bfRecDl', c.id, i) + '>Download Transcript</button>' + (can ? '<button class="bfx-btn pri" ' + bfOc('bfRecSetAside', opp.id) + '>Set Aside Opportunity</button>' : '') + '</div></div>';
+  }).join('') || (act ? '' : '<div class="bfx-note">No recordings yet.</div>');
+  return top + rows;
+}
+function bfRecClock() { var t = _bfRecAct ? Math.floor((Date.now() - _bfRecAct.t0) / 1000) : 0; return bfPad(Math.floor(t / 60)) + ':' + bfPad(t % 60); }
+function bfRecAsk(cid) {
+  bfModal('Record a meeting', '<div style="font-size:13px;line-height:1.6;margin-bottom:12px">Recording a client meeting needs the client\'s agreement. Ask them before you start, and say so at the start of the recording.</div><label style="display:flex;gap:9px;font-size:13px"><input type="checkbox" id="bf-rec-ok"><span>The client has agreed to be recorded.</span></label>', 'Start recording', "bfRecStart('" + cid + "')");
+}
+function bfRecStart(cid) {
+  var e = bfEl('bf-rec-ok'); if (!(e && e.checked)) { showToast('Confirm the client agreed first'); return; }
+  bfModalClose(); _bfRecAct = { cid: cid, t0: Date.now() };
+  if (typeof setInterval === 'function') { if (_bfRecTimer) clearInterval(_bfRecTimer); _bfRecTimer = setInterval(function(){ var t = bfEl('bf-rec-t'); if (t) t.textContent = bfRecClock(); else if (_bfRecTimer) { clearInterval(_bfRecTimer); _bfRecTimer = null; } }, 1000); }
+  bfRender();
+}
+function bfRecDiscard() { _bfRecAct = null; if (_bfRecTimer && typeof clearInterval === 'function') { clearInterval(_bfRecTimer); _bfRecTimer = null; } showToast('Recording discarded'); bfRender(); }
+function bfRecStop(cid) {
+  var c = BF.byId[cid], list = _bfRecs[cid] = _bfRecs[cid] || [], sc = BF_REC_SCEN[(bfHash(cid) + list.length) % BF_REC_SCEN.length], who = bfAgent(c.agent).name;
+  _bfRecAct = null; if (_bfRecTimer && typeof clearInterval === 'function') { clearInterval(_bfRecTimer); _bfRecTimer = null; }
+  var rec = { at: Date.now(), mins: 8 + bfHash(cid + list.length) % 30, by: who, fit: sc.fit, sum: sc.sum, concerns: sc.concerns, prefs: sc.prefs, tr: sc.tr };
+  list.unshift(rec);
+  bfNoteList(c).unshift({ html: '<p><b>Recorded meeting summary</b></p><p>' + bfEsc(sc.sum) + '</p><p>Concerns: ' + bfEsc(sc.concerns.join(', ')) + '. Preferences: ' + bfEsc(sc.prefs.join(', ')) + '.</p>', ago: 0, pin: false, tag: 'Recording', by: who });
+  bfLog(cid, 'Note', 'Recorded a meeting and added the summary to notes.');
+  bfAudit('Recording', cid, 'Meeting recorded with client agreement. Summary added to notes. Fit: ' + sc.fit + '.');
+  showToast('Summary ready'); bfRender();
+}
+function bfRecSetAside(oid) { bfSetOpp(oid, 'dismissed', 'Client does not want an annuity (from meeting notes)'); showToast('Opportunity set aside'); bfRender(); }
+function bfRecDl(cid, i) {
+  var c = BF.byId[cid], r = (_bfRecs[cid] || [])[i]; if (!r) return;
+  bfDownload('meeting-transcript-' + String(c.code || cid).toLowerCase() + '.txt', 'Meeting transcript (demo)\r\nHousehold: ' + (bfCanSeeClient(c) ? c.name : c.code) + '\r\nDate: ' + bfDate(r.at) + '\r\n\r\n' + r.tr.map(function(l){ return l[0] + ': ' + l[1]; }).join('\r\n') + '\r\n\r\nSummary: ' + r.sum + '\r\n');
+  showToast('Transcript downloaded');
+}
+/* ═══ Settings and Permissions (under the profile) ═══ */
+var BF_PERM_GROUPS = [
+  ['Households and Data', [['hh_view', 'View households in scope'], ['hh_edit', 'Edit households and financial data'], ['hh_export', 'Export household data'], ['hh_import', 'Import households from CSV']]],
+  ['Opportunities', [['opp_inbox', 'Opportunity Inbox'], ['opp_work', 'Work opportunities and change stages'], ['opp_review', 'Principal review and approvals'], ['opp_dismiss', 'Set opportunities aside']]],
+  ['Marketing and Communication', [['mk_email', 'Send emails to households'], ['mk_tpl', 'Use approved templates'], ['mk_edit', 'Personalize templates (name, address, phone, designation)'], ['mk_own', 'Upload or create own materials'], ['mk_drip', 'Drip campaigns and automations'], ['mk_fact', 'Send fact-finders']]],
+  ['Notes and AI', [['ai_rec', 'Record meetings'], ['ai_sum', 'AI summaries and note analysis'], ['ai_kb', 'Knowledge base that trains the AI'], ['ai_ace', 'Ask Ace and recommendations']]],
+  ['Production and Money', [['pm_comm', 'See commissions'], ['pm_split', 'Set commission splits'], ['pm_bonus', 'Create bonuses'], ['pm_cont', 'Create contests'], ['pm_goal', 'Set goals'], ['pm_pay', 'Export the payroll file']]],
+  ['Documents', [['dc_view', 'View agreements and invoices'], ['dc_dl', 'Download documents'], ['dc_sign', 'Send documents for signature']]],
+  ['Reports and Oversight', [['rp_view', 'Reports and dashboards'], ['rp_data', 'Data quality'], ['rp_audit', 'Audit trail'], ['rp_team', 'See other producers\' work']]],
+  ['Rules and Administration', [['ad_rules', 'Rules and triggers'], ['ad_prod', 'Products and state availability'], ['ad_comp', 'Compliance settings'], ['ad_users', 'Manage users and permissions']]]
+];
+var BF_PERM_LVL = [['full', 'Full access'], ['view', 'View only'], ['off', 'Off']], BF_PERM_RANK = { off: 0, view: 1, full: 2 };
+var BF_PERM_MGR = { ad_rules: 'view', ad_prod: 'view', ad_comp: 'view', rp_audit: 'view' };
+var BF_PERM_AGT = { hh_export: 'off', opp_review: 'off', mk_own: 'off', mk_drip: 'view', ai_kb: 'off', pm_split: 'off', pm_bonus: 'off', pm_cont: 'view', pm_goal: 'view', pm_pay: 'off', dc_sign: 'view', rp_data: 'view', rp_audit: 'off', rp_team: 'off', ad_rules: 'view', ad_prod: 'view', ad_comp: 'off', ad_users: 'off' };
+var BF_PERMS = { manager: {}, max: {}, agent: {} };
+BF_AGENCIES.forEach(function(g) {
+  ['manager', 'max', 'agent'].forEach(function(r){ BF_PERMS[r][g.id] = {}; });
+  BF_PERM_GROUPS.forEach(function(gr){ gr[1].forEach(function(f){ BF_PERMS.manager[g.id][f[0]] = BF_PERM_MGR[f[0]] || 'full'; BF_PERMS.max[g.id][f[0]] = BF_PERM_AGT[f[0]] || 'full'; BF_PERMS.agent[g.id][f[0]] = BF_PERM_AGT[f[0]] || 'full'; }); });
+});
+var BF_MKT = { fields: { name: true, address: true, phone: true, designation: true, disclaimer: false }, own: 'brookfield', approver: 'Brookfield Compliance', disclose: true };
+function bfPermLvlLabel(v) { return { full: 'Full access', view: 'View only', off: 'Off' }[v]; }
+function bfPermEff(ag, f) { var a = BF_PERMS.agent[ag][f], m = BF_PERMS.max[ag][f]; return BF_PERM_RANK[a] <= BF_PERM_RANK[m] ? a : m; }
+function bfPermSel(role, ag, f, cur, maxv, enabled) {
+  if (!enabled) return '<span class="bfx-st ' + (cur === 'full' ? 'submitted' : (cur === 'view' ? 'new' : 'risk')) + '">' + bfPermLvlLabel(cur) + '</span>';
+  return '<select class="bf-pm-sel" onchange="bfPermSet(\'' + role + '\',\'' + ag + '\',\'' + f + '\',this.value)">' + BF_PERM_LVL.map(function(o){ return '<option value="' + o[0] + '"' + (o[0] === cur ? ' selected' : '') + (maxv && BF_PERM_RANK[o[0]] > BF_PERM_RANK[maxv] ? ' disabled' : '') + '>' + o[1] + '</option>'; }).join('') + '</select>';
+}
+function bfPermSet(role, ag, f, v) {
+  var ex = { manager: 'agency managers', max: 'the most agents', agent: 'agents' }[role], name = ''; BF_PERM_GROUPS.forEach(function(gr){ gr[1].forEach(function(x){ if (x[0] === f) name = x[1]; }); });
+  BF_PERMS[role][ag][f] = v;
+  if (role === 'max' && BF_PERM_RANK[BF_PERMS.agent[ag][f]] > BF_PERM_RANK[v]) BF_PERMS.agent[ag][f] = v;
+  bfAudit('Rule change', null, (_bfv.tier === 'bws' ? 'Brookfield set ' : bfAgency(ag).name + ' set ') + name + ' for ' + ex + ' at ' + bfAgency(ag).name + ' to ' + bfPermLvlLabel(v) + '.');
+  showToast('Access updated');
+}
+function bfPermAll() {
+  var ag = _bfv.f.pmAg || BF_AGENCIES[0].id;
+  BF_AGENCIES.forEach(function(g){ if (g.id !== ag) { ['manager', 'max', 'agent'].forEach(function(r){ BF_PERMS[r][g.id] = JSON.parse(JSON.stringify(BF_PERMS[r][ag])); }); } });
+  bfAudit('Rule change', null, 'Brookfield applied the access settings of ' + bfAgency(ag).name + ' to every agency.'); showToast('Applied to every agency'); bfRender();
+}
+function bfPermMatrix(ag, mode) {
+  var cols = mode === 'bws' ? ['Agency manager', 'Agents (the most they can have)'] : ['Agency manager', 'Agents'];
+  return '<div style="overflow-x:auto"><table class="bfx-tbl"><thead><tr><th>Setting</th><th>' + cols[0] + '</th><th>' + cols[1] + '</th></tr></thead><tbody>' + BF_PERM_GROUPS.map(function(gr) {
+    return '<tr><td colspan="3" style="background:var(--g50,#faf8f3);font-weight:700;font-size:12px;letter-spacing:.03em">' + gr[0] + '</td></tr>' + gr[1].map(function(f) {
+      var m = BF_PERMS.manager[ag][f[0]], x = BF_PERMS.max[ag][f[0]], a = BF_PERMS.agent[ag][f[0]];
+      return '<tr><td>' + f[1] + '</td><td>' + (mode === 'bws' ? bfPermSel('manager', ag, f[0], m, null, true) : bfPermSel('manager', ag, f[0], m, null, false)) + '</td><td>' + (mode === 'bws' ? bfPermSel('max', ag, f[0], x, null, true) : bfPermSel('agent', ag, f[0], a, x, true) + (x !== 'full' ? '<div style="font-size:11px;color:var(--g400);margin-top:2px">Brookfield limit: ' + bfPermLvlLabel(x) + '</div>' : '')) + '</td></tr>';
+    }).join('');
+  }).join('') + '</tbody></table></div>';
+}
+function bfMktSet(k, v) { if (k.indexOf('f:') === 0) BF_MKT.fields[k.slice(2)] = !!v; else BF_MKT[k] = v; bfAudit('Rule change', null, 'Marketing control changed: ' + k.replace('f:', 'personalize ') + '.'); showToast('Marketing controls saved'); }
+function bfMktCard(edit) {
+  var lab = { name: 'Name', address: 'Address', phone: 'Phone', designation: 'Designation', disclaimer: 'Disclaimer' };
+  var open = Object.keys(BF_MKT.fields).filter(function(k){ return BF_MKT.fields[k]; }).length;
+  return '<div class="bfx-card"><h3>Marketing Controls</h3><div style="font-size:12.5px;color:var(--g500);margin-bottom:12px">Approved templates are locked. Agents may only change the items ticked below. The rest of each message stays as approved. ' + (edit ? '' : 'Brookfield sets these for every agency.') + '</div>' +
+    '<div style="font-size:12px;font-weight:700;color:var(--g600);margin-bottom:6px">What agents may personalize</div>' + Object.keys(lab).map(function(k){ return '<label style="display:flex;gap:9px;padding:5px 0;font-size:13px"><input type="checkbox"' + (BF_MKT.fields[k] ? ' checked' : '') + (edit ? ' onchange="bfMktSet(\'f:' + k + '\',this.checked)"' : ' disabled') + '><span>' + lab[k] + '</span></label>'; }).join('') +
+    '<div style="font-size:12.5px;color:var(--g500);margin:6px 0 14px">' + open + ' of 5 items can be changed, and the template body is always locked.</div>' +
+    '<label class="bfr-f"><span>Agent-created or uploaded materials</span><select class="bf-pm-sel"' + (edit ? ' onchange="bfMktSet(\'own\',this.value)"' : ' disabled') + '>' + [['none', 'Not allowed'], ['brookfield', 'Allowed after Brookfield approval'], ['agency', 'Allowed after agency approval']].map(function(o){ return '<option value="' + o[0] + '"' + (BF_MKT.own === o[0] ? ' selected' : '') + '>' + o[1] + '</option>'; }).join('') + '</select></label>' +
+    '<label class="bfr-f"><span>Who approves new templates</span><select class="bf-pm-sel"' + (edit ? ' onchange="bfMktSet(\'approver\',this.value)"' : ' disabled') + '>' + ['Brookfield Compliance', 'Agency principal'].map(function(o){ return '<option' + (BF_MKT.approver === o ? ' selected' : '') + '>' + o + '</option>'; }).join('') + '</select></label>' +
+    '<label style="display:flex;gap:9px;padding:8px 0;font-size:13px"><input type="checkbox"' + (BF_MKT.disclose ? ' checked' : '') + (edit ? ' onchange="bfMktSet(\'disclose\',this.checked)"' : ' disabled') + '><span>Add the compliance disclosure to every email</span></label></div>';
+}
+function bfPermSummary() {
+  var cnt = function(map, v){ var n = 0; Object.keys(map).forEach(function(k){ if (map[k] === v) n++; }); return n; };
+  return '<div class="bfx-card"><h3>Access by Agency</h3><div style="font-size:12.5px;color:var(--g500);margin-bottom:8px">How many settings each agency manager and its agents have at each level. Open Agency Access to change them.</div><div style="overflow-x:auto"><table class="bfx-tbl"><thead><tr><th>Agency</th><th>Manager: full</th><th>Manager: view only</th><th>Agents: full</th><th>Agents: view only</th><th>Agents: off</th><th></th></tr></thead><tbody>' + BF_AGENCIES.map(function(g) {
+    return '<tr><td><b>' + bfEsc(g.name) + '</b></td><td>' + cnt(BF_PERMS.manager[g.id], 'full') + '</td><td>' + cnt(BF_PERMS.manager[g.id], 'view') + '</td><td>' + cnt(BF_PERMS.agent[g.id], 'full') + '</td><td>' + cnt(BF_PERMS.agent[g.id], 'view') + '</td><td>' + cnt(BF_PERMS.agent[g.id], 'off') + '</td><td><button class="bfx-btn" onclick="_bfv.f.pmAg=\'' + g.id + '\';bfSetF(\'stTab\',\'access\')">Open</button></td></tr>';
+  }).join('') + '</tbody></table></div></div>';
+}
+BF_PAGES['bws:settings'] = function() {
+  var f = _bfv.f; if (['overview', 'access', 'marketing'].indexOf(f.stTab) < 0) f.stTab = 'overview'; var ag = f.pmAg || BF_AGENCIES[0].id; f.pmAg = ag;
+  var body;
+  if (f.stTab === 'overview') body = bfPermSummary();
+  else if (f.stTab === 'marketing') body = bfMktCard(true);
+  else body = '<div class="bfx-card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><div><h3 style="margin:0">Agency Access</h3><div style="font-size:12.5px;color:var(--g500);margin-top:4px">Choose what this agency\'s manager and agents can see and do. The agency can narrow what its agents have, but never go beyond the limit set here.</div></div><span style="display:flex;gap:8px;align-items:center"><select class="bf-pm-sel" onchange="bfSetF(\'pmAg\',this.value)">' + BF_AGENCIES.map(function(g){ return '<option value="' + g.id + '"' + (g.id === ag ? ' selected' : '') + '>' + bfEsc(g.name) + '</option>'; }).join('') + '</select><button class="bfx-btn" ' + bfOc('bfPermAll') + '>Apply to All Agencies</button></span></div><div style="margin-top:12px">' + bfPermMatrix(ag, 'bws') + '</div></div>';
+  return bfHead('Settings and Permissions', 'What every agency and agent can see and do across the network. Changes are written to the audit trail.') + bfTabs('stTab', [['overview', 'Overview'], ['access', 'Agency Access'], ['marketing', 'Marketing Controls']], f.stTab) + body;
+};
+BF_PAGES['agency:settings'] = function() {
+  var f = _bfv.f; if (['agents', 'mine', 'marketing'].indexOf(f.stTab) < 0) f.stTab = 'agents'; var ag = _bfv.agency, body;
+  if (f.stTab === 'marketing') body = bfMktCard(false);
+  else if (f.stTab === 'mine') body = '<div class="bfx-card"><h3>Your Access</h3><div style="font-size:12.5px;color:var(--g500);margin-bottom:10px">What Brookfield allows you and your agents to do. You can read it here but not change it.</div><div style="overflow-x:auto"><table class="bfx-tbl"><thead><tr><th>Setting</th><th>You</th><th>Your agents (the most)</th></tr></thead><tbody>' + BF_PERM_GROUPS.map(function(gr){ return '<tr><td colspan="3" style="background:var(--g50,#faf8f3);font-weight:700;font-size:12px">' + gr[0] + '</td></tr>' + gr[1].map(function(x){ return '<tr><td>' + x[1] + '</td><td>' + bfPermSel('', ag, x[0], BF_PERMS.manager[ag][x[0]], null, false) + '</td><td>' + bfPermSel('', ag, x[0], BF_PERMS.max[ag][x[0]], null, false) + '</td></tr>'; }).join(''); }).join('') + '</tbody></table></div></div>';
+  else body = '<div class="bfx-card"><h3>Agent Access</h3><div style="font-size:12.5px;color:var(--g500);margin-bottom:10px">Choose what your agents can see and do. You can narrow access, but you cannot go beyond Brookfield\'s limit.</div>' + bfPermMatrix(ag, 'agency') + '</div>';
+  return bfHead('Settings and Permissions', 'What your team can see and do. Brookfield sets the limits, and you set the rest for your agents.') + bfTabs('stTab', [['agents', 'Agent Access'], ['mine', 'Your Access'], ['marketing', 'Marketing Controls']], f.stTab) + body;
+};
+BF_PAGES['agent:settings'] = function() {
+  var f = _bfv.f; if (['access', 'marketing'].indexOf(f.stTab) < 0) f.stTab = 'access'; var ag = bfAgent(_bfv.agent).ag, body;
+  if (f.stTab === 'marketing') body = bfMktCard(false);
+  else body = '<div class="bfx-card"><h3>What You Can Access</h3><div style="font-size:12.5px;color:var(--g500);margin-bottom:10px">Set by Brookfield and your agency. Ask your agency manager if you need something changed.</div><div style="overflow-x:auto"><table class="bfx-tbl"><thead><tr><th>Setting</th><th>Your access</th></tr></thead><tbody>' + BF_PERM_GROUPS.map(function(gr){ return '<tr><td colspan="2" style="background:var(--g50,#faf8f3);font-weight:700;font-size:12px">' + gr[0] + '</td></tr>' + gr[1].map(function(x){ return '<tr><td>' + x[1] + '</td><td>' + bfPermSel('', ag, x[0], bfPermEff(ag, x[0]), null, false) + '</td></tr>'; }).join(''); }).join('') + '</tbody></table></div></div>';
+  return bfHead('Settings and Permissions', 'What you can see and do in Goals.com.') + bfTabs('stTab', [['access', 'Your Access'], ['marketing', 'Marketing Controls']], f.stTab) + body;
+};
 try { localStorage.removeItem('bf_bg'); } catch (e) {}
 try { setTimeout(function(){ document.body.classList.remove('bf-booting'); }, 2500); } catch (e) {}
 /* ── keep the same view after a refresh (per browser tab) ── */
