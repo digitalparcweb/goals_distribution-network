@@ -1989,6 +1989,7 @@ body.bf-theme .sb-label{max-width:80px;overflow:hidden;text-overflow:ellipsis}
 .bfbw{margin:0 0 12px}.bfbw-h{display:flex;justify-content:space-between;gap:10px;font-size:13px;margin-bottom:5px}.bfbw-n{font-weight:600;min-width:0}.bfbw-h b{white-space:nowrap}.bfbw-t{height:9px;border-radius:6px;background:var(--g100)}.bfbw-t i{display:block;height:100%;border-radius:6px;background:#1d9e75}.bfbw-s{font-size:11.5px;color:var(--g500);margin-top:3px}
 .bfcs-intro{font-size:12.5px;color:var(--g500);margin:2px 0 4px}.bfcs-grp{font-family:var(--mono);font-size:10px;letter-spacing:.7px;text-transform:uppercase;color:var(--g400);margin:20px 0 4px}.bfcs-row{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:20px;align-items:center;padding:14px 0;border-top:1px solid var(--g100)}.bfcs-grp+.bfcs-row{border-top:none}.bfcs-l b{display:block;font-size:13.5px}.bfcs-l span{display:block;font-size:12px;color:var(--g500);margin-top:3px;line-height:1.5}.bfcs-c{display:flex;justify-content:flex-end}.bfcs-n{display:flex;align-items:center;gap:8px}.bfcs-n input{width:110px}.bfcs-n em,.bfcs-pair em{font-style:normal;font-size:12px;color:var(--g500)}.bfcs-pair{display:flex;align-items:center;gap:8px}.bfcs-pair select{width:104px}.bfcs-sw{position:relative;display:inline-block;width:42px;height:24px;cursor:pointer}.bfcs-sw input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}.bfcs-tr{position:absolute;inset:0;border-radius:999px;background:var(--g300,#cfd3d8);transition:background .15s}.bfcs-tr:before{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s}.bfcs-sw input:checked+.bfcs-tr{background:#1d9e75}.bfcs-sw input:checked+.bfcs-tr:before{transform:translateX(18px)}.bfcs-sw input:focus-visible+.bfcs-tr{outline:2px solid #1d9e75;outline-offset:2px}.bfcs-disc{border-top:none;padding:6px 0 4px}.bfcs-d{font-size:12px;color:var(--g500);margin-bottom:8px}.bfcs-ft{display:flex;justify-content:flex-end;border-top:1px solid var(--g100);margin-top:16px;padding-top:14px}
 .bfpr-h,.bfpr-r{display:grid;grid-template-columns:minmax(0,1fr) 110px 130px;gap:12px;align-items:center}.bfpr-h{font-size:11px;color:var(--g400);font-family:var(--mono);text-transform:uppercase;letter-spacing:.6px;padding:0 0 6px;border-bottom:1px solid var(--g100)}.bfpr-r{padding:8px 0;border-bottom:1px solid var(--g100)}.bfpr-r:last-child{border-bottom:none}.bfpr-n b{display:block;font-size:13px}.bfpr-n i{font-style:normal;font-size:11.5px;color:var(--g500)}
+.bfsc-cat td{background:var(--g50,#faf7f2);padding:10px 14px!important;border-top:1px solid var(--g200)}.bfsc-n{font-weight:700;font-size:13px;margin-right:10px}.bfsc-d{font-size:12px;color:var(--g500)}.bfsc-t{float:right;font-size:12px;font-weight:600;color:var(--g600)}
 .bfr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px}.bfr-f{display:block;font-size:11.5px;color:var(--g500);font-weight:600}.bfr-f input,.bfr-f select{margin-top:4px}
 .bfscan{max-width:1000px}.bfscan-h{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:14px;gap:14px;flex-wrap:wrap}
 @media print{body.bf-theme .sidebar,body.bf-theme .topbar,body.bf-theme .bfx-head,body.bf-theme .bfscan-btn,body.bf-theme .bfx-seg{display:none!important}body.bf-theme .page-area{margin:0!important;padding:0!important;overflow:visible!important}}
@@ -32456,14 +32457,31 @@ function bfScoreMetrics() {
     { k: 'tpl', n: 'Emails sent from approved templates', a: 100, u: '%', hi: true, note: BF_RULES.emails + ' emails. Agents cannot edit the wording' }
   ];
 }
+var BF_SCORE_CATS = [
+  { k: 'cover', n: 'Coverage and Activity', d: 'Is every household checked and is the pipeline being worked?', m: ['scanned', 'perAgent', 'reviewed'] },
+  { k: 'conv', n: 'Pipeline Conversion', d: 'How opportunities move from contact to issued.', m: ['contact', 'appt', 'issued'] },
+  { k: 'data', n: 'Data Quality', d: 'How complete the household profiles are.', m: ['complete'] },
+  { k: 'comp', n: 'Compliance and Review', d: 'Suitability, principal review and approved communication.', m: ['suit', 'turn', 'tpl'] }
+];
+function bfScoreCatOf(k) { for (var i = 0; i < BF_SCORE_CATS.length; i++) if (BF_SCORE_CATS[i].m.indexOf(k) > -1) return BF_SCORE_CATS[i]; return BF_SCORE_CATS[0]; }
 function bfScoreTab() {
-  var ms = bfScoreMetrics(), met = 0;
-  var rows = ms.map(function(m) {
-    var t = BF_TARGETS[m.k], ok = m.hi ? m.a >= t : m.a <= t, close = m.hi ? m.a >= t * 0.8 : m.a <= t * 1.25; if (ok) met++;
-    var pill = ok ? '<span class="bfx-st submitted">Met</span>' : (close ? '<span class="bfx-st new">Close</span>' : '<span class="bfx-st risk">Behind</span>'), w = m.hi ? Math.min(100, t ? m.a / t * 100 : 100) : Math.min(100, m.a ? t / m.a * 100 : 100);
-    return '<tr><td><b>' + m.n + '</b><div style="font-size:11.5px;color:var(--g500)">' + m.note + '</div></td><td style="width:200px"><div class="tr" style="height:8px;background:var(--g100);border-radius:6px;overflow:hidden"><div style="height:100%;width:' + w + '%;background:' + (ok ? 'var(--teal2)' : (close ? '#d9a441' : '#c0553f')) + '"></div></div></td><td><b>' + m.a + m.u + '</b></td><td><input type="number" step="any" value="' + t + '" onchange="bfTargetSet(\'' + m.k + '\',this.value)" style="width:70px;border:1px solid var(--g200);border-radius:7px;padding:5px 7px;font-size:12.5px" aria-label="Target for ' + bfEsc(m.n) + '">' + (m.u === '%' ? '%' : m.u) + '</td><td>' + pill + '</td></tr>';
-  }).join('');
-  return '<div class="bfx-kpis"><div class="bfx-kpi"><div class="l">Targets met</div><div class="v">' + met + ' of ' + ms.length + '</div><div class="n">Pilot scorecard</div></div></div><div class="bfx-card"><h3>Pilot Scorecard Against Targets</h3><table class="bfx-tbl"><thead><tr><th>Measure</th><th>Progress</th><th>Actual</th><th>Target</th><th>Status</th></tr></thead><tbody>' + rows + '</tbody></table><div class="bfx-note" style="margin-top:10px">Targets are starting points for the pilot. Change a target and the status updates. The numbers come from the demo data.</div></div>';
+  var ms = bfScoreMetrics(), f = _bfv.f, cat = f.scCat || 'all', only = f.scBehind === '1', met = 0, tot = {};
+  ms.forEach(function(m) {
+    var t = BF_TARGETS[m.k]; m.t = t; m.ok = m.hi ? m.a >= t : m.a <= t; m.close = m.hi ? m.a >= t * 0.8 : m.a <= t * 1.25; m.cat = bfScoreCatOf(m.k).k;
+    var c = tot[m.cat] = tot[m.cat] || { n: 0, ok: 0 }; c.n++; if (m.ok) { c.ok++; met++; }
+  });
+  var kp = '<div class="bfx-kpis">' + BF_SCORE_CATS.map(function(c){ var x = tot[c.k] || { n: 0, ok: 0 }; return bfKpi(c.n, x.ok + ' of ' + x.n, x.ok === x.n ? 'All targets met' : (x.n - x.ok) + ' not met yet'); }).join('') + '</div>';
+  var row = function(m) {
+    var pill = m.ok ? '<span class="bfx-st submitted">Met</span>' : (m.close ? '<span class="bfx-st new">Close</span>' : '<span class="bfx-st risk">Behind</span>'), w = m.hi ? Math.min(100, m.t ? m.a / m.t * 100 : 100) : Math.min(100, m.a ? m.t / m.a * 100 : 100);
+    return '<tr><td><b>' + m.n + '</b><div style="font-size:11.5px;color:var(--g500)">' + m.note + '</div></td><td style="width:200px"><div class="tr" style="height:8px;background:var(--g100);border-radius:6px;overflow:hidden"><div style="height:100%;width:' + w + '%;background:' + (m.ok ? 'var(--teal2)' : (m.close ? '#d9a441' : '#c0553f')) + '"></div></div></td><td><b>' + m.a + m.u + '</b></td><td><input type="number" step="any" value="' + m.t + '" onchange="bfTargetSet(\'' + m.k + '\',this.value)" style="width:70px;border:1px solid var(--g200);border-radius:7px;padding:5px 7px;font-size:12.5px" aria-label="Target for ' + bfEsc(m.n) + '">' + (m.u === '%' ? '%' : m.u) + '</td><td>' + pill + '</td></tr>';
+  };
+  var body = BF_SCORE_CATS.filter(function(c){ return cat === 'all' || cat === c.k; }).map(function(c) {
+    var list = ms.filter(function(m){ return m.cat === c.k && (!only || !m.ok); }), x = tot[c.k] || { n: 0, ok: 0 };
+    if (!list.length) return '';
+    return '<tr class="bfsc-cat"><td colspan="5"><span class="bfsc-n">' + c.n + '</span><span class="bfsc-d">' + c.d + '</span><span class="bfsc-t">' + x.ok + ' of ' + x.n + ' met</span></td></tr>' + list.map(row).join('');
+  }).join('') || '<tr><td colspan="5"><div class="bfx-note">Nothing to show with these filters.</div></td></tr>';
+  var chips = '<div class="bfo-f"><span>Category</span>' + bfFilterChips('scCat', [['all', 'All']].concat(BF_SCORE_CATS.map(function(c){ return [c.k, c.n]; })), cat) + '</div><div class="bfo-f"><span>Show</span>' + bfFilterChips('scBehind', [['0', 'All Measures'], ['1', 'Not Met Only']], only ? '1' : '0') + '</div>';
+  return kp + '<div class="bfx-card"><h3>Pilot Scorecard Against Targets</h3><div style="font-size:12.5px;color:var(--g500);margin:0 0 10px">' + met + ' of ' + ms.length + ' targets met, grouped by category.</div><div style="display:flex;gap:18px;flex-wrap:wrap;margin-bottom:12px">' + chips + '</div><table class="bfx-tbl"><thead><tr><th>Measure</th><th>Progress</th><th>Actual</th><th>Target</th><th>Status</th></tr></thead><tbody>' + body + '</tbody></table><div class="bfx-note" style="margin-top:10px">Targets are starting points for the pilot. Change a target and the status updates. The numbers come from the demo data.</div></div>';
 }
 function bfTargetSet(k, v) { var n = parseFloat(v); if (!isNaN(n)) { BF_TARGETS[k] = n; bfAudit('Rule change', null, 'Pilot target for ' + k + ' set to ' + n + '.'); bfRender(); } }
 function bfFunnelTab() {
@@ -35909,6 +35927,85 @@ if (typeof document !== 'undefined' && document.head && document.createElement) 
   _bfR2St.textContent = '.bfrt-lock{display:inline-flex;align-items:center;gap:5px;background:var(--g100);border-radius:8px;padding:4px 9px;font-size:13px}';
   document.head.appendChild(_bfR2St);
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BROOKFIELD DEMO: sample call recordings, transcripts, call history and
+   extra notes for every household, so every view looks lived in.
+   Built on first use per household and the same for every viewer.
+   ═══════════════════════════════════════════════════════════════════════════ */
+var BF_DL_SCEN2 = [
+  { sum: 'Confirmed the beneficiary update and walked through the Medicare enrollment window. The client will send the signed form this week.',
+    next: ['Send the beneficiary form for e-signature', 'Email the Medicare enrollment checklist', 'Check on the signed form on Friday'],
+    tr: [['Agent', 'Hi {c}, it is {a}. This call is recorded for our files. I am calling about the beneficiary change.'], ['Client', 'Yes, I have the form here. Do both of us need to sign?'], ['Agent', 'Only the account owner signs. I will send it by e-signature so it is quick.'], ['Client', 'Good. And what about Medicare? I turn 65 soon.'], ['Agent', 'Your enrollment window opens three months before your birthday. I will email a short checklist today.'], ['Client', 'That helps a lot. Thank you.'], ['Agent', 'I will check in on Friday to make sure the form came through.']] },
+  { sum: 'The client raised a grandchild\'s college costs and asked to keep money accessible. Agreed to revisit liquidity in the spring before any annuity conversation.',
+    next: ['Diary a liquidity review for the spring', 'Note the preference for accessible funds', 'Send a short summary after the review'],
+    tr: [['Client', 'Hi {a}, I wanted to talk about our granddaughter. She starts college in the fall.'], ['Agent', 'Hello {c}. This call is recorded for our files. Congratulations. How can I help?'], ['Client', 'We want to help with tuition, so I do not want our money tied up.'], ['Agent', 'That is a good reason to look at liquidity first. We can review what you can reach quickly.'], ['Client', 'Let us talk in the spring. I do not want to decide anything now.'], ['Agent', 'Of course. I will put a note on the calendar and send a short summary afterward.']] },
+  { sum: 'Prepared for the annual review. The client has new statements and asked that their spouse join the meeting.',
+    next: ['Add the spouse to the meeting invite', 'Ask for the new statements before the meeting', 'Send the agenda two days ahead'],
+    tr: [['Agent', 'Hello {c}, this is {a}. This call is recorded for our files. I wanted to line up our annual review.'], ['Client', 'Thursday works. I picked up a few new statements.'], ['Agent', 'Great, please bring them. Would you like your spouse to join?'], ['Client', 'Yes, please add them. They have questions about income.'], ['Agent', 'I will update the invite and send an agenda. Nothing needs to be decided in the meeting.'], ['Client', 'Perfect, see you Thursday.']] },
+  { sum: 'The client asked how current annuity rates compare with their maturing CD. Explained the guaranteed rate and surrender terms at a high level and offered a side by side.',
+    next: ['Prepare a side by side of the CD and guaranteed options', 'Send the approved rate overview after consent is confirmed', 'Book a 30 minute review'],
+    tr: [['Client', 'Hi {a}. My CD comes due soon. What are rates like now?'], ['Agent', 'Hello {c}. This call is recorded for our files. Rates on guaranteed products are decent, but they come with surrender terms.'], ['Client', 'What does that mean in plain words?'], ['Agent', 'You agree to leave the money in for a set number of years in exchange for a guaranteed rate. We can compare that to the CD.'], ['Client', 'Please put that on paper so I can see both.'], ['Agent', 'I will prepare a simple side by side and we can go through it together.']] },
+  { sum: 'Returned a voicemail about paperwork. Confirmed the documents arrived and answered a question about the next steps on the application.',
+    next: ['Confirm the carrier received the documents', 'Send a status update by email', 'Call back if the carrier needs anything'],
+    tr: [['Agent', 'Hi {c}, it is {a}. This call is recorded for our files. I am returning your message about the paperwork.'], ['Client', 'Yes. I mailed the forms last week and wanted to be sure they arrived.'], ['Agent', 'They did, thank you. I am sending them to the carrier today.'], ['Client', 'What happens after that?'], ['Agent', 'The carrier reviews the application and I will update you as soon as I hear.'], ['Client', 'Great, that is all I needed.']] }
+];
+var BF_DL_ALL = BF_DL_SCEN.concat(BF_DL_SCEN2);
+var BF_SEED_NOTES = [
+  { t: 'Meeting', h: function(f, s){ return '<p>Annual review held. ' + f + ' brought updated statements' + (s ? ' and ' + s + ' joined by phone' : '') + '. Reviewed goals and nothing needs to change right now.</p>'; } },
+  { t: 'Follow-up', h: function(f){ return '<p>Sent the account summary and asked ' + f + ' to confirm the beneficiary details. <b>Follow up</b> next week if nothing comes back.</p>'; } },
+  { t: 'Family', h: function(f, s){ return '<p>' + f + ' mentioned a family event this summer' + (s ? ' that ' + s + ' is planning' : '') + '. Keep spending needs in mind for the next review.</p>'; } },
+  { t: 'Preference', h: function(f){ return '<p>' + f + ' likes a short written summary after every call. Prefers email in the morning and calls after 2 pm.</p>'; } },
+  { t: 'Goals', h: function(f){ return '<p>Talked about what a comfortable retirement looks like for ' + f + '. Priorities: <b>steady income</b>, protecting what is already saved, and staying near family.</p>'; } },
+  { t: 'Concern', h: function(f){ return '<p>' + f + ' is nervous about market swings and wants to understand <b>guaranteed options</b> before deciding anything. No pressure.</p>'; } }
+];
+function bfSeedRecs(c, list) {
+  var cm = bfComms(c), h = bfHash('sd' + c.id), mem = bfMembers(c), f = mem[0].first, s = mem[1] ? mem[1].first : '', by = bfAgent(c.agent).name, n = 2 + h % 2;
+  var days = [3, 6, 11, 17, 24, 33, 44, 58].map(function(d, i){ return d + (h + i * 7) % 4; }), recs = [], notes = [];
+  for (var i = 0; i < n; i++) {
+    var sc = bfDlGen(c, null, BF_DL_ALL[(h + i * 3) % BF_DL_ALL.length]), d = days[(h + i * 2) % days.length] + i * 6, dur = 150 + (h * 13 + i * 97) % 480, dir = (h + i) % 3 === 1 ? 'Incoming' : 'Outgoing';
+    var at = BF_T - d * BF_DAY + (9 + (h + i) % 7) * 3600000;
+    recs.push({ id: 'sd-' + c.id + '-' + i, seed: true, dir: dir, name: 'Call recording ' + bfDlStamp(at) + '.mp3', at: at, dur: dur, by: by, from: bfDlNum('dir' + c.agent), sum: sc.sum, next: sc.next, tr: sc.tr, days: d });
+    notes.push({ html: '<p><b>Call summary</b> (' + bfDlDur(dur) + ')</p><p>' + bfEsc(sc.sum) + '</p><p><b>Next steps</b></p><ul>' + sc.next.map(function(x){ return '<li>' + bfEsc(x) + '</li>'; }).join('') + '</ul><p><b>Full transcript</b></p>' + sc.tr.map(function(l){ return '<p><b>' + bfEsc(l[0]) + ':</b> ' + bfEsc(l[1]) + '</p>'; }).join(''), ago: d, pin: false, tag: 'Call', by: by });
+  }
+  for (var j = 0; j < 2; j++) { var nt = BF_SEED_NOTES[(h + j * 2) % BF_SEED_NOTES.length]; notes.push({ html: nt.h(f, s), ago: 8 + ((h + j * 11) % 60), pin: false, tag: nt.t, by: (h + j) % 4 === 0 ? by : undefined }); }
+  recs.sort(function(a, b){ return b.at - a.at; });
+  cm.callRecs = recs.concat(cm.callRecs || []);
+  notes.forEach(function(x){ list.push(x); });
+  list.sort(function(a, b){ return a.ago - b.ago; });
+}
+(function() {
+  var nl = bfNoteList;
+  bfNoteList = function(c) {
+    var cm = bfComms(c), l = nl(c);
+    if (!cm._seedCalls) { cm._seedCalls = true; bfSeedRecs(c, l); }
+    return l;
+  };
+  var dr = bfDlRecs;
+  bfDlRecs = function(c) { bfNoteList(c); return dr(c); };
+  var pd = bfPhoneData;
+  bfPhoneData = function(c) {
+    var cm = pd(c); bfNoteList(c);
+    if (!cm._seedCalls2) {
+      cm._seedCalls2 = true;
+      (cm.callRecs || []).forEach(function(r){ if (r.seed) cm.calls.push({ dir: r.dir, when: r.days, dur: Math.max(1, Math.round(r.dur / 60)), summary: r.sum, tag: 'Recorded' }); });
+      cm.calls.sort(function(a, b){ return a.when - b.when; });
+    }
+    return cm;
+  };
+  /* recent calls in the dialer come from the same recordings, plus a few missed calls */
+  bfDlLog = function() {
+    var key = _bfv.tier + (_bfv.tier === 'agent' ? _bfv.agent : bfDlAgencyId());
+    if (BF_DL.log && BF_DL.logKey === key) return BF_DL.log;
+    BF_DL.logKey = key; var L = [];
+    bfDlClients().forEach(function(c, i) {
+      bfDlRecs(c).forEach(function(r){ if (r.seed) L.push({ id: r.id, cid: c.id, name: bfDlName(c), num: bfDlNum(c.id), dir: r.dir, at: r.at, dur: r.dur, rec: true, by: r.by, sum: r.sum }); });
+      if (i % 4 === 3) L.push({ id: 'ms-' + c.id, cid: c.id, name: bfDlName(c), num: bfDlNum(c.id), dir: 'Missed', at: BF_T - (2 + i % 9) * BF_DAY + 11 * 3600000, dur: 0, rec: false, by: bfDlWho(), sum: 'Missed call. No voicemail.' });
+    });
+    L.sort(function(a, b){ return b.at - a.at; });
+    BF_DL.log = L.slice(0, 60); return BF_DL.log;
+  };
+})();
 
 try { localStorage.removeItem('bf_bg'); } catch (e) {}
 try { setTimeout(function(){ document.body.classList.remove('bf-booting'); }, 2500); } catch (e) {}
