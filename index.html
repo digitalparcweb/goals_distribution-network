@@ -2011,7 +2011,7 @@ body.bf-theme .sb-label{max-width:80px;overflow:hidden;text-overflow:ellipsis}
 .bfn-sec{font-family:var(--mono);font-size:11.5px;letter-spacing:.2px;text-transform:none;color:var(--g500);margin:20px 0 4px}
 .bfn-row{display:grid;grid-template-columns:200px minmax(0,1fr) auto;gap:22px;padding:16px 0;border-top:1px solid var(--g100);align-items:start}
 .bfn-meta{display:flex;gap:10px;align-items:flex-start}.bfn-who{font-size:13px;font-weight:600}.bfn-when{font-size:11.5px;color:var(--g400);margin-top:1px}
-.bfn-body{font-size:13.5px;line-height:1.65;min-width:0}.bfn-body ul{margin:6px 0 0;padding-left:18px}
+.bfn-body{font-size:13.5px;line-height:1.65;min-width:0}.bfn-body ul,.bfn-body ol{margin:6px 0 0;padding-left:20px}.bfn-body p{margin:0 0 6px}.bfn-body p:last-child{margin-bottom:0}
 .bfn-act{display:flex;gap:6px;opacity:0;transition:opacity .15s}.bfn-row:hover .bfn-act,.bfn-row:focus-within .bfn-act{opacity:1}
 @media(max-width:900px){.bfn-row{grid-template-columns:minmax(0,1fr);gap:8px}.bfn-act{opacity:1}}
 .bfag-bar{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:flex-end;margin-bottom:16px}.bfag-q{border:1px solid var(--g200);border-radius:999px;padding:8px 14px;font-size:13px;width:210px;background:#fff;font-family:var(--font)}
@@ -2140,7 +2140,7 @@ body.bf-theme select:not([multiple]):focus{outline:0;border-color:var(--teal);bo
 /* record actions, editor, quick add */
 .bfe{border:1px solid var(--g200);border-radius:10px;background:#fff}.bfe-tb{display:flex;gap:2px;padding:4px 6px;border-bottom:1px solid var(--g100)}
 .bfe-b{border:none;background:none;width:30px;height:26px;cursor:pointer;border-radius:6px;font-size:13px}.bfe-b:hover{background:var(--g100)}
-.bfe-ed{min-height:96px;padding:10px 12px;outline:none;font-size:13.5px;line-height:1.6}.bfe-ed:empty:before{content:attr(data-ph);color:var(--g400)}
+.bfe{overflow:hidden;border-radius:12px}.bfe:focus-within{border-color:var(--teal,#1d9e75)}.bfe-tb{background:var(--g100);gap:4px!important;padding:6px 8px!important}.bfe-b{width:34px!important;height:30px!important;border-radius:8px!important;font-size:14px!important;color:var(--dark)}.bfe-b:hover{background:#fff!important;box-shadow:0 0 0 1px var(--g200)}.bfe-ed ul,.bfe-ed ol{margin:6px 0;padding-left:22px}.bfe-ed p{margin:0 0 8px}.bfe-ed{min-height:150px;padding:14px 16px;outline:none;font-size:13.5px;line-height:1.6}.bfe-ed:empty:before{content:attr(data-ph);color:var(--g400)}
 .bfe-req{color:#c0392b}.bfe-two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .bfe-warn{background:rgba(29,158,117,.12);border:1px solid rgba(29,158,117,.3);color:var(--teal2);border-radius:10px;padding:10px 12px;font-size:12.5px;margin:2px 0 12px}
 .bfa-bar{display:flex;gap:8px;margin-bottom:14px}
@@ -2458,6 +2458,7 @@ body.bf-theme .bfx-kpi .l,body.bf-theme .bfx-tbl th{font-family:var(--font);font
     </div>
     <button class="ace-tb-btn" onclick="openAskAce()" aria-label="Open Ask Ace AI Coach" aria-haspopup="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3L13.5 8.5L19 10L13.5 11.5L12 17L10.5 11.5L5 10L10.5 8.5L12 3Z"/><path d="M5 3L5.75 5.25L8 6L5.75 6.75L5 9L4.25 6.75L2 6L4.25 5.25L5 3Z"/><path d="M19 14L19.5 15.5L21 16L19.5 16.5L19 18L18.5 16.5L17 16L18.5 15.5L19 14Z"/></svg> Ask Ace</button>
     <div id="bf-quick" data-nolabel="1" style="display:flex;align-items:center"></div>
+    <div id="bf-dl-slot" style="display:flex;align-items:center"></div>
     <div class="tb-icon-btn" onclick="togglePanel('cal-panel')" title="Calendar" role="button" aria-label="Open calendar" aria-haspopup="true" tabindex="0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
     <div class="tb-icon-btn" onclick="togglePanel('notif-panel')" title="Notifications" role="button" aria-label="Open notifications" aria-haspopup="true" tabindex="0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><div class="notif-dot" aria-hidden="true"></div><span class="bf-nbadge" id="bf-nbadge" style="display:none"></span></div>
     <!-- User switcher -->
@@ -9281,7 +9282,8 @@ document.addEventListener('click', function(e) {
 
 // ── KEYBOARD SHORTCUTS ───────────────────────────────────────────────────────
 document.addEventListener('keydown', function(e) {
-  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT' || e.target.isContentEditable) return;
+  if (typeof _bfv !== 'undefined') { if (e.key === 'Escape') { document.querySelectorAll('.modal-overlay.open').forEach(m => m.classList.remove('open')); } return; } /* Brookfield: single-letter quick-add shortcuts are off */
   const map = { p:'person-modal', o:'org-modal', a:'activity-modal', d:'deal-modal', l:'lead-modal', n:'note-modal', r:'product-modal', e:'project-modal' };
   const key = e.key.toLowerCase();
   // Only fire single-letter quick-add shortcuts when no modifier keys are held,
@@ -32632,7 +32634,7 @@ function bfNoteExtras(c, cm) {
   if (ann) X.push({ html: 'Received the ' + bfEsc(ann.carrier) + ' annuity statement. Surrender period ends <b>' + bfDate(ann.surrenderEnds) + '</b>. Discuss options only if the client raises it.', ago: 25 + Math.floor(r() * 30), pin: false, tag: 'Policy' });
   X.forEach(function(n){ n.by = r() < 0.15 ? ag : undefined; });
   cm.notes = cm.notes.concat(X);
-  cm.notes.sort(function(a, b){ return (b.pin ? 1 : 0) - (a.pin ? 1 : 0) || a.ago - b.ago; });
+  cm.notes.sort(function(a, b){ return a.ago - b.ago; });
 }
 function bfNoteList(c) { var cm = bfComms(c); if (!cm.notesAll) { bfNoteExtras(c, cm); cm.notesAll = (cm.userNotes || []).concat(cm.notes); } return cm.notesAll; }
 
@@ -32663,8 +32665,7 @@ function bfNoteRows(c, canEdit) {
     var n = x.n, i = x.i, who = n.by || by;
     return '<div class="bfn-row"><div class="bfn-meta">' + bfAv(who, 28) + '<div><div class="bfn-who">' + bfEsc(who) + '</div><div class="bfn-when">' + bfDayLabel(n.ago) + '</div>' + (n.tag ? '<span class="bfph-tag">' + bfEsc(n.tag) + '</span>' : '') + '</div></div><div class="bfn-body">' + n.html + '</div>' + (canEdit ? '<div class="bfn-act"><button class="bfx-btn" ' + bfOc('bfNoteEdit', c.id, i) + '>Edit</button><button class="bfx-btn del" ' + bfOc('bfNoteDel', c.id, i) + '>Delete</button></div>' : '<div></div>') + '</div>';
   };
-  var pin = vis.filter(function(x){ return x.n.pin; }), rest = vis.filter(function(x){ return !x.n.pin; });
-  return (pin.length ? '<div class="bfn-sec">Pinned</div>' + pin.map(row).join('') : '') + (rest.length ? '<div class="bfn-sec">' + (pin.length ? 'Earlier' : 'All notes') + '</div>' + rest.map(row).join('') : '') + (!vis.length ? '<div class="bfx-note">' + (q ? 'No notes match.' : 'No notes yet.') + '</div>' : '');
+  return vis.map(row).join('') + (!vis.length ? '<div class="bfx-note">' + (q ? 'No notes match.' : 'No notes yet.') + '</div>' : '');
 }
 var _bfNoteSum = {};
 function bfNoteSummarize(cid) {
@@ -32806,7 +32807,7 @@ function bfRecLeftHtml(c, canSee, sc) {
   var who = '<div class="bfdd-who">' + bfAv(agent.name, 30) + '<div><b>' + bfEsc(agent.name) + '</b><i>Assigned agent &middot; ' + bfEsc(ag.name) + '</i></div></div>';
   if (!canSee) return who + bfLsec('Details') + bfLk('Agency', bfEsc(ag.name)) + bfLk('Status', 'Not shared') + bfLsec('Tags') + '<div class="bfh-tags">' + tags + '</div><div class="bfx-note" style="margin-top:16px">Household details are not shared with Brookfield for this agency.</div>';
   var mem = bfMembers(c), p = mem[0], s2 = mem[1], g = bfG(c), cm = bfContact(c), edit = _bfv.tier === 'agent', cnt = bfGCount(c), pend = bfClientPolicies(c.id).filter(function(x){ return x.case; });
-  var notes = bfNoteList(c), pin = notes.filter(function(n){ return n.pin; })[0] || notes[0];
+  var notes = bfNoteList(c), pin = notes[0];
   var hh = bfLk('Household', bfEsc(c.last) + ' household') + bfLk('Status', bfHhStatus(c)) + bfLk('Client since', c.since) + bfLk('Members', mem.length) + (s2 ? bfLk('Secondary contact', bfEsc(s2.name)) : '') + bfLk('Mailing address', bfEsc(bfAddress(c))) + bfLk('Last updated', c.profileUpdated === 0 ? 'Today' : c.profileUpdated + ' days ago') +
     '<div class="bfdd-note"><span>Household notes</span>' + (pin ? bfEsc(pin.html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 130)) + '...' : 'None') + '</div>';
   var pc = bfLk('Name', bfEsc(p.name)) + bfLk('Preferred name', bfEsc(bfPrefName(c))) + bfLk('Relationship', p.role) + bfLk('Date of birth', c.dob ? bfDate(c.dob) : mask) + bfLk('Email', bfEsc(p.email)) + bfLk('Phone', bfEsc(p.phone)) + bfLk('State of residence', c.state ? bfEsc(c.state) : mask) + bfLk('Marital status', c.marital ? bfEsc(c.marital) : mask) + bfLk('Dependents', c.dependents != null ? c.dependents : mask) + bfLk('Client status', bfHhStatus(c)) + bfLk('Preferred contact', cm.pref) +
@@ -35463,6 +35464,257 @@ function bfSandbox() {
     bfBar('Projected', m.proj, mx, bfMoneyK(m.proj), ok ? 'var(--teal2)' : '#f59e0b') + bfBar('Goal', m.goal, mx, bfMoneyK(m.goal)) + '<div style="font-size:12px;color:var(--g500);margin-top:8px">' + Math.round(m.monthsLeft * 10) / 10 + ' months left in the year. Opportunity assets stand in for premium, as elsewhere in the forecast.</div></div>';
 }
 (function() { var fc = bfFcstTab; bfFcstTab = function() { return fc() + bfSandbox(); }; })();
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BROOKFIELD DEMO: dialer (agents and agency managers). Simulated calls,
+   mocked mp3 recording on the household, transcript auto-added to Notes.
+   ═══════════════════════════════════════════════════════════════════════════ */
+var BF_DL = { open: false, tab: 'keypad', num: '', from: 0, rq: '', cq: '', who: 'hh', call: null, done: null, log: null, timer: null, play: null };
+var BF_DL_KEYS = [['1', ''], ['2', 'ABC'], ['3', 'DEF'], ['4', 'GHI'], ['5', 'JKL'], ['6', 'MNO'], ['7', 'PQRS'], ['8', 'TUV'], ['9', 'WXYZ'], ['*', ''], ['0', '+'], ['#', '']];
+var BF_DL_SCEN = [
+  { sum: 'Reviewed the annual meeting agenda and confirmed the time. The client will gather the latest statements and asked how the guaranteed income option compares with what they have today.',
+    next: ['Send the meeting reminder and statement checklist', 'Prepare a side by side of guaranteed income options', 'Follow up two days before the meeting'],
+    tr: [['Agent', 'Hello {c}, this is {a}. This call is recorded for our files. Is now still a good time?'], ['Client', 'Yes, I have a few minutes.'], ['Agent', 'I wanted to confirm our review for Thursday and ask you to bring your most recent statements.'], ['Client', 'Will do. Can we also talk about the income side? I keep hearing about guaranteed income.'], ['Agent', 'Of course. I will prepare a simple comparison so you can see the options next to what you have now.'], ['Client', 'That would help. I do not want anything that locks up all of our money.'], ['Agent', 'Understood. We will keep liquidity front and center. I will send a reminder tomorrow.'], ['Client', 'Thank you, talk Thursday.']] },
+  { sum: 'The client called with questions about how the surrender schedule works and when it ends. No decision was requested. They prefer to hear options only after the surrender period ends.',
+    next: ['Send a one page explanation of the surrender schedule', 'Diary a check in before the surrender end date', 'Note the preference to avoid early changes'],
+    tr: [['Client', 'Hi {a}, I had a question about the surrender charge on our annuity.'], ['Agent', 'Hello {c}. This call is recorded for our files. Happy to help. What would you like to know?'], ['Client', 'When does it end, and what happens if we need money before then?'], ['Agent', 'The schedule steps down each year, and most contracts allow a free withdrawal each year. I will send you the exact dates.'], ['Client', 'Good. We are not planning to change anything right now.'], ['Agent', 'That makes sense. I will check in before the end date so there are no surprises.'], ['Client', 'Perfect, thank you.']] },
+  { sum: 'Left a conversation about the maturing CD and a good time to review options. The client is cautious about market swings and wants guaranteed choices explained before deciding anything.',
+    next: ['Book a 30 minute review before the CD matures', 'Prepare guaranteed rate options with the surrender terms', 'Send a short written summary after the meeting'],
+    tr: [['Agent', 'Hi {c}, it is {a}. This call is recorded for our files. I am calling about your CD that matures soon.'], ['Client', 'Yes, I saw the notice. I am not sure what to do with it.'], ['Agent', 'That is why I called. We can look at a few safe options together. Nothing needs to be decided today.'], ['Client', 'I worry about the market. I only want to hear about guaranteed things.'], ['Agent', 'Understood. I will show you guaranteed choices and be clear about the terms.'], ['Client', 'Mornings work best for us.'], ['Agent', 'I will send times for next week and a short summary afterward.']] }
+];
+function bfDlTier() { return _bfv.tier === 'agent' || _bfv.tier === 'agency'; }
+function bfDlAgencyId() { return _bfv.tier === 'agent' ? (bfAgent(_bfv.agent) || {}).ag : _bfv.agency; }
+function bfDlOn() {
+  if (!bfDlTier()) return false;
+  try { var g = bfDlAgencyId(); if (g && BF_PERMS.agent[g] && BF_PERMS.agent[g].ph_call) return _bfv.tier === 'agency' || bfPermEff(g, 'ph_call') !== 'off'; } catch (e) {}
+  return true;
+}
+function bfDlWho() { return _bfv.tier === 'agent' ? bfAgent(_bfv.agent).name : (bfAgency(_bfv.agency) || {}).name || 'Agency'; }
+function bfDlNum(id) { var h = bfHash('ph' + id); return '(' + (212 + h % 7 * 11) + ') 555-' + ('0000' + (h * 7 % 10000)).slice(-4); }
+function bfDlFroms() {
+  var g = bfDlAgencyId(), a = bfAgency(g) || { name: 'Agency' };
+  return [{ lbl: a.name + ' business line', num: bfDlNum('biz' + g) }, { lbl: 'Direct line', num: bfDlNum('dir' + (_bfv.tier === 'agent' ? _bfv.agent : g)) }];
+}
+function bfDlClients() {
+  var g = bfDlAgencyId();
+  return BF.clients.filter(function(c){ return _bfv.tier === 'agent' ? c.agent === _bfv.agent : c.agency === g; });
+}
+function bfDlTeam() { var g = bfDlAgencyId(); return BF_AGENTS.filter(function(a){ return a.ag === g && (_bfv.tier !== 'agent' || a.id !== _bfv.agent); }); }
+function bfDlName(c) { return bfCanSeeClient(c) ? c.name : c.code; }
+function bfDlMk(c, dir, daysAgo, dur, rec, by) {
+  return { id: 'dl' + (BF_DL.seq = (BF_DL.seq || 0) + 1), cid: c ? c.id : null, name: c ? bfDlName(c) : 'Unknown number', num: c ? bfDlNum(c.id) : '', dir: dir, at: BF_T - daysAgo * BF_DAY + 9 * 3600000 + (daysAgo * 977 % 8) * 3600000, dur: dur, rec: rec, by: by || bfDlWho() };
+}
+function bfDlLog() {
+  var key = _bfv.tier + (_bfv.tier === 'agent' ? _bfv.agent : bfDlAgencyId());
+  if (BF_DL.log && BF_DL.logKey === key) return BF_DL.log;
+  BF_DL.logKey = key; var L = [];
+  bfDlClients().slice(0, 6).forEach(function(c, i) {
+    var ph = bfPhoneData(c), k = ph.calls.filter(function(x){ return x.dir !== 'Missed'; }).slice(0, 1)[0];
+    var dir = i % 4 === 3 ? 'Missed' : (i % 2 ? 'Incoming' : 'Outgoing'), d = 1 + i * 2, dur = dir === 'Missed' ? 0 : 3 * 60 + (bfHash(c.id) % 400);
+    var e = bfDlMk(c, dir, d, dur, dir !== 'Missed' && i % 3 !== 2);
+    e.sum = k ? k.summary : '';
+    L.push(e);
+  });
+  BF_DL.log = L; return L;
+}
+function bfDlGen(c, e, sc) {
+  var a = bfAgent(c.agent).name.split(' ')[0], f = bfMembers(c)[0].first;
+  return { sum: sc.sum, next: sc.next, tr: sc.tr.map(function(l){ return [l[0] === 'Agent' ? a : f, l[1].replace(/\{c\}/g, f).replace(/\{a\}/g, a)]; }) };
+}
+function bfDlRecs(c) { var cm = bfComms(c); if (!cm.callRecs) cm.callRecs = []; return cm.callRecs; }
+function bfDlDur(s) { return bfPad(Math.floor(s / 60)) + ':' + bfPad(s % 60); }
+function bfDlStamp(ms) { var d = new Date(ms); return d.getFullYear() + '-' + bfPad(d.getMonth() + 1) + '-' + bfPad(d.getDate()) + ' ' + bfPad(d.getHours()) + '.' + bfPad(d.getMinutes()); }
+function bfDlWhen(ms) { var d = Math.round((BF_T - bfDayStart(ms)) / BF_DAY); return d <= 0 ? 'Today ' + new Date(ms).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) : (d === 1 ? 'Yesterday' : bfDateS(ms)); }
+var _bfDlIc = {
+  phone: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>',
+  play: '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4l13 8-13 8z"/></svg>',
+  info: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>',
+  back: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M21 4H8l-7 8 7 8h13z"/><line x1="12" y1="9" x2="18" y2="15"/><line x1="18" y1="9" x2="12" y2="15"/></svg>',
+  dl: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg>',
+  del: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>'
+};
+function bfDlToggle(e) {
+  if (e && e.stopPropagation) e.stopPropagation();
+  BF_DL.open = !BF_DL.open; if (BF_DL.open && typeof closeAllPanels === 'function') closeAllPanels(); bfDlDraw();
+}
+function bfDlClose() { BF_DL.open = false; bfDlDraw(); }
+function bfDlDraw() {
+  if (typeof document === 'undefined') return;
+  var el = bfEl('bf-dl');
+  if (!el) { if (!document.body || !document.createElement) return; el = document.createElement('div'); el.id = 'bf-dl'; el.className = 'bfdl'; document.body.appendChild(el); }
+  if (!BF_DL.open || !bfDlOn()) { el.style.display = 'none'; el.innerHTML = ''; return; }
+  el.style.display = 'flex'; el.innerHTML = bfDlHtml();
+  el.onclick = function(ev){ if (ev && ev.stopPropagation) ev.stopPropagation(); };
+}
+function bfDlHtml() {
+  var h = '<div class="bfdl-hd"><div><b>Brookfield Dialer</b><span>' + bfEsc(bfDlWho()) + '</span></div><button type="button" class="bfdl-x" aria-label="Close dialer" ' + bfOc('bfDlClose') + '>&times;</button></div>';
+  if (BF_DL.call) return h + bfDlCallHtml();
+  var body = BF_DL.tab === 'recent' ? bfDlRecent() : (BF_DL.tab === 'contacts' ? bfDlContacts() : bfDlKeypad());
+  var tabs = [['keypad', 'Keypad'], ['recent', 'Recent'], ['contacts', 'Contacts']].map(function(t){ return '<button type="button" class="' + (BF_DL.tab === t[0] ? 'on' : '') + '" ' + bfOc('bfDlTab', t[0]) + '>' + t[1] + '</button>'; }).join('');
+  return h + '<div class="bfdl-bd">' + (BF_DL.done ? bfDlDone() : '') + body + '</div><div class="bfdl-tabs">' + tabs + '</div>';
+}
+function bfDlTab(t) { BF_DL.tab = t; BF_DL.done = null; bfDlDraw(); }
+function bfDlFromSel() {
+  var F = bfDlFroms();
+  return '<label class="bfdl-from">Call from<select onchange="BF_DL.from=+this.value">' + F.map(function(f, i){ return '<option value="' + i + '"' + (BF_DL.from === i ? ' selected' : '') + '>' + bfEsc(f.lbl + ' · ' + f.num) + '</option>'; }).join('') + '</select></label>';
+}
+function bfDlKeypad() {
+  var keys = BF_DL_KEYS.map(function(k){ return '<button type="button" class="bfdl-key" ' + bfOc('bfDlKey', k[0]) + '><b>' + k[0] + '</b><i>' + k[1] + '</i></button>'; }).join('');
+  return '<div class="bfdl-num"><span class="bfdl-fl">US +1</span><input id="bf-dl-in" type="text" inputmode="tel" placeholder="Enter a number" value="' + bfEsc(BF_DL.num) + '" oninput="BF_DL.num=this.value" aria-label="Phone number"><button type="button" class="bfdl-bk" aria-label="Delete digit" ' + bfOc('bfDlBack') + '>' + _bfDlIc.back + '</button></div><div class="bfdl-pad">' + keys + '</div>' + bfDlFromSel() + '<button type="button" class="bfdl-call" ' + bfOc('bfDlDial') + '>' + _bfDlIc.phone + ' Call</button>';
+}
+function bfDlKey(k) { BF_DL.num = (BF_DL.num || '') + k; bfDlDraw(); }
+function bfDlBack() { BF_DL.num = (BF_DL.num || '').slice(0, -1); bfDlDraw(); }
+function bfDlDial() {
+  var d = String(BF_DL.num || '').replace(/\D/g, '');
+  if (d.length < 7) { showToast('Enter a full phone number'); return; }
+  var hit = null; bfDlClients().forEach(function(c){ if (bfDlNum(c.id).replace(/\D/g, '') === d.slice(-10)) hit = c; });
+  bfDlStart({ cid: hit ? hit.id : null, name: hit ? bfDlName(hit) : BF_DL.num, num: hit ? bfDlNum(hit.id) : BF_DL.num });
+}
+function bfDlRecent() {
+  var L = bfDlLog().slice().sort(function(a, b){ return b.at - a.at; }), q = (BF_DL.rq || '').toLowerCase();
+  L = L.filter(function(e){ return !q || e.name.toLowerCase().indexOf(q) >= 0; });
+  var rows = L.map(function(e) {
+    var col = e.dir === 'Missed' ? '#c0553f' : (e.dir === 'Incoming' ? '#5a7fb0' : '#1d9e75');
+    return '<div class="bfdl-row"><div class="bfdl-who"><b>' + bfEsc(e.name) + '</b><span style="color:' + col + '">' + e.dir + '</span> · ' + bfDlWhen(e.at) + (e.dur ? ' · ' + bfDlDur(e.dur) : '') + '</div><div class="bfdl-act">' + (e.rec ? '<button type="button" class="bfdl-ib" title="Play recording" aria-label="Play recording" ' + bfOc('bfDlPlay', e.id) + '>' + _bfDlIc.play + '</button>' : '') + '<button type="button" class="bfdl-ib" title="Call details" aria-label="Call details" ' + bfOc('bfDlInfo', e.id) + '>' + _bfDlIc.info + '</button></div></div>';
+  }).join('');
+  return '<input class="bfdl-q" placeholder="Search recent calls" value="' + bfEsc(BF_DL.rq) + '" oninput="BF_DL.rq=this.value;bfDlDraw()" aria-label="Search recent calls"><div class="bfdl-list">' + (rows || '<div class="bfdl-em">No calls yet.</div>') + '</div>';
+}
+function bfDlContacts() {
+  var q = (BF_DL.cq || '').toLowerCase(), team = BF_DL.who === 'team', list;
+  if (team) list = bfDlTeam().map(function(a){ return { id: a.id, name: a.name, sub: 'Team member', cid: null, num: bfDlNum(a.id) }; });
+  else list = bfDlClients().map(function(c){ return { id: c.id, name: bfDlName(c), sub: 'Household', cid: c.id, num: bfDlNum(c.id) }; });
+  list = list.filter(function(x){ return !q || x.name.toLowerCase().indexOf(q) >= 0; }).slice(0, 40);
+  var rows = list.map(function(x){ return '<div class="bfdl-row"><div class="bfdl-who"><b>' + bfEsc(x.name) + '</b>' + x.sub + ' · ' + x.num + '</div><button type="button" class="bfdl-go" aria-label="Call ' + bfEsc(x.name) + '" ' + bfOc('bfDlCall', x.cid || '', x.name, x.num) + '>' + _bfDlIc.phone + '</button></div>'; }).join('');
+  return '<div class="bfdl-sw"><button type="button" class="' + (team ? 'on' : '') + '" ' + bfOc('bfDlSetWho', 'team') + '>Team</button><button type="button" class="' + (team ? '' : 'on') + '" ' + bfOc('bfDlSetWho', 'hh') + '>Households</button></div><input class="bfdl-q" placeholder="Search contacts" value="' + bfEsc(BF_DL.cq) + '" oninput="BF_DL.cq=this.value;bfDlDraw()" aria-label="Search contacts"><div class="bfdl-list">' + (rows || '<div class="bfdl-em">No matches.</div>') + '</div>' + bfDlFromSel();
+}
+function bfDlSetWho(w) { BF_DL.who = w; bfDlDraw(); }
+function bfDlCall(cid, name, num) { bfDlStart({ cid: cid || null, name: name, num: num }); }
+function bfDlStart(t) {
+  if (BF_DL.call) return;
+  BF_DL.done = null; BF_DL.call = { cid: t.cid, name: t.name, num: t.num, from: bfDlFroms()[BF_DL.from] || bfDlFroms()[0], t0: Date.now(), state: 'ringing', mute: false };
+  bfDlDraw();
+  if (typeof setTimeout === 'function') setTimeout(function(){ if (BF_DL.call && BF_DL.call.state === 'ringing') bfDlAnswer(); }, 2200);
+}
+function bfDlAnswer() {
+  var k = BF_DL.call; if (!k) return; k.state = 'live'; k.t0 = Date.now();
+  if (typeof setInterval === 'function') { if (BF_DL.timer) clearInterval(BF_DL.timer); BF_DL.timer = setInterval(function(){ var t = bfEl('bf-dl-t'); if (t) t.textContent = bfDlClock(); }, 1000); }
+  bfDlDraw();
+}
+function bfDlClock() { var k = BF_DL.call; return k && k.state === 'live' ? bfDlDur(Math.floor((Date.now() - k.t0) / 1000)) : '00:00'; }
+function bfDlCallHtml() {
+  var k = BF_DL.call, live = k.state === 'live', rec = !!k.cid;
+  return '<div class="bfdl-bd bfdl-cc">' + bfAv(k.name, 64) + '<div class="bfdl-cn">' + bfEsc(k.name) + '</div><div class="bfdl-cs">' + bfEsc(k.num) + '</div><div class="bfdl-st">' + (live ? '<span id="bf-dl-t">' + bfDlClock() + '</span>' : 'Ringing…') + '</div>' +
+    (rec ? '<div class="bfdl-rec">' + (live ? '<i></i> Recording on. The standard recorded line notice was played.' : 'This call will be recorded, with a notice to the client.') + '</div>' : '<div class="bfdl-rec off">Not linked to a household, so this call is not recorded.</div>') +
+    '<div class="bfdl-cs" style="margin-top:6px">Calling from ' + bfEsc(k.from.lbl) + '</div>' +
+    '<div class="bfdl-ctl"><button type="button" class="bfdl-mu' + (k.mute ? ' on' : '') + '" ' + bfOc('bfDlMute') + '>' + (k.mute ? 'Unmute' : 'Mute') + '</button><button type="button" class="bfdl-end" ' + bfOc('bfDlHang') + '>' + _bfDlIc.phone + ' Hang up</button></div></div>';
+}
+function bfDlMute() { if (BF_DL.call) { BF_DL.call.mute = !BF_DL.call.mute; bfDlDraw(); } }
+function bfDlHang() {
+  var k = BF_DL.call; if (!k) return;
+  if (BF_DL.timer && typeof clearInterval === 'function') { clearInterval(BF_DL.timer); BF_DL.timer = null; }
+  var wasLive = k.state === 'live'; BF_DL.call = null;
+  var c = k.cid ? BF.byId[k.cid] : null, L = bfDlLog(), who = bfDlWho();
+  if (!wasLive) { L.unshift({ id: 'dl' + (BF_DL.seq = (BF_DL.seq || 0) + 1), cid: k.cid, name: k.name, num: k.num, dir: 'Missed', at: Date.now(), dur: 0, rec: false, by: who }); BF_DL.done = { msg: 'Call cancelled before it was answered.' }; bfDlDraw(); return; }
+  var real = Math.floor((Date.now() - k.t0) / 1000), dur = real < 90 ? 150 + bfHash(k.name + real) % 300 : real;
+  var e = { id: 'dl' + (BF_DL.seq = (BF_DL.seq || 0) + 1), cid: k.cid, name: k.name, num: k.num, dir: 'Outgoing', at: Date.now(), dur: dur, rec: !!c, by: who };
+  L.unshift(e);
+  if (c) {
+    var recs = bfDlRecs(c), sc = bfDlGen(c, e, BF_DL_SCEN[(bfHash(c.id) + recs.length) % BF_DL_SCEN.length]);
+    var r = { id: e.id, name: 'Call recording ' + bfDlStamp(e.at) + '.mp3', at: e.at, dur: dur, by: who, from: k.from.num, sum: sc.sum, next: sc.next, tr: sc.tr };
+    recs.unshift(r); e.sum = sc.sum;
+    var tr = sc.tr.map(function(l){ return '<p><b>' + bfEsc(l[0]) + ':</b> ' + bfEsc(l[1]) + '</p>'; }).join('');
+    bfNoteList(c).unshift({ html: '<p><b>Call summary</b> (' + bfDlDur(dur) + ')</p><p>' + bfEsc(sc.sum) + '</p><p><b>Next steps</b></p><ul>' + sc.next.map(function(n){ return '<li>' + bfEsc(n) + '</li>'; }).join('') + '</ul><p><b>Full transcript</b></p>' + tr, ago: 0, pin: false, tag: 'Call', by: who });
+    bfLog(c.id, 'Call', 'Outgoing call (' + bfDlDur(dur) + '). Recording saved and transcript added to notes.', true);
+    bfAudit('Call', c.id, 'Call recorded with the standard notice. Recording saved to files and transcript added to notes.');
+    BF_DL.done = { msg: 'Call ended (' + bfDlDur(dur) + '). The recording was saved to ' + bfEsc(k.name) + ' and the transcript was added to Notes.', cid: c.id };
+  } else BF_DL.done = { msg: 'Call ended (' + bfDlDur(dur) + '). It was not linked to a household, so nothing was recorded.' };
+  bfDlDraw(); if (typeof bfRender === 'function') bfRender();
+}
+function bfDlDone() { var d = BF_DL.done; return '<div class="bfdl-ok">' + d.msg + (d.cid ? ' <a href="javascript:void(0)" ' + bfOc('bfDlOpen', d.cid) + '>Open household</a>' : '') + '</div>'; }
+function bfDlOpen(cid) { BF_DL.open = false; BF_DL.done = null; bfDlDraw(); bfOpenClient(cid, 'history'); }
+function bfDlTone() {
+  try { var A = window.AudioContext || window.webkitAudioContext; if (!A) return; var x = new A(), o = x.createOscillator(), g = x.createGain(); o.frequency.value = 440; g.gain.value = 0.05; o.connect(g); g.connect(x.destination); o.start(); setTimeout(function(){ o.stop(); x.close(); }, 1200); } catch (e) {}
+}
+function bfDlPlay(id) { bfDlTone(); showToast('Playing the demo recording'); }
+function bfDlFind(id) {
+  var e = bfDlLog().filter(function(x){ return x.id === id; })[0]; return e;
+}
+function bfDlInfo(id) {
+  var e = bfDlFind(id); if (!e) return;
+  var c = e.cid ? BF.byId[e.cid] : null, r = c ? bfDlRecs(c).filter(function(x){ return x.id === id; })[0] : null;
+  var body = '<div class="bfdl-info"><div><span>Contact</span><b>' + bfEsc(e.name) + '</b></div><div><span>Type</span><b>' + e.dir + '</b></div><div><span>When</span><b>' + bfDate(e.at) + '</b></div><div><span>Length</span><b>' + (e.dur ? bfDlDur(e.dur) : 'Not answered') + '</b></div><div><span>Handled by</span><b>' + bfEsc(e.by) + '</b></div>' + (e.sum ? '<div><span>Summary</span><b>' + bfEsc(e.sum) + '</b></div>' : '') + (r ? '<div><span>Recording</span><b>' + bfEsc(r.name) + '</b></div>' : '') + '</div>';
+  bfModal('Call details', body, 'Close', 'bfModalClose()');
+}
+/* household record: call recordings (Files) */
+function bfCallRecsPanel(c, edit) {
+  var recs = bfDlRecs(c);
+  var rows = recs.map(function(r, i) {
+    return '<div class="bfdl-fr"><div class="bfdl-fi">' + _bfDlIc.play + '</div><div class="bfdl-fn"><b>' + bfEsc(r.name) + '</b><span>' + bfDlDur(r.dur) + ' · ' + bfEsc(r.by) + ' · ' + bfDate(r.at) + '</span></div><div class="bfdl-act"><button type="button" class="bfdl-tb" ' + bfOc('bfDlPlay', r.id) + '>' + _bfDlIc.play + ' Play</button><button type="button" class="bfdl-tb" ' + bfOc('bfDlRecDl', c.id, i) + '>' + _bfDlIc.dl + ' Download</button>' + (edit ? '<button type="button" class="bfdl-tb del" ' + bfOc('bfDlRecDel', c.id, i) + '>' + _bfDlIc.del + ' Delete</button>' : '') + '</div></div>';
+  }).join('');
+  return bfSecLabel('Call recordings') + (rows ? '<div class="bfx-card" style="padding:6px 14px">' + rows + '</div><div style="font-size:11px;color:var(--g400);margin-top:6px">Each call is also written to Notes as a summary, next steps and transcript.' + (edit ? '' : ' View only for your role.') + '</div>' : '<div class="bfx-card" style="font-size:12.5px;color:var(--g400)">No call recordings yet. Calls made from the dialer appear here.</div>');
+}
+function bfDlRecDl(cid, i) {
+  var c = BF.byId[cid], r = bfDlRecs(c)[i]; if (!r) return;
+  bfDownload(r.name.replace(/\.mp3$/, '') + ' transcript.txt', 'Call transcript (demo)\r\nHousehold: ' + bfDlName(c) + '\r\nDate: ' + bfDate(r.at) + '\r\nLength: ' + bfDlDur(r.dur) + '\r\n\r\n' + r.sum + '\r\n\r\n' + r.tr.map(function(l){ return l[0] + ': ' + l[1]; }).join('\r\n'));
+  showToast('Demo file downloaded (transcript)');
+}
+function bfDlRecDel(cid, i) {
+  var c = BF.byId[cid], r = bfDlRecs(c)[i]; if (!r) return;
+  bfModal('Delete this recording?', '<div style="font-size:13px;line-height:1.6">' + bfEsc(r.name) + ' will be removed from the household files. The note with the transcript stays in Notes.</div>', 'Delete recording', 'bfDlRecDelGo(\'' + cid + '\',' + i + ')');
+}
+function bfDlRecDelGo(cid, i) {
+  var c = BF.byId[cid], recs = bfDlRecs(c), r = recs[i]; if (!r) { bfModalClose(); return; }
+  recs.splice(i, 1); bfAudit('Call', cid, 'Call recording deleted: ' + r.name + '.'); bfModalClose(); showToast('Recording deleted'); bfRender();
+}
+(function() {
+  var prev = bfHistoryHub;
+  bfHistoryHub = function(c, edit, p) {
+    var h = prev(c, edit, p);
+    if ((_bfv.f.hSub || 'timeline') !== 'docs') return h;
+    return h + bfCallRecsPanel(c, edit && _bfv.tier !== 'bws');
+  };
+  var pq = bfQuickHtml;
+  bfQuickHtml = function() {
+    var b = bfDlOn() ? '<div class="tb-icon-btn bfdl-btn" role="button" tabindex="0" title="Dialer" aria-label="Open dialer" aria-haspopup="true" onclick="bfDlToggle(event)" onkeydown="if(event.key===\'Enter\')bfDlToggle(event)">' + _bfDlIc.phone + '</div>' : '';
+    var sl = bfEl('bf-dl-slot'); if (sl) sl.innerHTML = b;
+    return pq();
+  };
+  if (typeof togglePanel === 'function') { var ptp = togglePanel; togglePanel = function() { if (BF_DL.open && !BF_DL.call) { BF_DL.open = false; bfDlDraw(); } return ptp.apply(this, arguments); }; }
+  if (document.addEventListener) document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && BF_DL.open && !BF_DL.call) bfDlClose(); });
+  var pr = bfRender;
+  bfRender = function() { var r = pr.apply(this, arguments); if (BF_DL.open && !bfDlOn()) { BF_DL.open = false; bfDlDraw(); } return r; };
+  BF_PERM_GROUPS.forEach(function(g) { if (g[0] === 'Notes and AI' && !g[1].some(function(x){ return x[0] === 'ph_call'; })) g[1].push(['ph_call', 'Make and record calls (dialer)']); });
+  ['manager', 'max', 'agent'].forEach(function(r) { Object.keys(BF_PERMS[r]).forEach(function(g) { if (!BF_PERMS[r][g].ph_call) BF_PERMS[r][g].ph_call = 'full'; }); });
+})();
+if (typeof document !== 'undefined' && document.head && document.createElement) {
+  var _bfDlSt = document.createElement('style');
+  _bfDlSt.textContent = '.bfdl{position:fixed;top:58px;right:96px;width:340px;height:600px;max-height:calc(100vh - 70px);background:#fff;border:1px solid var(--g200);border-radius:16px;box-shadow:0 14px 40px rgba(0,0,0,.18);z-index:900;flex-direction:column;overflow:hidden;display:none}' +
+    '.bfdl-hd{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--g200)}.bfdl-hd b{display:block;font-size:14px}.bfdl-hd span{font-size:11px;color:var(--g400)}.bfdl-x{border:none;background:none;font-size:22px;cursor:pointer;color:var(--g400);line-height:1}' +
+    '.bfdl-bd{flex:1;overflow:auto;padding:14px 16px;display:flex;flex-direction:column;gap:10px}.bfdl-tabs{display:flex;border-top:1px solid var(--g200)}.bfdl-tabs button{flex:1;padding:12px;border:none;background:none;font-size:12.5px;font-weight:600;color:var(--g400);cursor:pointer}.bfdl-tabs button.on{color:#17805f;box-shadow:inset 0 2px 0 #1d9e75}' +
+    '.bfdl-num{display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--g200);padding:4px 0}.bfdl-fl{font-size:11px;font-weight:700;background:var(--g100);border-radius:6px;padding:4px 7px}.bfdl-num input{flex:1;border:none;outline:none;font-size:20px;font-weight:600;min-width:0;background:none}.bfdl-bk{border:none;background:none;cursor:pointer;color:var(--g400)}' +
+    '.bfdl-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.bfdl-key{border:none;background:var(--g100);border-radius:50%;width:62px;height:62px;justify-self:center;padding:0;justify-content:center;cursor:pointer;display:flex;flex-direction:column;align-items:center}.bfdl-key b{font-size:20px;font-weight:600}.bfdl-key i{font-style:normal;font-size:9px;letter-spacing:1px;color:var(--g400);min-height:11px}.bfdl-key:hover{background:var(--g200)}' +
+    '.bfdl-from{display:flex;flex-direction:column;gap:3px;font-size:11px;color:var(--g400)}.bfdl-from select,.bfdl-q{border:1px solid var(--g200);border-radius:8px;padding:8px 10px;font-size:12.5px;background:#fff;width:100%;box-sizing:border-box}' +
+    '.bfdl-call,.bfdl-end{display:flex;align-items:center;justify-content:center;gap:8px;border:none;border-radius:999px;background:#1d9e75;color:#fff;font-weight:700;font-size:14px;padding:11px;cursor:pointer}.bfdl-end{background:#c0553f;padding:11px 22px}.bfdl-end svg{transform:rotate(135deg)}' +
+    '.bfdl-list{display:flex;flex-direction:column}.bfdl-row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 0;border-bottom:1px solid var(--g100)}.bfdl-who b{display:block;font-size:13px}.bfdl-who{font-size:11px;color:var(--g400)}.bfdl-act{display:flex;gap:6px;align-items:center}' +
+    '.bfdl-ib{width:28px;height:28px;border-radius:50%;border:1px solid var(--g200);background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--g500)}.bfdl-go{width:34px;height:34px;border-radius:50%;border:none;background:#1d9e75;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center}' +
+    '.bfdl-sw{display:flex;background:var(--g100);border-radius:999px;padding:3px}.bfdl-sw button{flex:1;border:none;background:none;border-radius:999px;padding:6px;font-size:12px;font-weight:600;cursor:pointer;color:var(--g400)}.bfdl-sw button.on{background:#fff;color:var(--dark);box-shadow:0 1px 3px rgba(0,0,0,.12)}' +
+    '.bfdl-em{font-size:12.5px;color:var(--g400);padding:18px 0;text-align:center}.bfdl-ok{background:rgba(29,158,117,.1);border:1px solid rgba(29,158,117,.3);border-radius:10px;padding:10px 12px;font-size:12.5px;line-height:1.5}' +
+    '.bfdl-cc{align-items:center;text-align:center;justify-content:center}.bfdl-cn{font-size:18px;font-weight:700}.bfdl-cs{font-size:12px;color:var(--g400)}.bfdl-st{font-size:26px;font-weight:600;font-variant-numeric:tabular-nums}.bfdl-rec{font-size:11.5px;display:flex;gap:6px;align-items:center;background:rgba(192,85,63,.08);border-radius:8px;padding:6px 10px}.bfdl-rec i{width:8px;height:8px;border-radius:50%;background:#c0553f}.bfdl-rec.off{background:var(--g100);color:var(--g400)}' +
+    '.bfdl-ctl{display:flex;gap:10px;margin-top:14px}.bfdl-mu{border:1px solid var(--g200);background:#fff;border-radius:999px;padding:11px 20px;font-weight:600;cursor:pointer}.bfdl-mu.on{background:var(--g100)}' +
+    '.bfdl-info{display:flex;flex-direction:column;gap:8px}.bfdl-info div{display:flex;flex-direction:column}.bfdl-info span{font-size:11px;color:var(--g400)}.bfdl-info b{font-size:13px;font-weight:600;line-height:1.5}' +
+    '.bfdl-fr{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--g100);flex-wrap:wrap}.bfdl-fr:last-child{border-bottom:none}.bfdl-fi{width:34px;height:34px;border-radius:8px;background:rgba(29,158,117,.12);color:#17805f;display:flex;align-items:center;justify-content:center}.bfdl-fn{flex:1;min-width:180px}.bfdl-fn b{display:block;font-size:13px}.bfdl-fn span{font-size:11px;color:var(--g400)}' +
+    '.bfdl-tb{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--g200);background:#fff;border-radius:8px;padding:5px 10px;font-size:12px;cursor:pointer}.bfdl-tb.del{color:#c0553f}.bfdl-btn{color:var(--g500)}' +
+    '#bf-dl-slot{margin:0 4px}#bf-quick{margin:0 4px}' +
+    '.bfdl{width:360px;border:none;border-radius:18px;box-shadow:0 16px 40px rgba(0,0,0,.14);background:#fff}' +
+    '.bfdl-hd{background:#fff;color:var(--dark);border-bottom:1px solid var(--g200);padding:14px 20px}.bfdl-hd b{font-size:15px}.bfdl-x{width:30px;height:30px;border-radius:50%}.bfdl-x:hover{background:var(--g100)}' +
+    '.bfdl-bd{padding:12px 20px;gap:10px}.bfdl-num{background:#fff;border:1px solid var(--g200);border-radius:14px;padding:8px 12px}.bfdl-num input{font-size:22px;letter-spacing:.5px}' +
+    '.bfdl-pad{gap:10px 8px}.bfdl-key{width:56px;height:56px;background:#fff;border:1px solid var(--g200);box-shadow:0 1px 2px rgba(0,0,0,.05);transition:transform .08s,background .15s}.bfdl-key:hover{background:var(--g100)}.bfdl-key:active{transform:scale(.94)}.bfdl-key b{font-size:20px;font-weight:500;line-height:1.1}' +
+    '.bfdl-call{flex:none;height:46px;box-shadow:none;font-size:15px}.bfdl-call:hover{background:#188a66}.bfdl-from select{background:#fff;border-radius:10px;padding:9px 10px}' +
+    '.bfdl-tabs{background:#fff;padding:4px 8px}.bfdl-tabs button{border-radius:10px;padding:10px;margin:2px}.bfdl-tabs button.on{background:var(--g100);color:var(--dark);box-shadow:none}' +
+    '.bfdl-row{background:#fff;border:1px solid var(--g100);border-radius:12px;padding:10px 12px;margin-bottom:8px}.bfdl-list{gap:0}.bfdl-q{border-radius:999px;padding:9px 14px}.bfdl-sw{background:var(--g200)}' +
+    '.bfdl-ib:hover{background:var(--g100)}.bfdl-go:hover{background:#188a66}.bfdl-cc{padding-top:26px}.bfdl-st{color:var(--dark)}';
+  document.head.appendChild(_bfDlSt);
+}
 
 try { localStorage.removeItem('bf_bg'); } catch (e) {}
 try { setTimeout(function(){ document.body.classList.remove('bf-booting'); }, 2500); } catch (e) {}
