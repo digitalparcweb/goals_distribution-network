@@ -30416,7 +30416,7 @@ function bfHead(title, sub, right) {
 function bfRenderNav() {
   var box = bfEl('bf-nav'); if (!box) return;
   box.innerHTML = BF_NAV[_bfv.tier].map(function(n) {
-    return '<button class="sb-item bf-item' + (_bfv.page === n[0] ? ' active' : '') + '" ' + bfOc('bfGo', n[0]) + '><svg class="sb-icon-svg" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' + BF_ICONS[n[2]] + '</svg><span class="sb-label">' + n[1] + '</span></button>';
+    return '<button class="sb-item bf-item' + (_bfv.page === n[0] ? ' active' : '') + '" ' + bfOc('bfNavGo', n[0]) + '><svg class="sb-icon-svg" aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' + BF_ICONS[n[2]] + '</svg><span class="sb-label">' + n[1] + '</span></button>';
   }).join('');
 }
 function bfPersona() {
@@ -36074,7 +36074,7 @@ function bfSdScore(c, n) {
   var s = 50, flags = [], pct = c.investable ? n.amount / c.investable * 100 : 100;
   if (n.objective === 'Guaranteed income' || n.objective === 'Principal protection') s += 15; else s += 5;
   if (n.risk === 'Conservative') s += 15; else if (n.risk === 'Moderate') s += 8; else if (n.risk === 'Growth') { s += 0; flags.push('Growth risk tolerance. Confirm an annuity fits.'); } else s += 3;
-  if (c.age >= 55 && c.age <= 75) s += 10; else if (c.age <= 80) { s += 4; flags.push('Age ' + c.age + ': keep the surrender period shorter.'); } else flags.push('Age ' + c.age + ': needs principal review.');
+  if (c.age >= 55 && c.age <= 75) s += 10; else if (c.age < 55) s += 6; else if (c.age <= 80) { s += 4; flags.push('Age ' + c.age + ': keep the surrender period shorter.'); } else flags.push('Age ' + c.age + ': needs principal review.');
   if (pct <= 25) s += 10; else if (pct <= BF_SDR.maxPct) s += 4; else { s -= 10; flags.push('Premium is ' + Math.round(pct) + '% of investable assets, above the ' + BF_SDR.maxPct + '% guideline.'); }
   if (n.liquid <= 15) s += 5; else if (n.liquid > 30) { s -= 10; flags.push('Needs ' + n.liquid + '% accessible within 5 years. That is high for an annuity.'); }
   if (n.horizon >= 7) s += 5; else flags.push('Time horizon under 7 years.');
@@ -36105,7 +36105,12 @@ function bfSdWhyText(cs, p) {
   var tail = p.type === 'SPIA' ? 'There is no surrender period, and the client understands the payments cannot be reversed.' : 'The surrender period ends at age ' + (c.age + (o.t || 0)) + ', and the client was told about surrender charges and the ' + p.fw + '% a year free withdrawal.';
   return first + ' is ' + c.age + ', wants ' + String(n.objective).toLowerCase() + ' and has a ' + String(n.risk).toLowerCase() + ' risk tolerance. ' + p.name + ' (' + p.car + ') provides ' + feat + '. ' + (oth.length ? 'It was compared with ' + oth.join(' and ') + ' and chosen for its ' + (p.type === 'FIA' ? 'upside with principal protection' : (p.type === 'SPIA' ? 'income guarantee' : 'rate and guarantee')) + '. ' : '') + 'The premium is ' + pct + '% of investable assets and ' + n.liquid + '% may be needed within 5 years. ' + tail;
 }
-function bfSdComm(cs) { var p = bfSdProd(cs.q.sel); return p ? Math.round((cs.i.premium || cs.n.amount) * p.comm / 100) : 0; }
+function bfSdComm(cs) {
+  var p = bfSdProd(cs.q.sel); if (!p) return 0;
+  var g = (cs.i.premium || cs.n.amount) * p.comm / 100, f = 1;
+  try { var st = { agent: cs.agent, agency: cs.agency, lob: 'Annuity', product: p.name, premium: 1000, status: 'Active' }, gg = bfGross(st); if (gg > 0) f = bfCommOf(st) / gg; } catch (e) {}
+  return Math.round(g * f);
+}
 function bfSdCommStat(cs) { return cs.dl && cs.dl.receipt ? 'Earned' : (cs.submitted ? 'Pending' : 'Expected'); }
 function bfSdWhyRegen() { var cs = bfSdCur(), p = cs && bfSdProd(cs.q.sel); if (!cs || !p || bfSdLocked()) return; cs.q.why = bfSdWhyText(cs, p); bfSdRedraw(true); }
 function bfSdToEarn() { _bfv.f.eTab = 'comm'; bfGo('earn'); }
@@ -36785,6 +36790,47 @@ if (typeof document !== 'undefined' && document.head && document.createElement) 
     '.sd-tbl tr.sd-dim td{color:var(--g400)}.sd-tbl tr.sd-dim td:last-child{color:#b4452f}.sd-tbl tr.sd-sel td{background:rgba(29,158,117,.07)}.sd-why{font-size:11.5px;line-height:1.4}.sd-pdf{border:1px solid var(--g200);border-radius:10px;padding:18px}@media(max-width:1150px){.sd-two,.sd-two.rev{grid-template-columns:1fr}.sd-track{grid-template-columns:repeat(2,1fr)}.sd-ben{grid-template-columns:1fr 1fr}}.sd-sum{display:flex;flex-wrap:wrap;gap:0;background:#fff;border:1px solid var(--g200);border-radius:12px;margin:0 0 16px}.sd-sum div{flex:1;min-width:120px;padding:10px 16px;border-right:1px solid var(--g100)}.sd-sum div:last-child{border-right:none}.sd-sum span{display:block;font-size:11px;color:var(--g500);margin-bottom:2px}.sd-sum b{font-size:13px;font-weight:600}.sd-steps{gap:4px}.sd-step{padding:6px 11px 6px 6px;font-size:12px}';
   document.head.appendChild(_bfSdSt);
 }
+
+/* ── Return trail: leaving a household for another module keeps a way back to the same household and tab ── */
+(function() {
+  _bfv.ret = null;
+  var oGo = bfGo, oOpen = bfOpenClient, oRender = bfRender;
+  bfGo = function(page) {
+    if (_bfv.rec && _bfv.rec.id && BF.byId[_bfv.rec.id] && page !== _bfv.page) {
+      _bfv.ret = { page: _bfv.page, tier: _bfv.tier, rec: { id: _bfv.rec.id, tab: _bfv.rec.tab } };
+    }
+    return oGo.apply(this, arguments);
+  };
+  bfOpenClient = function() { _bfv.ret = null; return oOpen.apply(this, arguments); };
+  /* other links that leave a household (agent, agency, jump to a filtered list) keep the way back too */
+  ['bfOpenAgent', 'bfOpenAgency', 'bfJump'].forEach(function(n) {
+    var o = window[n]; if (typeof o !== 'function') return;
+    window[n] = function() {
+      if (_bfv.rec && _bfv.rec.id && BF.byId[_bfv.rec.id]) _bfv.ret = { page: _bfv.page, tier: _bfv.tier, rec: { id: _bfv.rec.id, tab: _bfv.rec.tab } };
+      return o.apply(this, arguments);
+    };
+  });
+  bfRender = function() {
+    var r = oRender.apply(this, arguments);
+    try {
+      var root = bfEl('bf-root'), t = _bfv.ret;
+      if (root && t && t.tier === _bfv.tier && !(_bfv.rec && _bfv.rec.id) && BF.byId[t.rec.id]) {
+        root.innerHTML = '<div class="bf-ret"><button type="button" class="bf-ret-b" onclick="bfReturn()">&lsaquo; Back to ' + bfEsc(bfName(BF.byId[t.rec.id])) + '</button></div>' + root.innerHTML;
+      }
+    } catch (e) {}
+    return r;
+  };
+  window.bfNavGo = function(page) { _bfv.ret = null; bfGo(page); };
+  window.bfReturn = function() {
+    var t = _bfv.ret; if (!t) return;
+    _bfv.ret = null;
+    oGo(t.page);
+    bfOpenClient(t.rec.id, t.rec.tab);
+  };
+  var st = document.createElement('style');
+  st.textContent = '.bf-ret{margin:0 0 10px}.bf-ret-b{background:none;border:0;padding:4px 0;font:inherit;font-size:13px;font-weight:600;color:var(--green,#1f6f4a);cursor:pointer}.bf-ret-b:hover{text-decoration:underline}';
+  document.head.appendChild(st);
+})();
 
 try { localStorage.removeItem('bf_bg'); } catch (e) {}
 try { setTimeout(function(){ document.body.classList.remove('bf-booting'); }, 2500); } catch (e) {}
