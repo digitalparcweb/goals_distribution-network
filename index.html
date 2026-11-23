@@ -34350,7 +34350,8 @@ BF_PAGES['agent:inbox'] = function() {
   var bar = '<div class="bfpl-bar"><div class="bfo-f"><span>Priority</span>' + bfFilterChips('iTier', [['all', 'All'], ['A', 'Hot'], ['B', 'Warm'], ['C', 'Watch']], f.iTier) + '</div><div class="bfo-f"><span>Trigger</span>' + sigs + '</div></div>' +
     '<div class="bfpl-bar" style="margin-top:0"><input id="bfi-q" class="bfag-q" style="width:260px" type="text" placeholder="Search households or triggers" value="' + bfEsc(f.iq || '') + '" oninput="bfInboxSearch(this.value)"><div class="bfo-f"><span>Sort</span>' + bfFilterChips('iSort', [['priority', 'Priority'], ['assets', 'Assets'], ['newest', 'Newest'], ['oldest', 'Quiet Longest']], f.iSort || 'priority') + '</div></div>';
   var list = rows.length ? rows.slice(0, 40).map(tab === 'review' ? bfInboxCard : bfFollowCard).join('') : '<div class="bfx-card"><div class="bfx-note">' + (sets[tab].length ? 'Nothing matches these filters.' : ({ review: 'Nothing is waiting. New opportunities appear here when a household meets a trigger.', followup: 'No opportunities are in progress.', waiting: 'Nothing is waiting on your principal.', done: 'Nothing here yet.' })[tab]) + '</div></div>';
-  var live = '<button class="bfx-btn' + (_bfv.live ? ' pri' : '') + '" ' + bfOc('bfLiveToggle') + ' title="Simulates new data arriving, so you can see the inbox update on its own">' + (_bfv.live ? 'Live updates on' : 'Simulate live updates') + '</button>';
+  var showLive = _bfv.live || /[?&]demo=1\b/.test(location.search + location.hash);
+  var live = !showLive ? '' : '<button class="bfx-btn' + (_bfv.live ? ' pri' : '') + '" ' + bfOc('bfLiveToggle') + ' title="Simulates new data arriving, so you can see the inbox update on its own">' + (_bfv.live ? 'Live updates on' : 'Simulate live updates') + '</button>';
   return bfHead('Opportunity Inbox', 'Households worth a conversation, with the reasons. Each email uses wording approved by Brookfield. This is a prompt to consider a conversation, never advice.', live) + kpis + tabs + bar + list + (rows.length > 40 ? '<div class="bfx-note">Showing 40 of ' + rows.length + '.</div>' : '');
 };
 
@@ -36791,44 +36792,61 @@ if (typeof document !== 'undefined' && document.head && document.createElement) 
   document.head.appendChild(_bfSdSt);
 }
 
-/* ── Return trail: leaving a household for another module keeps a way back to the same household and tab ── */
+/* ── Return trail: jumping from one screen to another keeps a way back to the exact screen you left (page, filters, household and tab) ── */
 (function() {
-  _bfv.ret = null;
+  _bfv.trail = [];
   var oGo = bfGo, oOpen = bfOpenClient, oRender = bfRender;
-  bfGo = function(page) {
-    if (_bfv.rec && _bfv.rec.id && BF.byId[_bfv.rec.id] && page !== _bfv.page) {
-      _bfv.ret = { page: _bfv.page, tier: _bfv.tier, rec: { id: _bfv.rec.id, tab: _bfv.rec.tab } };
-    }
-    return oGo.apply(this, arguments);
-  };
-  bfOpenClient = function() { _bfv.ret = null; return oOpen.apply(this, arguments); };
-  /* other links that leave a household (agent, agency, jump to a filtered list) keep the way back too */
-  ['bfOpenAgent', 'bfOpenAgency', 'bfJump'].forEach(function(n) {
+  function label(s) {
+    if (s.rec && BF.byId[s.rec.id]) return bfName(BF.byId[s.rec.id]);
+    if (s.agentDetail && bfAgent(s.agentDetail).name) return bfAgent(s.agentDetail).name;
+    if (s.agencyDetail && bfAgency(s.agencyDetail).name) return bfAgency(s.agencyDetail).name;
+    var n = (BF_NAV[s.tier] || []).filter(function(x){ return x[0] === s.page; })[0];
+    return n ? n[1] : 'previous screen';
+  }
+  function snap() {
+    var f = {}; try { f = JSON.parse(JSON.stringify(_bfv.f || {})); } catch (e) {}
+    return { tier: _bfv.tier, agent: _bfv.agent, agency: _bfv.agency, page: _bfv.page, f: f, agentDetail: _bfv.agentDetail || null, agencyDetail: _bfv.agencyDetail || null, rec: _bfv.rec && _bfv.rec.id && BF.byId[_bfv.rec.id] ? { id: _bfv.rec.id, tab: _bfv.rec.tab } : null };
+  }
+  function mark(target) {
+    var s = snap();
+    if (target && target === s.page && !s.rec && !s.agentDetail && !s.agencyDetail) return;
+    var top = _bfv.trail[_bfv.trail.length - 1];
+    if (top && JSON.stringify(top) === JSON.stringify(s)) return;
+    _bfv.trail.push(s); if (_bfv.trail.length > 8) _bfv.trail.shift();
+  }
+  bfGo = function(page) { mark(page); return oGo.apply(this, arguments); };
+  /* other links that jump between screens keep the way back too */
+  ['bfOpenAgent', 'bfOpenAgency', 'bfJump', 'bfDrill'].forEach(function(n) {
     var o = window[n]; if (typeof o !== 'function') return;
-    window[n] = function() {
-      if (_bfv.rec && _bfv.rec.id && BF.byId[_bfv.rec.id]) _bfv.ret = { page: _bfv.page, tier: _bfv.tier, rec: { id: _bfv.rec.id, tab: _bfv.rec.tab } };
-      return o.apply(this, arguments);
-    };
+    window[n] = function() { mark(); return o.apply(this, arguments); };
+  });
+  /* switching person or level starts fresh */
+  ['bfSetTier', 'bfSetWho'].forEach(function(n) {
+    var o = window[n]; if (typeof o !== 'function') return;
+    window[n] = function() { _bfv.trail = []; return o.apply(this, arguments); };
   });
   bfRender = function() {
     var r = oRender.apply(this, arguments);
     try {
-      var root = bfEl('bf-root'), t = _bfv.ret;
-      if (root && t && t.tier === _bfv.tier && !(_bfv.rec && _bfv.rec.id) && BF.byId[t.rec.id]) {
-        root.innerHTML = '<div class="bf-ret"><button type="button" class="bf-ret-b" onclick="bfReturn()">&lsaquo; Back to ' + bfEsc(bfName(BF.byId[t.rec.id])) + '</button></div>' + root.innerHTML;
+      var root = bfEl('bf-root'), t = _bfv.trail[_bfv.trail.length - 1];
+      if (root && t && t.tier === _bfv.tier && !(_bfv.rec && _bfv.rec.id)) {
+        root.innerHTML = '<div class="bf-ret"><button type="button" class="bf-ret-b" onclick="bfReturn()">&lsaquo; Back to ' + bfEsc(label(t)) + '</button></div>' + root.innerHTML;
       }
     } catch (e) {}
     return r;
   };
-  window.bfNavGo = function(page) { _bfv.ret = null; bfGo(page); };
+  window.bfNavGo = function(page) { _bfv.trail = []; oGo(page); };
   window.bfReturn = function() {
-    var t = _bfv.ret; if (!t) return;
-    _bfv.ret = null;
+    var t = _bfv.trail.pop(); if (!t) return;
     oGo(t.page);
-    bfOpenClient(t.rec.id, t.rec.tab);
+    _bfv.agentDetail = t.agentDetail; _bfv.agencyDetail = t.agencyDetail;
+    Object.keys(t.f || {}).forEach(function(k) { _bfv.f[k] = t.f[k]; });
+    if (typeof bfRenderNav === 'function') bfRenderNav();
+    bfRender();
+    if (t.rec && BF.byId[t.rec.id]) oOpen(t.rec.id, t.rec.tab);
   };
   var st = document.createElement('style');
-  st.textContent = '.bf-ret{margin:0 0 10px}.bf-ret-b{background:none;border:0;padding:4px 0;font:inherit;font-size:13px;font-weight:600;color:var(--green,#1f6f4a);cursor:pointer}.bf-ret-b:hover{text-decoration:underline}';
+  st.textContent = '.bf-ret{margin:0 0 10px}.bf-ret-b{background:none;border:0;padding:4px 0;font:inherit;font-size:13px;font-weight:600;color:var(--teal);cursor:pointer}.bf-ret-b:hover{color:var(--teal2);text-decoration:underline}';
   document.head.appendChild(st);
 })();
 
