@@ -36094,6 +36094,21 @@ function bfSdIn(path, val, type, ph, w) {
   var id = 'sd-' + path.replace(/\./g, '-');
   return '<input id="' + id + '" type="' + (type || 'text') + '" value="' + bfEsc(val == null ? '' : val) + '" placeholder="' + bfEsc(ph || '') + '" onchange="bfSdSet(\'' + path + '\',this.value,\'' + (type === 'number' ? 'n' : 's') + '\')"' + bfSdDis() + ' style="width:' + (w || '100%') + ';border:1px solid var(--g200);border-radius:9px;padding:9px 11px;font-size:13px;font-family:var(--font);background:#fff;color:var(--dark);box-sizing:border-box">';
 }
+function bfSdTa(path, val, rows, ph) {
+  var id = 'sd-' + path.replace(/\./g, '-');
+  return '<textarea id="' + id + '" rows="' + (rows || 3) + '" placeholder="' + bfEsc(ph || '') + '" onchange="bfSdSet(\'' + path + '\',this.value,\'s\')"' + bfSdDis() + ' style="width:100%;border:1px solid var(--g200);border-radius:9px;padding:9px 11px;font-size:13px;line-height:1.5;font-family:var(--font);background:#fff;color:var(--dark);box-sizing:border-box;resize:vertical">' + bfEsc(val || '') + '</textarea>';
+}
+function bfSdWhyText(cs, p) {
+  var c = BF.byId[cs.client], n = cs.n, o = bfSdOpt(p, cs.i.opt || p.opts[0].t), prem = cs.i.premium || n.amount, pct = c.investable ? Math.round(prem / c.investable * 100) : 0, first = bfMembers(c)[0].first;
+  var oth = (cs.q.picks || []).filter(function(id){ return id !== p.id; }).map(function(id){ var x = bfSdProd(id); return x ? x.name : ''; }).filter(Boolean);
+  var feat = p.type === 'SPIA' ? 'guaranteed monthly income that cannot run out' : (p.type === 'FIA' ? 'growth linked to an index, with a ' + bfSdPct(o.cap) + ' cap and no loss from market declines' : 'a guaranteed ' + bfSdPct(o.rate) + ' for ' + o.t + ' years');
+  var tail = p.type === 'SPIA' ? 'There is no surrender period, and the client understands the payments cannot be reversed.' : 'The surrender period ends at age ' + (c.age + (o.t || 0)) + ', and the client was told about surrender charges and the ' + p.fw + '% a year free withdrawal.';
+  return first + ' is ' + c.age + ', wants ' + String(n.objective).toLowerCase() + ' and has a ' + String(n.risk).toLowerCase() + ' risk tolerance. ' + p.name + ' (' + p.car + ') provides ' + feat + '. ' + (oth.length ? 'It was compared with ' + oth.join(' and ') + ' and chosen for its ' + (p.type === 'FIA' ? 'upside with principal protection' : (p.type === 'SPIA' ? 'income guarantee' : 'rate and guarantee')) + '. ' : '') + 'The premium is ' + pct + '% of investable assets and ' + n.liquid + '% may be needed within 5 years. ' + tail;
+}
+function bfSdComm(cs) { var p = bfSdProd(cs.q.sel); return p ? Math.round((cs.i.premium || cs.n.amount) * p.comm / 100) : 0; }
+function bfSdCommStat(cs) { return cs.dl && cs.dl.receipt ? 'Earned' : (cs.submitted ? 'Pending' : 'Expected'); }
+function bfSdWhyRegen() { var cs = bfSdCur(), p = cs && bfSdProd(cs.q.sel); if (!cs || !p || bfSdLocked()) return; cs.q.why = bfSdWhyText(cs, p); bfSdRedraw(true); }
+function bfSdToEarn() { _bfv.f.eTab = 'comm'; bfGo('earn'); }
 function bfSdSel(path, opts, cur) {
   var id = 'sd-' + path.replace(/\./g, '-');
   return '<select id="' + id + '" onchange="bfSdSet(\'' + path + '\',this.value,\'s\')"' + bfSdDis() + ' style="width:100%;border:1px solid var(--g200);border-radius:9px;padding:9px 11px;font-size:13px;font-family:var(--font);background:#fff;color:var(--dark);box-sizing:border-box">' + opts.map(function(o){ var v = Array.isArray(o) ? o[0] : o, l = Array.isArray(o) ? o[1] : o; return '<option value="' + bfEsc(v) + '"' + (String(cur) === String(v) ? ' selected' : '') + '>' + bfEsc(l) + '</option>'; }).join('') + '</select>';
@@ -36176,6 +36191,7 @@ function bfSdPick(id) {
   if (bfSdElig(p, c, cs.n).length) { bfSdMsg('This client cannot buy that product'); return; }
   cs.q.sel = id; cs.i.opt = p.opts[Math.floor(p.opts.length / 2)].t; cs.i.premium = cs.n.amount; cs.i.ack = false;
   if (cs.q.picks.indexOf(id) < 0 && cs.q.picks.length < 3) cs.q.picks.push(id);
+  cs.q.why = bfSdWhyText(cs, p);
   bfSdLog(cs, 'Selected ' + p.name + ' (' + p.car + ').'); bfSdRedraw(true);
 }
 function bfSdCompare() {
@@ -36248,7 +36264,7 @@ function bfSdStep0(cs, c) {
   var auth = '<div class="bfx-card"><h3>Disclosures and pre-sale authorization</h3>' +
     bfSdChk('n.disc1', n.disc1, 'The client received the annuity disclosure and buyer\'s guide.') + bfSdChk('n.disc2', n.disc2, 'The client understands surrender charges and limits on early withdrawals.') + bfSdChk('n.disc3', n.disc3, 'The client agreed to receive documents electronically.') +
     '<div style="margin-top:10px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">' + (n.auth ? '<span class="sd-ok">Signed ' + bfSdStamp(n.auth) + '</span>' : (bfSdEdit() ? '<button class="bfx-btn pri" onclick="bfSdSign(\'n.auth\',\'Pre-sale authorization\')">Capture client e-signature</button>' : '<span class="bfx-mask">Not signed yet</span>')) + '<span class="sd-sub">Built-in e-signature. No separate tool.</span></div></div>';
-  return '<div class="sd-two"><div>' + left + '</div><div>' + form + score + auth + '</div></div>';
+  return '<div class="sd-two"><div>' + left + score + '</div><div>' + form + auth + '</div></div>';
 }
 function bfSdSign(path, label) {
   var cs = bfSdCur(); if (!cs || !bfSdEdit()) return;
@@ -36261,7 +36277,8 @@ function bfSdStep1(cs, c) {
   var top = '<div class="bfx-card" style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between"><div><h3 style="margin:0">Choose a product for ' + bfMoney(cs.n.amount) + '</h3><div class="sd-sub" style="margin-top:4px">' + bfEsc(cs.n.state) + ' &middot; age ' + c.age + ' &middot; ' + bfEsc(cs.n.objective) + '. Products the client cannot buy are shown in gray with the reason.</div></div>' +
     '<div style="display:flex;gap:8px;flex-wrap:wrap">' + (picks.length > 1 ? '<button class="bfx-btn" onclick="bfSdCompare()">Compare ' + picks.length + ' side by side</button>' : '') + (bfSdEdit() ? '<button class="bfx-btn" onclick="bfSdShare()">Email quote to client</button>' : '') + '</div></div>';
   var chosen = sel ? '<div class="sd-picked">Selected: <b>' + bfEsc(sel.name) + '</b> (' + bfEsc(sel.car) + ')</div>' : '';
-  return top + '<div class="bfx-card">' + chosen + bfSdShelfHtml(cs, c) + '</div>';
+  var why = sel ? '<div class="bfx-card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><h3 style="margin:0">Why this product</h3>' + (bfSdEdit() ? '<button class="bfx-btn" onclick="bfSdWhyRegen()">Rewrite from the quote</button>' : '') + '</div><div class="sd-sub" style="margin:4px 0 8px">Your recommendation record. Regulators expect advisors to document why a product is in the client\'s best interest. Edit it so it sounds like you.</div>' + bfSdTa('q.why', cs.q.why, 4) + '</div>' : '';
+  return top + why + '<div class="bfx-card">' + chosen + bfSdShelfHtml(cs, c) + '</div>';
 }
 
 /* ── step 2: Illustrate ── */
@@ -36310,14 +36327,20 @@ function bfSdNew(c) {
     a: { ben: ben, fund: { inst: inst, acct: (c.accounts && c.accounts[0]) ? c.accounts[0].type : '' }, repl: '', replCo: '', suit: { income: '', worth: '' }, rider: false, wd: 'None', cl: null, clSent: null, ag: null, apptReq: false },
     rv: { status: 'none', flags: [], by: '', at: null, note: '' }, dl: {}, log: [] };
 }
-function bfSdStart(cid) {
+function bfSdStart(cid, mode) {
   var c = BF.byId[cid]; if (!c || _bfv.tier !== 'agent') return;
   var ex = BF_SD.cases.filter(function(x){ return x.client === cid && !x.dl.receipt; })[0];
-  if (ex) { bfSdOpen(ex.id); return; }
+  if (ex && mode === 'continue') { bfModalClose(); bfSdOpen(ex.id); return; }
+  if (ex && mode !== 'new') {
+    var pr = bfSdProd(ex.q.sel);
+    bfModal('This Household Has an Open Case', '<div style="font-size:13px;line-height:1.6"><b>' + bfEsc(c.name) + '</b> already has case <b>' + ex.id + '</b>' + (pr ? ' (' + bfEsc(pr.name) + ')' : '') + ' at <b>' + BF_SD_STEPS[ex.max] + '</b>. Continue it, or start a separate quote?</div><div style="margin-top:14px"><button class="bfx-btn pri" onclick="bfSdStart(\'' + cid + '\',\'continue\')">Continue ' + ex.id + '</button></div>', 'Start a New Case', "bfSdStart('" + cid + "','new')");
+    return;
+  }
+  bfModalClose();
   var cs = bfSdNew(c); bfSdLog(cs, 'Case started from the household record.'); BF_SD.cases.unshift(cs);
   bfAudit('Stage', cid, 'Sales Desk case ' + cs.id + ' started.'); bfSdOpen(cs.id);
 }
-function bfSdOpen(id) { _bfv.f.sdCase = id; _bfv.f.sdView = 'case'; bfGo('desk'); }
+function bfSdOpen(id) { var oc = bfSdCase(id); if (oc) oc.step = oc.rv.status === 'returned' ? Math.min(3, oc.max) : oc.max; _bfv.f.sdCase = id; _bfv.f.sdView = 'case'; bfGo('desk'); }
 function bfSdList() { _bfv.f.sdCase = null; _bfv.f.sdView = 'cases'; bfRender(); }
 function bfSdPickAsk() {
   if (!bfSdEdit()) return;
@@ -36336,7 +36359,7 @@ function bfSdGate(cs) {
     if (!(n.disc1 && n.disc2 && n.disc3)) g.push('Confirm all three disclosures');
     if (!n.auth) g.push('Capture the pre-sale authorization signature');
   }
-  if (cs.step === 1 && !p) g.push('Select a product');
+  if (cs.step === 1) { if (!p) g.push('Select a product'); else if (String(cs.q.why || '').trim().length < 30) g.push('Add your reason for recommending this product'); }
   if (cs.step === 2) { if (p && cs.i.premium < p.min) g.push('Premium is below the ' + bfMoney(p.min) + ' minimum'); if (!cs.i.ack) g.push('Confirm the client reviewed the illustration'); }
   if (cs.step === 3) g = bfSdNigo(cs);
   if (cs.step === 4 && cs.rv.status !== 'approved') g.push(cs.rv.status === 'pending' ? 'Waiting for principal approval' : 'Case needs to be submitted first');
@@ -36408,15 +36431,18 @@ function bfSdStep3(cs, c) {
   var suit = '<div class="bfx-card"><h3>Suitability</h3><div class="sd-grid">' + bfField('Household income', bfSdSel('a.suit.income', [['', 'Select one'], 'Under $50,000', '$50,000 to $100,000', '$100,000 to $250,000', 'Over $250,000'], a.suit.income)) + bfField('Net worth (excluding home)', bfSdSel('a.suit.worth', [['', 'Select one'], 'Under $250,000', '$250,000 to $500,000', '$500,000 to $1,000,000', 'Over $1,000,000'], a.suit.worth)) + bfField('Objective ' + pf, '<div class="sd-ro">' + bfEsc(cs.n.objective) + '</div>') + bfField('Risk tolerance ' + pf, '<div class="sd-ro">' + bfEsc(cs.n.risk) + '</div>') + bfField('Tax bracket ' + pf, '<div class="sd-ro">' + bfEsc(c.tax || 'Not set') + '</div>') + bfField('Withdrawal option', bfSdSel('a.wd', ['None', 'Free withdrawal (up to ' + p.fw + '% a year)', 'Systematic withdrawals'], a.wd)) + '</div>' + (bfSdOpt(p, cs.i.opt).rider ? bfSdChk('a.rider', a.rider, 'Add the income rider (' + bfSdOpt(p, cs.i.opt).rider + '% roll-up)') : '') + '</div>';
   var cs1 = '<div class="bfx-card"><h3>Can-sell check</h3>' + cans.map(function(x){ return '<div class="sd-chk ' + (x.ok ? 'ok' : 'no') + '"><i>' + (x.ok ? '&#10003;' : '!') + '</i><div><b>' + bfEsc(x.l) + '</b><span>' + bfEsc(x.n || '') + '</span></div>' + (x.fix && !bfSdLocked() ? '<button class="bfx-btn" onclick="bfSdAppt()">' + x.fix + '</button>' : '') + '</div>'; }).join('') + '</div>';
   var nigo = '<div class="bfx-card"><h3>Ready to submit? <span class="sd-pill ' + (gaps.length ? 'bad' : 'good') + '">' + (gaps.length ? gaps.length + ' to fix' : 'In good order') + '</span></h3>' + (gaps.length ? '<ul class="sd-flags">' + gaps.map(function(x){ return '<li>' + bfEsc(x) + '</li>'; }).join('') + '</ul>' : '<div class="sd-ok">Everything the carrier needs is here. This should not come back as NIGO.</div>') + '</div>';
+  var rf = bfSdRules(cs).filter(function(r){ return !r.ok; });
+  var note = rf.length ? '<div class="bfx-card"><h3>Note to reviewer</h3><div class="sd-sub" style="margin:2px 0 8px">This case will go to a principal because: ' + rf.map(function(r){ return bfEsc(r.l.toLowerCase()); }).join('; ') + '. A short note speeds up approval.</div>' + bfSdTa('a.note', a.note, 3, 'For example: Client is replacing a low-rate contract and the old surrender charge has expired.') + '</div>' : '';
   var sig = '<div class="bfx-card"><h3>E-signature</h3>' +
     '<div class="sd-sig"><div><b>Client</b><span>' + (a.cl ? 'Signed ' + bfSdStamp(a.cl) : (a.clSent ? 'Link sent ' + bfSdStamp(a.clSent) : 'Not signed')) + '</span></div>' + (a.cl || bfSdLocked() ? '' : '<div class="sd-btns"><button class="bfx-btn" onclick="bfSdSignA(\'cl\')">Sign in person</button><button class="bfx-btn" onclick="bfSdSendSign()">Email link</button>' + (a.clSent ? '<button class="bfx-btn" onclick="bfSdClientOpens()">Demo: client signs</button>' : '') + '</div>') + '</div>' +
     '<div class="sd-sig"><div><b>Agent</b><span>' + (a.ag ? 'Signed ' + bfSdStamp(a.ag) : 'Not signed') + '</span></div>' + (a.ag || bfSdLocked() ? '' : '<div class="sd-btns"><button class="bfx-btn" onclick="bfSdSignA(\'ag\')">Sign as agent</button></div>') + '</div></div>';
-  return ret + '<div class="sd-two rev"><div>' + owner + ben + fund + suit + '</div><div>' + cs1 + nigo + sig + '</div></div>';
+  return ret + '<div class="sd-two rev"><div>' + owner + ben + fund + suit + '</div><div>' + cs1 + nigo + note + sig + '</div></div>';
 }
 function bfSdSubmit() {
   var cs = bfSdCur(); if (!cs || !bfSdEdit()) return;
   var g = bfSdNigo(cs); if (g.length) { bfSdMsg('Fix first: ' + g[0]); return; }
   var c = BF.byId[cs.client], prod = bfSdProd(cs.q.sel), I = bfSdIllus(cs), o = I.o, p, k;
+  if (BF_RATE_PROD[prod.name] == null) BF_RATE_PROD[prod.name] = prod.comm / 100;
   if (!cs.csId) {
     p = { id: bfSdUid(BF.policies, 'p'), client: c.id, agent: c.agent, agency: c.agency, lob: 'Annuity', carrier: prod.car, product: prod.name, status: 'Pending', effective: BF_T, renewal: bfAt(365 * (o.t || 1)), number: 'PL-' + (950000 + BF.policies.length), premium: Math.round(I.prem), value: Math.round(I.prem), surrenderEnds: bfAt(365 * (o.t || 1)), case: null, issuedViaOpp: false, rate: o.rate || o.cap || 0, qualified: cs.n.fund.indexOf('Qualified') === 0, x1035: cs.n.fund.indexOf('1035') === 0, riders: cs.a.rider ? ['Income rider'] : [], benef: true };
     k = { id: bfSdUid(BF.cases, 'cs'), policy: p.id, client: c.id, agent: c.agent, agency: c.agency, stage: 'Application', opened: BF_T, daysInStage: 0, req: null };
@@ -36470,8 +36496,10 @@ function bfSdStep4(cs, c) {
   var banner = rv.status === 'approved' ? '<div class="sd-okbox"><b>Approved</b> by ' + bfEsc(rv.by) + (rv.at ? ' on ' + bfSdStamp(rv.at) : '') + '. ' + bfEsc(rv.note) + '</div>' : (rv.status === 'pending' ? '<div class="sd-warn"><b>Waiting for principal review.</b> ' + rv.flags.length + ' rule' + (rv.flags.length === 1 ? '' : 's') + ' flagged. Simple cases approve automatically.</div>' : (rv.status === 'returned' ? '<div class="sd-warn"><b>Returned:</b> ' + bfEsc(rv.note) + '</div>' : '<div class="bfx-note">Submit the application to start review.</div>'));
   var acts = can ? '<div style="display:flex;gap:8px;margin-top:12px"><button class="bfx-btn pri" onclick="bfSdApprove()">Approve</button><button class="bfx-btn" onclick="bfSdReturnAsk()">Return to agent</button></div>' : (rv.status === 'pending' && _bfv.tier === 'agent' ? '<div style="margin-top:12px"><button class="bfx-btn" onclick="bfSdAsAgency()">Open in Agency view to approve (demo)</button></div>' : '');
   var tbl = '<table class="bfx-tbl sd-tbl"><thead><tr><th>Rule</th><th>Result</th><th>Detail</th></tr></thead><tbody>' + rules.map(function(r){ return '<tr><td class="sd-w">' + bfEsc(r.l) + '</td><td>' + (r.ok ? '<span class="sd-pill good">Passed</span>' : '<span class="sd-pill bad">Flagged</span>') + '</td><td class="sd-sub sd-w" style="font-size:12px">' + bfEsc(r.n) + '</td></tr>'; }).join('') + '</tbody></table>';
+  var agentEdit = _bfv.tier === 'agent' && rv.status === 'pending';
+  var rec = '<div class="bfx-card"><h3>Recommendation record</h3><div style="font-size:12.5px;line-height:1.6">' + (cs.q.why ? bfEsc(cs.q.why) : '<span class="bfx-mask">Not recorded</span>') + '</div>' + (agentEdit ? '<h3 style="margin-top:14px">Your note to the reviewer</h3>' + bfSdTa('a.note', cs.a.note, 3, 'Add context for the reviewer') : (cs.a.note ? '<h3 style="margin-top:14px">Agent note to the reviewer</h3><div style="font-size:12.5px;line-height:1.6">' + bfEsc(cs.a.note) + '</div>' : '')) + '</div>';
   var tl = '<div class="bfx-card"><h3>Case timeline</h3>' + cs.log.slice(-8).reverse().map(function(l){ return '<div class="sd-kv"><span>' + bfEsc(l.text) + '</span><b>' + bfSdStamp(l.at) + '</b></div>'; }).join('') + '</div>';
-  return banner + '<div class="sd-two rev"><div class="bfx-card"><h3>Review rules</h3>' + tbl + acts + '<div class="sd-foot">Rules and thresholds are set by the home office under Sales Desk, Admin.</div></div><div>' + tl + '</div></div>';
+  return banner + '<div class="sd-two rev"><div class="bfx-card"><h3>Review rules</h3>' + tbl + acts + '<div class="sd-foot">Rules and thresholds are set by the home office under Sales Desk, Admin.</div></div><div>' + rec + tl + '</div></div>';
 }
 
 /* ── step 5: Contract Delivery ── */
@@ -36483,6 +36511,8 @@ function bfSdDeliv(what) {
   if (what === 'sign') {
     if (!dl.opened) return; dl.receipt = now; bfSdLog(cs, 'Client signed the delivery receipt. Free look period started.');
     if (p) { p.status = 'Active'; p.effective = BF_T; } if (k) { k.stage = 'Issued'; k.daysInStage = 0; k.req = null; }
+    dl.fu = [[7, 'Call to confirm the contract arrived and answer questions'], [25, 'Free look ends in 5 days. Confirm the client is happy with the contract'], [365, 'Annual review of the annuity']].map(function(x){ return { when: bfAt(x[0]), text: x[1] }; });
+    dl.fu.forEach(function(f){ bfLog(c.id, 'Task', f.text + ' (' + cs.id + ')', false, f.when); });
     bfAudit('Stage', cs.client, 'Contract ' + dl.num + ' delivered and receipt signed (case ' + cs.id + ').'); bfLog(c.id, 'Note', 'Contract ' + dl.num + ' delivered. Policy is now active.');
   }
   if (what === 'resend') { bfSdLog(cs, 'Delivery email resent.'); bfSdMsg('Resent'); }
@@ -36498,7 +36528,10 @@ function bfSdStep5(cs, c) {
   var days = dl.receipt ? Math.max(0, 30 - Math.floor((bfSdNow() - dl.receipt) / 864e5)) : null;
   var mins = dl.receipt && dl.sent ? Math.max(1, Math.round((dl.receipt - dl.sent) / 60000)) : null;
   var side = '<div class="bfx-card"><h3>Delivery</h3><div class="sd-kv"><span>Contract number</span><b>' + (dl.num || 'Not issued') + '</b></div><div class="sd-kv"><span>Carrier</span><b>' + bfEsc(bfSdProd(cs.q.sel).car) + '</b></div><div class="sd-kv"><span>Method</span><b>E-delivery with e-signature</b></div>' + (days != null ? '<div class="sd-kv"><span>Free look remaining</span><b>' + days + ' days</b></div>' : '') + (mins != null ? '<div class="sd-kv"><span>Sent to signed receipt</span><b>' + (mins < 120 ? mins + ' minutes' : Math.round(mins / 60) + ' hours') + '</b></div>' : '') + (dl.sent && !dl.receipt && edit ? '<button class="bfx-btn" style="margin-top:10px" onclick="bfSdDeliv(\'resend\')">Resend</button>' : '') + '<div class="sd-foot">Paper delivery by mail can take two weeks. E-delivery is tracked end to end.</div></div>';
-  return '<div class="bfx-card"><h3>Contract delivery</h3>' + tl + '<div style="margin-top:14px">' + act + (dl.receipt ? '<span class="sd-okbox" style="display:inline-block;margin:0">Delivered. The policy is active.</span>' : '') + '</div></div>' + side;
+  var cm = bfSdProd(cs.q.sel), earned = !!dl.receipt;
+  var comm = '<div class="bfx-card"><h3>Your commission</h3><div class="sd-kv"><span>Rate</span><b>' + cm.comm + '% of premium</b></div><div class="sd-kv"><span>Amount</span><b>' + bfMoney(bfSdComm(cs)) + '</b></div><div class="sd-kv"><span>Status</span><b>' + (earned ? 'Earned' : 'Pending until the receipt is signed') + '</b></div>' + (earned ? '<div class="sd-sub" style="margin-top:8px">It now shows in Earnings under Commissions.</div>' : '') + (_bfv.tier === 'bws' ? '' : '<button class="bfx-btn" style="margin-top:10px" onclick="bfSdToEarn()">View in Earnings</button>') + '</div>';
+  var fu = dl.fu && dl.fu.length ? '<div class="bfx-card"><h3>Follow-ups added to your Actions</h3>' + dl.fu.map(function(f){ return '<div class="sd-kv"><span>' + bfEsc(f.text) + '</span><b>' + bfFmtDay(f.when) + '</b></div>'; }).join('') + (_bfv.tier === 'agent' ? '<button class="bfx-btn" style="margin-top:10px" onclick="bfGo(\'acts\')">View in Activities</button>' : '') + '</div>' : '';
+  return '<div class="bfx-card"><h3>Contract delivery</h3>' + tl + '<div style="margin-top:14px">' + act + (dl.receipt ? '<span class="sd-okbox" style="display:inline-block;margin:0">Delivered. The policy is active.</span>' : '') + '</div></div><div class="sd-two"><div>' + side + '</div><div>' + comm + fu + '</div></div>';
 }
 
 /* ── step 6 and the Servicing tab: in-force requests ── */
@@ -36544,7 +36577,8 @@ function bfSdCaseHtml(cs) {
   var label = ['Continue to quote', 'Continue to illustration', 'Continue to application', 'Submit application', 'Continue to delivery', 'Continue to servicing', 'Finish'][cs.step];
   var foot = '<div class="sd-ft"><button class="bfx-btn"' + (cs.step === 0 ? ' disabled' : '') + ' onclick="bfSdBack()">Back</button><div class="sd-ftm">' + (edit && g.length && cs.step !== 3 ? 'To continue: ' + bfEsc(g[0]) + (g.length > 1 ? ' (+' + (g.length - 1) + ' more)' : '') : '') + '</div>' +
     (edit ? '<button class="bfx-btn pri"' + (g.length && cs.step !== 6 ? ' style="opacity:.55"' : '') + ' onclick="bfSdNext()">' + label + '</button>' : (cs.step < cs.max ? '<button class="bfx-btn" onclick="bfSdNext()">Next step</button>' : '')) + '</div>';
-  return head + steps + '<div class="sd-body">' + body + '</div>' + foot;
+  var st = bfSdStatus(cs), sum = '<div class="sd-sum"><div><span>Premium</span><b>' + bfMoney(cs.i.premium || cs.n.amount) + '</b></div><div><span>Product</span><b>' + (p ? bfEsc(p.name) : 'Not chosen yet') + '</b></div><div><span>Carrier</span><b>' + (p ? bfEsc(p.car) : '&mdash;') + '</b></div><div><span>Funding</span><b>' + bfEsc(cs.n.fund) + '</b></div><div><span>Commission</span><b>' + (p ? bfMoney(bfSdComm(cs)) + ' <span class="sd-sub">' + bfSdCommStat(cs) + '</span>' : '&mdash;') + '</b></div><div><span>Status</span><b><span class="sd-pill ' + (st === 'Delivered' ? 'good' : (st === 'Returned' ? 'bad' : '')) + '">' + st + '</span></b></div></div>';
+  return head + steps + sum + '<div class="sd-body">' + body + '</div>' + foot;
 }
 /* ── Sales Desk pages: Cases, Review Queue, Product Shelf, Servicing, Metrics, Admin ── */
 function bfSdStatus(cs) {
@@ -36581,9 +36615,9 @@ function bfSdCasesView() {
 }
 function bfSdReviewView() {
   var list = bfSdScopeCases().filter(function(x){ return x.rv.status === 'pending'; }).sort(function(a, b){ return a.submitted - b.submitted; });
-  var tbl = list.length ? '<div style="overflow-x:auto"><table class="bfx-tbl sd-tbl"><thead><tr><th>Case</th><th>Household</th><th>Agent</th><th>Product</th><th>Premium</th><th>Why it needs review</th><th>Waiting</th><th></th></tr></thead><tbody>' + list.map(function(cs){
+  var tbl = list.length ? '<div style="overflow-x:auto"><table class="bfx-tbl sd-tbl"><thead><tr><th>Case</th><th>Household</th><th>Agent</th><th>Product</th><th>Premium</th><th>Why it needs review</th><th>Note from agent</th><th>Waiting</th><th></th></tr></thead><tbody>' + list.map(function(cs){
     var c = BF.byId[cs.client], p = bfSdProd(cs.q.sel);
-    return '<tr><td><b>' + cs.id + '</b></td><td class="sd-w">' + bfName(c) + '</td><td class="sd-w">' + bfEsc(bfAgent(cs.agent).name) + '</td><td class="sd-w">' + (p ? bfEsc(p.name) : '') + '</td><td>' + bfMoney(cs.i.premium || cs.n.amount) + '</td><td class="sd-w" style="font-size:12px">' + cs.rv.flags.map(bfEsc).join('<br>') + '</td><td>' + Math.max(0, Math.round((bfSdNow() - cs.submitted) / 864e5)) + ' days</td><td style="white-space:nowrap"><button class="bfx-btn pri" onclick="bfSdApprove(\'' + cs.id + '\')">Approve</button> <button class="bfx-btn" onclick="bfSdReturnAsk(\'' + cs.id + '\')">Return</button> <button class="bfx-btn" onclick="bfSdOpen(\'' + cs.id + '\')">Open</button></td></tr>';
+    return '<tr><td><b>' + cs.id + '</b></td><td class="sd-w">' + bfName(c) + '</td><td class="sd-w">' + bfEsc(bfAgent(cs.agent).name) + '</td><td class="sd-w">' + (p ? bfEsc(p.name) : '') + '</td><td>' + bfMoney(cs.i.premium || cs.n.amount) + '</td><td class="sd-w" style="font-size:12px">' + cs.rv.flags.map(bfEsc).join('<br>') + '</td><td class="sd-w" style="font-size:12px">' + (cs.a.note ? bfEsc(cs.a.note) : '<span class="bfx-mask">No note</span>') + '</td><td>' + Math.max(0, Math.round((bfSdNow() - cs.submitted) / 864e5)) + ' days</td><td style="white-space:nowrap"><button class="bfx-btn pri" onclick="bfSdApprove(\'' + cs.id + '\')">Approve</button> <button class="bfx-btn" onclick="bfSdReturnAsk(\'' + cs.id + '\')">Return</button> <button class="bfx-btn" onclick="bfSdOpen(\'' + cs.id + '\')">Open</button></td></tr>';
   }).join('') + '</tbody></table></div>' : '<div class="bfx-note">Nothing waiting. Cases that pass every rule approve automatically.</div>';
   return '<div class="bfx-card"><h3>Review queue</h3><div class="sd-sub" style="margin-bottom:10px">Only cases that trip a suitability rule land here. The rest approve on their own.</div>' + tbl + '</div>';
 }
@@ -36654,7 +36688,7 @@ function bfSdProdSave() {
   if (isNaN(m) || m < 0 || isNaN(c) || c < 0 || c > 15) { bfSdMsg('Check the minimum and commission'); return; }
   var old = p.type === 'FIA' ? p.opts[0].cap : (p.type === 'SPIA' ? 0 : p.opts[0].rate);
   if (p.type !== 'SPIA') { var d = r - old; p.opts.forEach(function(o){ if (p.type === 'FIA') o.cap = Math.round((o.cap + d) * 100) / 100; else o.rate = Math.round((o.rate + d) * 100) / 100; }); }
-  p.min = Math.round(m); p.comm = Math.round(c * 100) / 100; BF_SD_HIDDEN[p.id] = hid;
+  p.min = Math.round(m); p.comm = Math.round(c * 100) / 100; BF_SD_HIDDEN[p.id] = hid; if (BF_RATE_PROD[p.name] != null) BF_RATE_PROD[p.name] = p.comm / 100;
   bfAudit('Rule change', null, 'Sales Desk product ' + p.name + ' updated: ' + (p.type === 'SPIA' ? '' : (p.type === 'FIA' ? 'cap ' : 'rate ') + bfSdPct(old) + ' to ' + bfSdPct(r) + ', ') + 'minimum ' + bfMoney(p.min) + ', commission ' + p.comm + '%' + (hid ? ', hidden from the shelf' : '') + '.');
   bfModalClose(); bfSdMsg('Product updated'); bfRender();
 }
@@ -36688,20 +36722,20 @@ function bfSdMake(c, target, r, k) {
   var elig = BF_SD_PRODUCTS.filter(function(p){ return !bfSdElig(p, c, n).length; }); if (!elig.length) elig = BF_SD_PRODUCTS.filter(function(p){ return p.type === 'Fixed'; });
   var sel = elig[Math.floor(r() * elig.length)], other = elig[(elig.indexOf(sel) + 1) % elig.length];
   if (target >= 1) cs.q.picks = sel === other ? [sel.id] : [sel.id, other.id];
-  if (target >= 2) { cs.q.sel = sel.id; cs.i.opt = sel.opts[Math.floor(r() * sel.opts.length)].t; cs.i.premium = n.amount; cs.i.scen = 'mid'; lg(created + 7200000, 'Selected ' + sel.name + ' (' + sel.car + ').'); cs.updated = created + 7200000; }
+  if (target >= 2) { cs.q.sel = sel.id; cs.i.opt = sel.opts[Math.floor(r() * sel.opts.length)].t; cs.i.premium = n.amount; cs.i.scen = 'mid'; lg(created + 7200000, 'Selected ' + sel.name + ' (' + sel.car + ').'); cs.updated = created + 7200000; cs.q.why = bfSdWhyText(cs, sel); }
   if (target >= 3) { cs.i.ack = true; cs.a.fund.inst = cs.a.fund.inst || 'Local credit union'; if (!cs.a.ben.length) cs.a.ben = [{ name: mem[0].first + ' Jr.', rel: 'Child', pct: 100 }]; cs.a.repl = 'No'; cs.a.suit.income = '$100,000 to $250,000'; if (target > 3) cs.a.suit.worth = '$500,000 to $1,000,000'; cs.updated = created + 86400000; }
   if (target >= 4) {
     cs.a.cl = created + 2 * DAY; cs.a.ag = created + 2 * DAY + 600000; cs.submitted = created + 2 * DAY + 1800000; cs.updated = cs.submitted;
     if (target === 4 && k % 2 === 0) { cs.a.repl = 'Yes'; cs.a.replCo = 'Legacy Life'; }
     cs.step = target; cs.max = target; cs.csId = null; cs.rv = { status: 'none', flags: [], by: '', at: null, note: '' };
     var fl = bfSdRules(cs).filter(function(x){ return !x.ok; }); cs.rv.flags = fl.map(function(x){ return x.l; });
-    if (fl.length && target === 4) { cs.rv.status = 'pending'; lg(cs.submitted, 'Sent to principal review: ' + fl.length + ' rule' + (fl.length === 1 ? '' : 's') + ' flagged.'); }
+    if (fl.length && target === 4) { cs.a.note = cs.a.repl === 'Yes' ? 'Client is replacing a lower-rate contract. The surrender charge on the old contract has expired.' : 'Client understands the surrender period and wants the guaranteed income. Source of funds is documented.'; cs.rv.status = 'pending'; lg(cs.submitted, 'Sent to principal review: ' + fl.length + ' rule' + (fl.length === 1 ? '' : 's') + ' flagged.'); }
     else { cs.rv.status = 'approved'; cs.rv.by = fl.length ? bfAgency(c.agency).name + ' principal' : 'Rules engine (auto)'; cs.rv.at = cs.submitted + 3600000; cs.rv.note = fl.length ? 'Approved after review.' : 'All rules passed.'; lg(cs.submitted, 'Annuity application submitted.'); lg(cs.rv.at, fl.length ? 'Approved after principal review.' : 'Auto-approved. All rules passed.'); }
     if (r() < 0.28) { cs.ret = 1; cs.retWhy = [['Missing replacement form', 'Confirm the beneficiaries', 'Suitability needs more detail'][Math.floor(r() * 3)]]; }
   }
   if (target >= 5) {
     cs.dl.issued = cs.submitted + 2 * DAY; cs.dl.num = 'CN-' + (700000 + bfHash(cs.id) % 90000); lg(cs.dl.issued, 'Carrier issued contract ' + cs.dl.num + '.'); cs.dl.sent = cs.dl.issued + 3600000; lg(cs.dl.sent, 'Contract e-delivered to the client.'); cs.updated = cs.dl.sent;
-    if (target >= 6) { cs.dl.opened = cs.dl.sent + 5400000; cs.dl.receipt = cs.dl.sent + 3 * 3600000 + Math.floor(r() * 36) * 3600000; lg(cs.dl.opened, 'Client opened the contract.'); lg(cs.dl.receipt, 'Client signed the delivery receipt. Free look period started.'); cs.updated = cs.dl.receipt; }
+    if (target >= 6) { cs.dl.opened = cs.dl.sent + 5400000; cs.dl.receipt = cs.dl.sent + 3 * 3600000 + Math.floor(r() * 36) * 3600000; lg(cs.dl.opened, 'Client opened the contract.'); lg(cs.dl.receipt, 'Client signed the delivery receipt. Free look period started.'); cs.updated = cs.dl.receipt; cs.dl.fu = [[7, 'Call to confirm the contract arrived and answer questions'], [25, 'Free look ends in 5 days. Confirm the client is happy with the contract'], [365, 'Annual review of the annuity']].map(function(x){ return { when: cs.dl.receipt + x[0] * DAY, text: x[1] }; }); }
   }
   cs.step = target; cs.max = target;
   if (target >= 6 && r() < 0.6) BF_SD.svc.push({ id: 'SV-' + (3000 + BF_SD.svc.length + 1), client: c.id, agent: c.agent, agency: c.agency, caseId: cs.id, policy: cs.dl.num, type: BF_SD_SVC_TYPES[Math.floor(r() * 3)], detail: 'Requested by phone, signed electronically.', status: ['Submitted', 'In review', 'Completed'][Math.floor(r() * 3)], at: cs.dl.receipt + 2 * DAY, by: by });
@@ -36748,7 +36782,7 @@ if (typeof document !== 'undefined' && document.head && document.createElement) 
     '.sd-ft{display:flex;align-items:center;gap:12px;margin-top:16px;padding-top:14px;border-top:1px solid var(--g200)}.sd-ftm{flex:1;font-size:12px;color:#a16207}.sd-body .bfx-card{margin-bottom:16px}.sd-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:12px}.sd-tiles div{background:#faf9f6;border:1px solid var(--g100);border-radius:10px;padding:10px 12px}.sd-tiles span{display:block;font-size:11px;color:var(--g500)}.sd-tiles b{font-size:17px}' +
     '.sd-legend{display:flex;gap:16px;flex-wrap:wrap;font-size:11.5px;color:var(--g500);margin-top:4px}.sd-legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px}.sd-track{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.sd-track div{border:1px solid var(--g200);border-radius:12px;padding:12px;font-size:12.5px}.sd-track div.on{border-color:rgba(29,158,117,.5);background:rgba(29,158,117,.06)}.sd-track i{display:inline-flex;width:24px;height:24px;border-radius:50%;background:var(--g100);align-items:center;justify-content:center;font-style:normal;font-size:12px;margin-bottom:6px}.sd-track .on i{background:#1d9e75;color:#fff}.sd-track b{display:block}.sd-track span{display:block;color:var(--g500);font-size:11.5px}.sd-track em{display:block;font-style:normal;color:var(--g400);font-size:11px}' +
     '.sd-foot{font-size:11.5px;color:var(--g400);line-height:1.5;margin-top:10px}.sd-picked{background:rgba(29,158,117,.08);border-radius:9px;padding:8px 12px;font-size:12.5px;margin-bottom:10px}.sd-bar{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin:8px 0 12px;font-size:11.5px;color:var(--g400)}.sd-bar select{border:1px solid var(--g200);border-radius:8px;padding:6px 8px;font-size:12.5px;background:#fff;margin-left:4px}' +
-    '.sd-tbl tr.sd-dim td{color:var(--g400)}.sd-tbl tr.sd-dim td:last-child{color:#b4452f}.sd-tbl tr.sd-sel td{background:rgba(29,158,117,.07)}.sd-why{font-size:11.5px;line-height:1.4}.sd-pdf{border:1px solid var(--g200);border-radius:10px;padding:18px}@media(max-width:1150px){.sd-two,.sd-two.rev{grid-template-columns:1fr}.sd-track{grid-template-columns:repeat(2,1fr)}.sd-ben{grid-template-columns:1fr 1fr}}.sd-steps{gap:4px}.sd-step{padding:6px 11px 6px 6px;font-size:12px}';
+    '.sd-tbl tr.sd-dim td{color:var(--g400)}.sd-tbl tr.sd-dim td:last-child{color:#b4452f}.sd-tbl tr.sd-sel td{background:rgba(29,158,117,.07)}.sd-why{font-size:11.5px;line-height:1.4}.sd-pdf{border:1px solid var(--g200);border-radius:10px;padding:18px}@media(max-width:1150px){.sd-two,.sd-two.rev{grid-template-columns:1fr}.sd-track{grid-template-columns:repeat(2,1fr)}.sd-ben{grid-template-columns:1fr 1fr}}.sd-sum{display:flex;flex-wrap:wrap;gap:0;background:#fff;border:1px solid var(--g200);border-radius:12px;margin:0 0 16px}.sd-sum div{flex:1;min-width:120px;padding:10px 16px;border-right:1px solid var(--g100)}.sd-sum div:last-child{border-right:none}.sd-sum span{display:block;font-size:11px;color:var(--g500);margin-bottom:2px}.sd-sum b{font-size:13px;font-weight:600}.sd-steps{gap:4px}.sd-step{padding:6px 11px 6px 6px;font-size:12px}';
   document.head.appendChild(_bfSdSt);
 }
 
