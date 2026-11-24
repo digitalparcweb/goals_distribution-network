@@ -1899,8 +1899,8 @@ body.bf-theme:not(.dark-mode) .filter-chip.active:hover{color:#fff}
 #bf-record{background:var(--off)}
 .bfh{min-height:100%;font-family:var(--font);color:var(--dark)}
 .bfh-top{padding:16px 28px 14px;border-bottom:1px solid var(--g200);background:var(--off)}
-.bfh-back{border:none;background:none;color:var(--g500);font-size:13px;font-family:var(--font);cursor:pointer;padding:2px 0}
-.bfh-back:hover{color:var(--dark)}
+.bfh-back{border:none;background:none;color:var(--teal);font-size:13px;font-weight:600;font-family:var(--font);cursor:pointer;padding:4px 0}
+.bfh-back:hover{color:var(--teal2);text-decoration:underline}
 .bfh-title{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin:8px 0 14px}
 .bfh-name{font-family:var(--serif,Georgia,serif);font-size:32px;font-weight:500;letter-spacing:-.5px;line-height:1.1;margin:0}
 .bfh-meta{font-size:12.5px;color:var(--g500);margin-top:6px}
@@ -30031,8 +30031,28 @@ var BF_PRODUCTS = {
   'Life': ['Term Life', 'Whole Life', 'Universal Life'],
   'Annuity': ['Fixed Annuity', 'Fixed Index Annuity', 'Multi-Year Guarantee', 'Income Annuity']
 };
-var BWS_CARRIER = 'BWS (demo products)';
-var BWS_PRODUCTS = ['BWS Multi-Year Guarantee', 'BWS Fixed Index Annuity', 'BWS Income Annuity'];
+/* the annuity shelf: one list of products drives the Sales Desk, the catalog, the rate tables and the seeded policies */
+var BF_SD_PRODUCTS = [
+  { id: 'ae-gs3', car: 'American Equity', name: 'GuaranteeShield 3', type: 'Fixed', opts: [{ t: 3, rate: 4.15 }], min: 20000, s0: 7, fw: 10, maxAge: 85, off: ['NY'], comm: 2.5, feat: 'Fixed rate guaranteed for 3 years' },
+  { id: 'ae-gs5', car: 'American Equity', name: 'GuaranteeShield 5', type: 'Fixed', opts: [{ t: 5, rate: 4.45 }], min: 20000, s0: 8, fw: 10, maxAge: 85, off: ['NY'], comm: 2.75, feat: 'Fixed rate guaranteed for 5 years' },
+  { id: 'ae-as', car: 'American Equity', name: 'AssetShield', type: 'FIA', opts: [{ t: 7, cap: 5.75, part: 100 }, { t: 10, cap: 6.5, part: 100 }], min: 20000, s0: 9, fw: 10, maxAge: 85, off: ['NY'], comm: 5.5, feat: 'Accumulation focus with a floor on losses', idx: 'S&P 500, 1-year point to point' },
+  { id: 'ae-is', car: 'American Equity', name: 'IncomeShield', type: 'FIA', opts: [{ t: 10, cap: 5, part: 100, rider: 6.2 }], min: 25000, s0: 10, fw: 10, maxAge: 80, off: ['NY', 'MA'], comm: 6.5, feat: 'Income rider with a guaranteed roll-up', idx: 'S&P 500, 1-year point to point' },
+  { id: 'ae-es', car: 'American Equity', name: 'EstateShield', type: 'FIA', opts: [{ t: 10, cap: 5.5, part: 100 }], min: 25000, s0: 10, fw: 10, maxAge: 80, off: ['NY', 'FL'], comm: 6, feat: 'Built to pass assets to heirs', idx: 'S&P 500, 1-year point to point' },
+  { id: 'ae-fs', car: 'American Equity', name: 'FlexShield 10', type: 'FIA', opts: [{ t: 10, cap: 6.25, part: 100 }], min: 25000, s0: 10, fw: 10, maxAge: 85, off: ['NY'], comm: 6.25, feat: 'Accumulation with flexible crediting', idx: 'S&P 500, 1-year point to point' },
+  { id: 'an-pm', car: 'American National', name: 'Palladium MYG', type: 'MYGA', opts: [{ t: 3, rate: 4.1 }, { t: 5, rate: 4.55 }, { t: 7, rate: 4.75 }, { t: 10, rate: 4.9 }], min: 5000, s0: 8, fw: 10, maxAge: 90, off: ['NY'], comm: 2, feat: 'Multi-year guarantee, one fixed rate for the whole term' },
+  { id: 'an-pmx', car: 'American National', name: 'Palladium MYG Max', type: 'MYGA', opts: [{ t: 5, rate: 4.7 }, { t: 7, rate: 4.9 }, { t: 10, rate: 5.05 }], min: 50000, s0: 8, fw: 10, maxAge: 90, off: ['NY'], comm: 2.25, feat: 'Higher rates for larger deposits' },
+  { id: 'an-si7', car: 'American National', name: 'Strategy Index 7', type: 'FIA', opts: [{ t: 7, cap: 6, part: 100 }], min: 10000, s0: 9, fw: 10, maxAge: 85, off: ['NY'], comm: 5, feat: 'Index crediting with a 7 year surrender period', idx: 'S&P 500, 1-year point to point' },
+  { id: 'an-si10', car: 'American National', name: 'Strategy Index 10', type: 'FIA', opts: [{ t: 10, cap: 6.75, part: 100 }], min: 10000, s0: 10, fw: 10, maxAge: 85, off: ['NY'], comm: 6, feat: 'Index crediting with a 10 year surrender period', idx: 'S&P 500, 1-year point to point' },
+  { id: 'an-ssa', car: 'American National', name: 'Smart Start Accumulator', type: 'FIA', opts: [{ t: 7, cap: 5.5, part: 100 }], min: 10000, s0: 9, fw: 10, maxAge: 85, off: ['NY', 'CA'], comm: 4.75, feat: 'Single premium accumulator', idx: 'S&P 500, 1-year point to point' },
+  { id: 'an-ssap', car: 'American National', name: 'Smart Start Accumulator Plus', type: 'FIA', opts: [{ t: 7, cap: 6, part: 100, bonus: 3 }], min: 25000, s0: 9, fw: 10, maxAge: 80, off: ['NY', 'CA'], comm: 5.5, feat: 'Accumulator with a first-year premium bonus', idx: 'S&P 500, 1-year point to point' },
+  { id: 'an-wq7', car: 'American National', name: 'WealthQuest 7', type: 'Fixed', opts: [{ t: 3, rate: 3.95 }, { t: 5, rate: 4.25 }, { t: 6, rate: 4.4 }, { t: 7, rate: 4.55 }], min: 10000, s0: 8, fw: 10, maxAge: 85, off: ['NY'], comm: 2.5, feat: 'Fixed deferred with a choice of guarantee period' },
+  { id: 'an-sia', car: 'American National', name: 'Strategy Indexed Annuity', type: 'FIA', opts: [{ t: 10, cap: 6.5, part: 100 }], min: 10000, s0: 10, fw: 10, maxAge: 85, off: ['NY', 'MA'], comm: 6.5, feat: 'Index crediting tied to the S&P 500', idx: 'S&P 500, 1-year point to point' },
+  { id: 'an-spia', car: 'American National', name: 'Single Premium Immediate Annuity', type: 'SPIA', opts: [{ t: 0 }], min: 25000, s0: 0, fw: 0, maxAge: 90, off: ['NY'], comm: 2, feat: 'Guaranteed monthly income that starts right away' }
+];
+var BF_SD_TYPE_NAME = { MYGA: 'Multi-Year Guarantee', Fixed: 'Fixed', FIA: 'Fixed Index', SPIA: 'Income (SPIA)' };
+var BWS_CARRIER = 'Brookfield annuity shelf';
+var BWS_PRODUCTS = BF_SD_PRODUCTS.map(function(p){ return p.name; });
+function bfShelfOf(name) { for (var i = 0; i < BF_SD_PRODUCTS.length; i++) if (BF_SD_PRODUCTS[i].name === name) return BF_SD_PRODUCTS[i]; return null; }
 
 var BF_AGENCIES = [
   { id: 'ag1', name: 'Northgate Financial Group', city: 'Minneapolis, MN', access: true, region: 'Midwest' },
@@ -30099,11 +30119,10 @@ var BF_RULES = { cdDays: 90, cdHot: 30, surMonths: 12, retYears: 5, cashMin: 100
   on: { cd: true, ret: true, sur: true, csh: true, age: true, ren: true },
   reviewAssets: 250000, quietFrom: 21, quietTo: 8, needConsent: true, needSuit: true, minComplete: 60 };
 var BF_STATES = ['CA', 'CO', 'FL', 'IL', 'MA', 'MN', 'NC', 'NY', 'OH', 'TX'];
-var BF_CATALOG = [
-  { name: 'BWS Multi-Year Guarantee', kind: 'Fixed (MYGA)', min: 10000, terms: '3, 5, 7 and 10 years', feature: 'Fixed rate for the whole term', off: ['NY'] },
-  { name: 'BWS Fixed Index Annuity', kind: 'Fixed index', min: 25000, terms: '7 and 10 years', feature: 'Credits linked to an index, with a floor', off: ['NY', 'MA', 'FL'] },
-  { name: 'BWS Income Annuity', kind: 'Income (SPIA)', min: 50000, terms: 'Immediate or deferred', feature: 'Guaranteed lifetime income payments', off: ['NY', 'CO'] }
-];
+var BF_CATALOG = BF_SD_PRODUCTS.map(function(p) {
+  var ts = p.opts.map(function(o){ return o.t; }).filter(function(t){ return t > 0; });
+  return { name: p.name, car: p.car, kind: BF_SD_TYPE_NAME[p.type], min: p.min, terms: ts.length ? ts.join(', ').replace(/, (\d+)$/, ' and $1') + (ts.length === 1 ? ' year' : ' years') : 'Immediate', feature: p.feat, off: p.off };
+});
 var BF_PLANNED = [
   { name: 'Rollover from an employer plan', note: 'Needs a retirement or job-change feed' },
   { name: 'Medicare eligibility turning 65', note: 'Planned for the next phase' },
@@ -32368,12 +32387,12 @@ function bfTrigCount(k) { return BF.clients.filter(function(c){ return c.score.s
 function bfRulesTab(tab) {
   var R = BF_RULES;
   if (tab === 'products') {
-    return '<div class="bfx-card"><h3>Product Catalog</h3><table class="bfx-tbl"><thead><tr><th>Product</th><th>Type</th><th>Minimum</th><th>Terms</th><th>Description</th><th>Available In</th></tr></thead><tbody>' + BF_CATALOG.map(function(p){ return '<tr><td><b>' + bfEsc(p.name) + '</b></td><td>' + p.kind + '</td><td>' + bfMoney(p.min) + '</td><td>' + p.terms + '</td><td style="max-width:240px;font-size:12.5px">' + p.feature + '</td><td>' + (BF_STATES.length - p.off.length) + ' of ' + BF_STATES.length + ' states</td></tr>'; }).join('') + '</tbody></table><div class="bfx-note" style="margin-top:10px">Product details are for reference. This pilot does not match products to households. Agents decide what to discuss after a suitability review.</div></div>';
+    return '<div class="bfx-card"><h3>Product Catalog</h3><table class="bfx-tbl"><thead><tr><th>Product</th><th>Type</th><th>Minimum</th><th>Terms</th><th>Description</th><th>Available In</th></tr></thead><tbody>' + BF_CATALOG.map(function(p){ return '<tr><td>' + (p.car ? bfSdLogo(p.car, true) : '') + '<b>' + bfEsc(p.name) + '</b>' + (p.car ? '<div style="font-size:11.5px;color:var(--g500)">' + bfEsc(p.car) + '</div>' : '') + '</td><td>' + p.kind + '</td><td>' + bfMoney(p.min) + '</td><td>' + p.terms + '</td><td style="max-width:240px;font-size:12.5px">' + p.feature + '</td><td>' + (BF_STATES.length - p.off.length) + ' of ' + BF_STATES.length + ' states</td></tr>'; }).join('') + '</tbody></table><div class="bfx-note" style="margin-top:10px">Product details are for reference. This pilot does not match products to households. Agents decide what to discuss after a suitability review.</div></div>';
   }
   if (tab === 'states') {
     var blocked = BF.clients.filter(function(c){ return !c.score.stateOk; }).length;
     return '<div class="bfx-card"><h3>State Availability</h3><div style="font-size:12.5px;color:var(--g600);margin-bottom:12px">Yes means the product is approved for sale in that state, and No means it is not available there. If no product is approved in a household\'s state, that household cannot move past Contacted and emails are blocked.</div><div style="overflow-x:auto"><table class="bfx-tbl"><thead><tr><th>Product</th>' + BF_STATES.map(function(s){ return '<th style="text-align:center">' + s + '</th>'; }).join('') + '</tr></thead><tbody>' +
-      BF_CATALOG.map(function(p, i){ return '<tr><td><b>' + bfEsc(p.name) + '</b></td>' + BF_STATES.map(function(s){ return '<td style="text-align:center"><button type="button" class="bfx-sp ' + (p.off.indexOf(s) < 0 ? 'on' : 'off') + '" onclick="bfStateToggle(' + i + ',\'' + s + '\')" aria-label="' + bfEsc(p.name) + ' in ' + s + '">' + (p.off.indexOf(s) < 0 ? 'Yes' : 'No') + '</button></td>'; }).join('') + '</tr>'; }).join('') + '</tbody></table></div><div class="bfx-note" style="margin-top:10px">' + blocked + ' household' + (blocked === 1 ? '' : 's') + ' live in a state with no approved product right now.</div></div>';
+      BF_CATALOG.map(function(p, i){ return '<tr><td>' + (p.car ? bfSdLogo(p.car, true) : '') + '<b>' + bfEsc(p.name) + '</b></td>' + BF_STATES.map(function(s){ return '<td style="text-align:center"><button type="button" class="bfx-sp ' + (p.off.indexOf(s) < 0 ? 'on' : 'off') + '" onclick="bfStateToggle(' + i + ',\'' + s + '\')" aria-label="' + bfEsc(p.name) + ' in ' + s + '">' + (p.off.indexOf(s) < 0 ? 'Yes' : 'No') + '</button></td>'; }).join('') + '</tr>'; }).join('') + '</tbody></table></div><div class="bfx-note" style="margin-top:10px">' + blocked + ' household' + (blocked === 1 ? '' : 's') + ' live in a state with no approved product right now.</div></div>';
   }
   if (tab === 'compliance') {
     var hrs = []; for (var h = 0; h < 24; h++) hrs.push([h, bfClock(h)]);
@@ -32897,7 +32916,7 @@ function bfPolDet(p) {
   if (p.lob === 'P&C') { d.cov = /auto/i.test(prod) ? 'Auto' : (/home/i.test(prod) ? 'Home' : (/renter/i.test(prod) ? 'Renters' : (/umbrella/i.test(prod) ? 'Umbrella' : 'Property'))); d.ded = ['$500', '$1,000', '$2,500'][Math.floor(r() * 3)]; d.lim = d.cov === 'Umbrella' ? '$1,000,000' : (d.cov === 'Auto' ? '100/300/100' : '$' + (250 + Math.floor(r() * 400)) + ',000'); }
   if (p.lob === 'Medicare') { d.plan = /advantage/i.test(prod) ? 'Medicare Advantage' : (/supplement|medigap/i.test(prod) ? 'Medicare Supplement' : (/part d|drug/i.test(prod) ? 'Prescription drug plan' : 'Medicare plan')); var y = new Date().getFullYear(), rv = new Date(y, 9, 15).getTime(); d.review = rv < BF_T ? new Date(y + 1, 9, 15).getTime() : rv; }
   if (p.lob === 'Life') { d.type = /term/i.test(prod) ? 'Term' : (/whole/i.test(prod) ? 'Whole life' : (/universal/i.test(prod) ? 'Universal life' : 'Life')); d.face = Math.round((100 + r() * 650) / 25) * 25 * 1000; d.termEnd = d.type === 'Term' ? p.effective + 20 * 365 * BF_DAY : null; d.cash = d.type === 'Term' ? null : Math.round(d.face * (0.04 + r() * 0.08) / 100) * 100; }
-  if (p.lob === 'Annuity') { d.annType = p.carrier === BWS_CARRIER ? (/income/i.test(prod) ? 'Immediate / income' : (/index/i.test(prod) ? 'Fixed indexed' : 'Fixed (multi-year guarantee)')) : (/index/i.test(prod) ? 'Fixed indexed' : (/variable/i.test(prod) ? 'Variable' : 'Fixed')); d.annuitant = pn; d.orig = Math.round((p.value || p.premium) * (0.8 + r() * 0.15) / 1000) * 1000; d.fees = (p.riders && p.riders.length) ? '1.0% yearly rider fee' : 'No yearly fee'; d.schedule = p.surrenderEnds ? 'Surrender charges end ' + bfDate(p.surrenderEnds) : 'Not recorded'; }
+  if (p.lob === 'Annuity') { d.annType = p.carrier === BWS_CARRIER ? (bfShelfOf(prod) ? ({ FIA: 'Fixed indexed', SPIA: 'Immediate / income' }[bfShelfOf(prod).type] || 'Fixed (multi-year guarantee)') : /income/i.test(prod) ? 'Immediate / income' : (/index/i.test(prod) ? 'Fixed indexed' : 'Fixed (multi-year guarantee)')) : (/index/i.test(prod) ? 'Fixed indexed' : (/variable/i.test(prod) ? 'Variable' : 'Fixed')); d.annuitant = pn; d.orig = Math.round((p.value || p.premium) * (0.8 + r() * 0.15) / 1000) * 1000; d.fees = (p.riders && p.riders.length) ? '1.0% yearly rider fee' : 'No yearly fee'; d.schedule = p.surrenderEnds ? 'Surrender charges end ' + bfDate(p.surrenderEnds) : 'Not recorded'; }
   p.d = d; return d;
 }
 function bfAcctDet(c) {
@@ -33866,7 +33885,7 @@ function bfEsc2(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;
 /* ═══ Brookfield demo: Earnings (Commissions, Bonuses, Contests, Forecast) and Documents (Contracts, Invoices, Payments) ═══ */
 /* Structure follows the original Goals.com Commissions, Bonuses, Contests, Forecast and Marketing pages, rebuilt on Brookfield data. */
 var BF_RATE_LOB = { 'Annuity': 0.055, 'Life': 0.35, 'P&C': 0.12, 'Medicare': 0.08 };
-var BF_RATE_PROD = { 'BWS Multi-Year Guarantee': 0.02, 'BWS Fixed Index Annuity': 0.065, 'BWS Income Annuity': 0.025 };
+var BF_RATE_PROD = {}; BF_SD_PRODUCTS.forEach(function(p){ BF_RATE_PROD[p.name] = p.comm / 100; });
 var BF_IMO_SHARE = 0.15;   /* Brookfield keeps 15% of the gross commission and passes 85% to the agency */
 function bfRate(p) { return BF_RATE_PROD[p.product] != null ? BF_RATE_PROD[p.product] : (BF_RATE_LOB[p.lob] || 0.06); }
 function bfSplit(agId) { return (70 + bfHash(agId + 'sp') % 16) / 100; }
@@ -33904,7 +33923,7 @@ function bfCommTab() {
   var monthly = '<div class="bfx-card"><div style="display:flex;justify-content:space-between;align-items:center"><h3>Monthly Breakdown</h3><button class="bfx-btn" ' + bfOc('bfCommExport') + '>Export CSV</button></div><table class="bfx-tbl"><thead><tr><th>Month</th><th>Policies</th><th>Premium</th><th>' + bfCommLabel() + '</th><th>Chargebacks</th><th>Net</th><th>Status</th></tr></thead><tbody>' + mrows.join('') + '</tbody></table></div>';
   var bp = {}; ytd.forEach(function(p){ var k = p.lob === 'Annuity' ? p.product : p.lob; bp[k] = (bp[k] || 0) + bfSigned(p); });
   var keys = Object.keys(bp).sort(function(a, b){ return bp[b] - bp[a]; }), mx = Math.max.apply(null, keys.map(function(k){ return Math.abs(bp[k]); }).concat([1]));
-  var byProd = '<div class="bfx-card"><h3>By Product, This Year</h3><div style="font-size:12.5px;color:var(--g500);margin-bottom:8px">Each bar shows the commission earned this year from that product, after chargebacks.</div>' + keys.map(function(k){ var pr = BF_RATE_PROD[k] != null ? BF_RATE_PROD[k] : BF_RATE_LOB[k]; return bfBarWide(bfEsc(k.indexOf('lob:') === 0 ? bfRateLabel(k) : k), pr != null ? 'Paid at ' + Math.round(pr * 1000) / 10 + '% of premium' : '', Math.abs(bp[k]), mx, bfMoneyK(bp[k])); }).join('') + '<div style="font-size:11.5px;color:var(--g500);margin-top:8px">Commission is paid as a percentage of premium. Annuity products pay ' + Math.round(BF_RATE_PROD['BWS Multi-Year Guarantee'] * 1000) / 10 + '% for Multi-Year Guarantee, ' + Math.round(BF_RATE_PROD['BWS Fixed Index Annuity'] * 1000) / 10 + '% for Fixed Index and ' + Math.round(BF_RATE_PROD['BWS Income Annuity'] * 1000) / 10 + '% for Income. Life, property and casualty, and Medicare each use their own rate.</div></div>';
+  var byProd = '<div class="bfx-card"><h3>By Product, This Year</h3><div style="font-size:12.5px;color:var(--g500);margin-bottom:8px">Each bar shows the commission earned this year from that product, after chargebacks.</div>' + keys.map(function(k){ var pr = BF_RATE_PROD[k] != null ? BF_RATE_PROD[k] : BF_RATE_LOB[k]; return bfBarWide(bfEsc(k.indexOf('lob:') === 0 ? bfRateLabel(k) : k), pr != null ? 'Paid at ' + Math.round(pr * 1000) / 10 + '% of premium' : '', Math.abs(bp[k]), mx, bfMoneyK(bp[k])); }).join('') + '<div style="font-size:11.5px;color:var(--g500);margin-top:8px">Commission is paid as a percentage of premium. Annuity products pay ' + Math.round(Math.min.apply(null, BF_SD_PRODUCTS.map(function(p){ return BF_RATE_PROD[p.name]; })) * 1000) / 10 + '% to ' + Math.round(Math.max.apply(null, BF_SD_PRODUCTS.map(function(p){ return BF_RATE_PROD[p.name]; })) * 1000) / 10 + '% of premium depending on the product. See Products for each rate. Life, property and casualty, and Medicare each use their own rate.</div></div>';
   var who = '';
   if (t !== 'agent') {
     var grp = t === 'agency' ? bfScope().agents : BF_AGENCIES, rows = grp.map(function(g) {
@@ -33959,7 +33978,7 @@ var BF_CLOSE_DAYS = { application: 30, illustration: 60, appointment: 90 };
 function bfFcstTab() {
   var S = bfScope(), op = S.opps.filter(bfOppOpen), t = _bfv.tier;
   var w = function(o){ return bfOppAssets(o) * (BF_PROB[o.status] || 0); };
-  var weighted = bfSum(op, w), in90 = bfSum(op.filter(function(o){ return BF_CLOSE_DAYS[o.status]; }), w), rate = BF_RATE_PROD['BWS Fixed Index Annuity'];
+  var weighted = bfSum(op, w), in90 = bfSum(op.filter(function(o){ return BF_CLOSE_DAYS[o.status]; }), w), rate = BF_RATE_PROD['Strategy Indexed Annuity'];
   var issued90 = bfPlaced(S.policies.filter(function(p){ return p.lob === 'Annuity'; }), 90);
   var kp = '<div class="bfx-kpis">' + bfKpi('Weighted Pipeline', bfMoneyK(weighted), op.length + ' open opportunities') + bfKpi('Expected in 90 Days', bfMoneyK(in90), 'Appointment stage or later') + bfKpi('Issued, Last 90 Days', bfMoneyK(issued90), 'Annuity premium') + bfKpi('Expected Commission', bfMoneyK(in90 * rate * (t === 'agent' ? (1 - BF_IMO_SHARE) * 0.78 : (t === 'agency' ? 1 - BF_IMO_SHARE : BF_IMO_SHARE))), 'At the Fixed Index rate') + '</div>';
   var stg = BF_OPP_STAGES.slice(0, 6).map(function(s){ var os = op.filter(function(o){ return o.status === s; }); return { s: s, n: os.length, v: bfSum(os, bfOppAssets), w: bfSum(os, w) }; }), mx = Math.max.apply(null, stg.map(function(x){ return x.v; }).concat([1]));
@@ -34570,19 +34589,19 @@ function bfDocDl(kind, title) {
 /* ── Brookfield rules: create and edit products, approved email templates ── */
 function bfProductsEditable() {
   var edit = _bfv.tier === 'bws';
-  return '<div class="bfx-card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><h3>Product Catalog</h3>' + (edit ? '<button class="bfx-btn pri" ' + bfOc('bfProdAsk', '-1') + '>Create Product</button>' : '') + '</div><table class="bfx-tbl"><thead><tr><th>Product</th><th>Type</th><th>Minimum</th><th>Terms</th><th>Description</th><th>Available In</th>' + (edit ? '<th></th>' : '') + '</tr></thead><tbody>' + BF_CATALOG.map(function(p, i){ return '<tr><td><b>' + bfEsc(p.name) + '</b></td><td>' + bfEsc(p.kind) + '</td><td>' + bfMoney(p.min) + '</td><td>' + bfEsc(p.terms) + '</td><td style="max-width:240px;font-size:12.5px">' + bfEsc(p.feature) + '</td><td>' + (BF_STATES.length - p.off.length) + ' of ' + BF_STATES.length + ' states</td>' + (edit ? '<td><button class="bfx-btn" ' + bfOc('bfProdAsk', i) + '>Edit</button></td>' : '') + '</tr>'; }).join('') + '</tbody></table><div class="bfx-note" style="margin-top:10px">Product details are for reference. This pilot does not match products to households. Agents decide what to discuss after a suitability review.</div></div>';
+  return '<div class="bfx-card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><h3>Product Catalog</h3>' + (edit ? '<button class="bfx-btn pri" ' + bfOc('bfProdAsk', '-1') + '>Create Product</button>' : '') + '</div><table class="bfx-tbl"><thead><tr><th>Product</th><th>Type</th><th>Minimum</th><th>Terms</th><th>Description</th><th>Available In</th>' + (edit ? '<th></th>' : '') + '</tr></thead><tbody>' + BF_CATALOG.map(function(p, i){ return '<tr><td>' + (p.car ? bfSdLogo(p.car, true) : '') + '<b>' + bfEsc(p.name) + '</b>' + (p.car ? '<div style="font-size:11.5px;color:var(--g500)">' + bfEsc(p.car) + '</div>' : '') + '</td><td>' + bfEsc(p.kind) + '</td><td>' + bfMoney(p.min) + '</td><td>' + bfEsc(p.terms) + '</td><td style="max-width:240px;font-size:12.5px">' + bfEsc(p.feature) + '</td><td>' + (BF_STATES.length - p.off.length) + ' of ' + BF_STATES.length + ' states</td>' + (edit ? '<td><button class="bfx-btn" ' + bfOc('bfProdAsk', i) + '>Edit</button></td>' : '') + '</tr>'; }).join('') + '</tbody></table><div class="bfx-note" style="margin-top:10px">Product details are for reference. This pilot does not match products to households. Agents decide what to discuss after a suitability review.</div></div>';
 }
 function bfProdAsk(i) {
-  i = parseInt(i, 10); var p = i >= 0 ? BF_CATALOG[i] : { name: '', kind: '', min: 10000, terms: '', feature: '', off: [] };
+  i = parseInt(i, 10); var p = i >= 0 ? BF_CATALOG[i] : { name: '', car: '', kind: '', min: 10000, terms: '', feature: '', off: [] };
   var sts = BF_STATES.map(function(st){ return '<label style="display:inline-flex;gap:5px;align-items:center;margin:0 10px 6px 0;font-size:12.5px"><input type="checkbox" id="bf-pr-s-' + st + '"' + (p.off.indexOf(st) < 0 ? ' checked' : '') + '>' + st + '</label>'; }).join('');
-  bfModal(i >= 0 ? 'Edit product' : 'Create product', bfField('Product name', bfInput('bf-pr-n', p.name)) + bfField('Type', bfInput('bf-pr-k', p.kind, 'text', 'For example: Fixed index')) + bfField('Minimum premium ($)', bfInput('bf-pr-m', p.min, 'number')) + bfField('Terms', bfInput('bf-pr-t', p.terms, 'text', 'For example: 5 and 10 years')) + bfField('Description', '<textarea id="bf-pr-f" rows="2" ' + BF_INP + '>' + bfEsc(p.feature) + '</textarea>') + '<div style="font-size:12px;font-weight:700;color:var(--g600);margin-bottom:6px">Approved for sale in</div>' + sts, i >= 0 ? 'Save product' : 'Create product', 'bfProdDo(' + i + ')');
+  bfModal(i >= 0 ? 'Edit product' : 'Create product', bfField('Product name', bfInput('bf-pr-n', p.name)) + bfField('Carrier', bfInput('bf-pr-c', p.car || '', 'text', 'For example: American Equity')) + bfField('Type', bfInput('bf-pr-k', p.kind, 'text', 'For example: Fixed index')) + bfField('Minimum premium ($)', bfInput('bf-pr-m', p.min, 'number')) + bfField('Terms', bfInput('bf-pr-t', p.terms, 'text', 'For example: 5 and 10 years')) + bfField('Description', '<textarea id="bf-pr-f" rows="2" ' + BF_INP + '>' + bfEsc(p.feature) + '</textarea>') + '<div style="font-size:12px;font-weight:700;color:var(--g600);margin-bottom:6px">Approved for sale in</div>' + sts, i >= 0 ? 'Save product' : 'Create product', 'bfProdDo(' + i + ')');
 }
 function bfProdDo(i) {
   var n = bfV('bf-pr-n').trim(), m = parseFloat(bfV('bf-pr-m'));
   if (!n) { showToast('Enter a product name'); return; } if (!(m > 0)) { showToast('Enter a minimum above zero'); return; }
   var off = BF_STATES.filter(function(st){ var e = bfEl('bf-pr-s-' + st); return e && !e.checked; });
-  var rec = { name: n, kind: bfV('bf-pr-k').trim() || 'Annuity', min: Math.round(m), terms: bfV('bf-pr-t').trim() || 'Not set', feature: bfV('bf-pr-f').trim() || 'No description yet', off: off };
-  if (i >= 0) { BF_CATALOG[i] = rec; bfAudit('Rule change', null, 'Product ' + n + ' updated.'); } else { BF_CATALOG.push(rec); bfAudit('Rule change', null, 'Product ' + n + ' created.'); }
+  var rec = { name: n, car: bfV('bf-pr-c').trim(), kind: bfV('bf-pr-k').trim() || 'Annuity', min: Math.round(m), terms: bfV('bf-pr-t').trim() || 'Not set', feature: bfV('bf-pr-f').trim() || 'No description yet', off: off };
+  if (i >= 0) { var sp = bfShelfOf(BF_CATALOG[i].name); if (sp) { sp.min = rec.min; sp.off = rec.off; sp.feat = rec.feature; } BF_CATALOG[i] = rec; bfAudit('Rule change', null, 'Product ' + n + ' updated.'); } else { BF_CATALOG.push(rec); bfAudit('Rule change', null, 'Product ' + n + ' created.'); }
   bfModalClose(); bfRecomputeAll(); showToast(i >= 0 ? 'Product saved' : 'Product created'); bfRender();
 }
 function bfTemplatesEditable() {
@@ -34790,9 +34809,9 @@ function bfPlanBlank(ag) {
 }
 BF_AGENCIES.forEach(function(g) {
   var ppl = BF_AGENTS.filter(function(a){ return a.ag === g.id; }).map(function(a){ return a.id; }), yr = bfPlanYear(), t0 = Date.now();
-  BF_PLANS.push({ id: 'pl-' + g.id + '-1', agency: g.id, name: 'Annuity Product Rates Plan', kind: 'flat', rate: 5, tiers: [], cliff: 0, scope: 'annuity', products: [{ product: 'BWS Multi-Year Guarantee', rate: 1.5 }, { product: 'BWS Fixed Index Annuity', rate: 5.5 }, { product: 'BWS Income Annuity', rate: 2 }], split: false, spiff: null, draw: { on: false, amt: 1000, rec: true }, residual: false, clawback: { on: true, days: 90 }, freq: 'Monthly', start: yr.start, end: yr.end, people: ppl, byAce: true, calc: t0 });
+  BF_PLANS.push({ id: 'pl-' + g.id + '-1', agency: g.id, name: 'Annuity Product Rates Plan', kind: 'flat', rate: 5, tiers: [], cliff: 0, scope: 'annuity', products: [{ product: 'Palladium MYG', rate: 1.5 }, { product: 'Strategy Indexed Annuity', rate: 5.5 }, { product: 'Single Premium Immediate Annuity', rate: 2 }], split: false, spiff: null, draw: { on: false, amt: 1000, rec: true }, residual: false, clawback: { on: true, days: 90 }, freq: 'Monthly', start: yr.start, end: yr.end, people: ppl, byAce: true, calc: t0 });
   BF_PLANS.push({ id: 'pl-' + g.id + '-2', agency: g.id, name: 'Tiered Monthly Production Plan', kind: 'tiered', rate: 0, tiers: [{ up: 50000, rate: 4 }, { up: 150000, rate: 5.5 }, { up: null, rate: 7 }], cliff: 0, scope: 'all', products: [], split: false, spiff: null, draw: { on: false, amt: 1000, rec: true }, residual: false, clawback: { on: false, days: 90 }, freq: 'Monthly', start: yr.start, end: yr.end, people: ppl, byAce: false, calc: t0 });
-  if (g.id === 'ag1') BF_PLANS.push({ id: 'pl-ag1-3', agency: 'ag1', name: 'Q4 Accelerator with Fixed Index SPIFF', kind: 'accel', rate: 0, tiers: [{ up: 40000, rate: 4.5 }, { up: 100000, rate: 6 }, { up: null, rate: 7.5 }], cliff: 0, scope: 'annuity', products: [], split: false, spiff: { amt: 200, product: 'BWS Fixed Index Annuity', from: new Date(new Date(BF_T).getFullYear(), 9, 1).getTime(), to: yr.end }, draw: { on: true, amt: 1500, rec: true }, residual: false, clawback: { on: true, days: 90 }, freq: 'Quarterly', start: new Date(new Date(BF_T).getFullYear(), 9, 1).getTime(), end: yr.end, people: ppl, byAce: true, calc: t0 });
+  if (g.id === 'ag1') BF_PLANS.push({ id: 'pl-ag1-3', agency: 'ag1', name: 'Q4 Accelerator with Fixed Index SPIFF', kind: 'accel', rate: 0, tiers: [{ up: 40000, rate: 4.5 }, { up: 100000, rate: 6 }, { up: null, rate: 7.5 }], cliff: 0, scope: 'annuity', products: [], split: false, spiff: { amt: 200, product: 'Strategy Indexed Annuity', from: new Date(new Date(BF_T).getFullYear(), 9, 1).getTime(), to: yr.end }, draw: { on: true, amt: 1500, rec: true }, residual: false, clawback: { on: true, days: 90 }, freq: 'Quarterly', start: new Date(new Date(BF_T).getFullYear(), 9, 1).getTime(), end: yr.end, people: ppl, byAce: true, calc: t0 });
 });
 function bfPlanDesc(pl) {
   var k = function(v){ return v == null ? '' : bfMoneyK(v); };
@@ -35278,9 +35297,9 @@ function bfRateNow(key) { return bfRateAt(key, BF_T); }
   Object.keys(BF_RATE_PROD).forEach(function(k){ mk(k, BF_RATE_PROD[k], d0, 'Manual entry', 'Opening rate'); });
   Object.keys(BF_RATE_LOB).forEach(function(k){ mk('lob:' + k, BF_RATE_LOB[k], d0, 'Manual entry', 'Opening rate'); });
   /* a little history that sits before any policy in the book, so it shows the timeline without moving today's numbers */
-  mk('BWS Fixed Index Annuity', 0.07, d0 - 1, 'Carrier bulletin', 'Earlier carrier schedule'); BF_RATES[BF_RATES.length - 1].from = new Date(2012, 0, 1).getTime();
-  BF_RATES.filter(function(e){ return e.key === 'BWS Fixed Index Annuity' && e.rate === 0.065; })[0].from = d1; BF_RATES.filter(function(e){ return e.key === 'BWS Fixed Index Annuity' && e.rate === 0.065; })[0].note = 'Carrier lowered the street rate from 7%';
-  BF_RATES.filter(function(e){ return e.key === 'BWS Fixed Index Annuity' && e.rate === 0.07; })[0].note = 'Earlier carrier schedule';
+  mk('Strategy Indexed Annuity', 0.07, d0 - 1, 'Carrier bulletin', 'Earlier carrier schedule'); BF_RATES[BF_RATES.length - 1].from = new Date(2012, 0, 1).getTime();
+  BF_RATES.filter(function(e){ return e.key === 'Strategy Indexed Annuity' && e.rate === 0.065; })[0].from = d1; BF_RATES.filter(function(e){ return e.key === 'Strategy Indexed Annuity' && e.rate === 0.065; })[0].note = 'Carrier lowered the street rate from 7%';
+  BF_RATES.filter(function(e){ return e.key === 'Strategy Indexed Annuity' && e.rate === 0.07; })[0].note = 'Earlier carrier schedule';
   bfRateIndex();
 })();
 var bfRate0 = bfRate;
@@ -35851,7 +35870,7 @@ var BF_RANGES = [
   { n: 'Variable Annuity', lo: 4, hi: 7, sur: '6 to 8 year surrender' },
   { n: 'Indexed Annuities', lo: 5, hi: 8, sur: '' }
 ];
-var BF_RANGE_OF = { 'BWS Multi-Year Guarantee': 0, 'BWS Income Annuity': 1, 'BWS Fixed Index Annuity': 2 };
+var BF_RANGE_OF = {}; BF_SD_PRODUCTS.forEach(function(p){ BF_RANGE_OF[p.name] = p.type === 'MYGA' ? 0 : (p.type === 'FIA' ? 2 : 1); });
 var BF_ARW = { connected: false, last: null, by: null };
 function bfRangeTxt(r) { return r.lo + '% to ' + r.hi + '%'; }
 function bfRangeOf(name) { return BF_RANGE_OF[name] != null ? BF_RANGES[BF_RANGE_OF[name]] : null; }
@@ -35906,7 +35925,7 @@ function bfRateSplitCard() {
     var st = bfStreetPct(p.name), rg = bfRangeOf(p.name), a = home ? null : bfAgencyRate(ag, p.name), inR = rg && st != null && st >= rg.lo && st <= rg.hi;
     var agc = home ? '<span style="color:var(--g500)">Set by each agency</span>' : (a ? '<b>' + a.rate + '%</b><div style="font-size:11px;color:var(--g500)">in ' + bfEsc(a.plan) + '</div>' : '<span style="color:var(--g400)">Not set</span>');
     var spread = !home && a && st != null ? '<span style="color:var(--g500)">' + (Math.round((st - a.rate) * 100) / 100) + ' pts</span>' : '<span style="color:var(--g400)">&ndash;</span>';
-    return '<tr><td><b>' + bfEsc(p.name) + '</b>' + (rg ? '<div style="font-size:11px;color:var(--g500)">' + bfEsc(rg.n) + '</div>' : '') + '</td><td>' + (rg ? bfRangeTxt(rg) : '&ndash;') + '</td><td><span class="bfrt-lock" title="Locked. Set by Brookfield' + (BF_ARW.connected ? ' through Annuity Rate Watch' : '') + '">&#128274; <b>' + (st == null ? '&ndash;' : st + '%') + '</b></span>' + (rg && st != null && !inR ? ' <span class="bfx-st risk">Outside range</span>' : '') + '</td><td>' + agc + '</td><td>' + spread + '</td><td style="white-space:nowrap">' + (can ? '<button class="bfx-btn" ' + bfOc('bfAgencyRateAsk', p.name) + '>' + (a ? 'Change' : 'Set') + ' Agency Rate</button>' : '') + '</td></tr>';
+    return '<tr><td>' + (p.car ? bfSdLogo(p.car, true) : '') + '<b>' + bfEsc(p.name) + '</b>' + (rg ? '<div style="font-size:11px;color:var(--g500)">' + bfEsc(rg.n) + '</div>' : '') + '</td><td>' + (rg ? bfRangeTxt(rg) : '&ndash;') + '</td><td><span class="bfrt-lock" title="Locked. Set by Brookfield' + (BF_ARW.connected ? ' through Annuity Rate Watch' : '') + '">&#128274; <b>' + (st == null ? '&ndash;' : st + '%') + '</b></span>' + (rg && st != null && !inR ? ' <span class="bfx-st risk">Outside range</span>' : '') + '</td><td>' + agc + '</td><td>' + spread + '</td><td style="white-space:nowrap">' + (can ? '<button class="bfx-btn" ' + bfOc('bfAgencyRateAsk', p.name) + '>' + (a ? 'Change' : 'Set') + ' Agency Rate</button>' : '') + '</td></tr>';
   }).join('');
   feed += '<div style="overflow-x:auto;margin-top:12px"><table class="bfx-tbl"><thead><tr><th>Product</th><th>Typical Range</th><th>Street Rate (Locked)</th><th>Agency Rate</th><th>Spread</th><th></th></tr></thead><tbody>' + rows + '</tbody></table></div></div>';
   var ref = '<div class="bfx-card"><h3>Typical Commission Ranges by Product</h3><div style="font-size:12.5px;color:var(--g500);margin:0 0 10px">Industry reference' + (BF_ARW.connected ? ' from Annuity Rate Watch' : '') + '. Street rates in this platform are checked against these ranges.</div><table class="bfx-tbl"><thead><tr><th>Product</th><th>Typical Commission</th><th>Surrender Period</th></tr></thead><tbody>' + BF_RANGES.map(function(r){ return '<tr><td><b>' + bfEsc(r.n) + '</b></td><td>' + bfRangeTxt(r) + '</td><td>' + (r.sur || '&ndash;') + '</td></tr>'; }).join('') + '</tbody></table></div>';
@@ -36015,25 +36034,7 @@ function bfSeedRecs(c, list) {
    minimums and commissions are SAMPLE numbers for the demo, not live carrier data.
    ═══════════════════════════════════════════════════════════════════════════ */
 var BF_SD_STEPS = ['Pre-Sale Analysis', 'Quote', 'Illustrate', 'Apply', 'Carrier Submission', 'Contract Delivery', 'In-force Servicing'];
-var BF_SD_PRODUCTS = [
-  { id: 'ae-gs3', car: 'American Equity', name: 'GuaranteeShield 3', type: 'Fixed', opts: [{ t: 3, rate: 4.15 }], min: 20000, s0: 7, fw: 10, maxAge: 85, off: [], comm: 2.5, feat: 'Fixed rate guaranteed for 3 years' },
-  { id: 'ae-gs5', car: 'American Equity', name: 'GuaranteeShield 5', type: 'Fixed', opts: [{ t: 5, rate: 4.45 }], min: 20000, s0: 8, fw: 10, maxAge: 85, off: [], comm: 2.75, feat: 'Fixed rate guaranteed for 5 years' },
-  { id: 'ae-as', car: 'American Equity', name: 'AssetShield', type: 'FIA', opts: [{ t: 7, cap: 5.75, part: 100 }, { t: 10, cap: 6.5, part: 100 }], min: 20000, s0: 9, fw: 10, maxAge: 85, off: ['NY'], comm: 5.5, feat: 'Accumulation focus with a floor on losses', idx: 'S&P 500, 1-year point to point' },
-  { id: 'ae-is', car: 'American Equity', name: 'IncomeShield', type: 'FIA', opts: [{ t: 10, cap: 5, part: 100, rider: 6.2 }], min: 25000, s0: 10, fw: 10, maxAge: 80, off: ['NY', 'MA'], comm: 6.5, feat: 'Income rider with a guaranteed roll-up', idx: 'S&P 500, 1-year point to point' },
-  { id: 'ae-es', car: 'American Equity', name: 'EstateShield', type: 'FIA', opts: [{ t: 10, cap: 5.5, part: 100 }], min: 25000, s0: 10, fw: 10, maxAge: 80, off: ['NY', 'FL'], comm: 6, feat: 'Built to pass assets to heirs', idx: 'S&P 500, 1-year point to point' },
-  { id: 'ae-fs', car: 'American Equity', name: 'FlexShield 10', type: 'FIA', opts: [{ t: 10, cap: 6.25, part: 100 }], min: 25000, s0: 10, fw: 10, maxAge: 85, off: ['NY'], comm: 6.25, feat: 'Accumulation with flexible crediting', idx: 'S&P 500, 1-year point to point' },
-  { id: 'an-pm', car: 'American National', name: 'Palladium MYG', type: 'MYGA', opts: [{ t: 3, rate: 4.1 }, { t: 5, rate: 4.55 }, { t: 7, rate: 4.75 }, { t: 10, rate: 4.9 }], min: 5000, s0: 8, fw: 10, maxAge: 90, off: ['NY'], comm: 2, feat: 'Multi-year guarantee, one fixed rate for the whole term' },
-  { id: 'an-pmx', car: 'American National', name: 'Palladium MYG Max', type: 'MYGA', opts: [{ t: 5, rate: 4.7 }, { t: 7, rate: 4.9 }, { t: 10, rate: 5.05 }], min: 50000, s0: 8, fw: 10, maxAge: 90, off: ['NY'], comm: 2.25, feat: 'Higher rates for larger deposits' },
-  { id: 'an-si7', car: 'American National', name: 'Strategy Index 7', type: 'FIA', opts: [{ t: 7, cap: 6, part: 100 }], min: 10000, s0: 9, fw: 10, maxAge: 85, off: ['NY'], comm: 5, feat: 'Index crediting with a 7 year surrender period', idx: 'S&P 500, 1-year point to point' },
-  { id: 'an-si10', car: 'American National', name: 'Strategy Index 10', type: 'FIA', opts: [{ t: 10, cap: 6.75, part: 100 }], min: 10000, s0: 10, fw: 10, maxAge: 85, off: ['NY'], comm: 6, feat: 'Index crediting with a 10 year surrender period', idx: 'S&P 500, 1-year point to point' },
-  { id: 'an-ssa', car: 'American National', name: 'Smart Start Accumulator', type: 'FIA', opts: [{ t: 7, cap: 5.5, part: 100 }], min: 10000, s0: 9, fw: 10, maxAge: 85, off: ['NY', 'CA'], comm: 4.75, feat: 'Single premium accumulator', idx: 'S&P 500, 1-year point to point' },
-  { id: 'an-ssap', car: 'American National', name: 'Smart Start Accumulator Plus', type: 'FIA', opts: [{ t: 7, cap: 6, part: 100, bonus: 3 }], min: 25000, s0: 9, fw: 10, maxAge: 80, off: ['NY', 'CA'], comm: 5.5, feat: 'Accumulator with a first-year premium bonus', idx: 'S&P 500, 1-year point to point' },
-  { id: 'an-wq7', car: 'American National', name: 'WealthQuest 7', type: 'Fixed', opts: [{ t: 3, rate: 3.95 }, { t: 5, rate: 4.25 }, { t: 6, rate: 4.4 }, { t: 7, rate: 4.55 }], min: 10000, s0: 8, fw: 10, maxAge: 85, off: [], comm: 2.5, feat: 'Fixed deferred with a choice of guarantee period' },
-  { id: 'an-sia', car: 'American National', name: 'Strategy Indexed Annuity', type: 'FIA', opts: [{ t: 10, cap: 6.5, part: 100 }], min: 10000, s0: 10, fw: 10, maxAge: 85, off: ['NY', 'MA'], comm: 6.5, feat: 'Index crediting tied to the S&P 500', idx: 'S&P 500, 1-year point to point' },
-  { id: 'an-spia', car: 'American National', name: 'Single Premium Immediate Annuity', type: 'SPIA', opts: [{ t: 0 }], min: 25000, s0: 0, fw: 0, maxAge: 90, off: [], comm: 2, feat: 'Guaranteed monthly income that starts right away' }
-];
 var BF_SD_TYPES = [['all', 'All Types'], ['MYGA', 'MYGA'], ['Fixed', 'Fixed'], ['FIA', 'Fixed Index'], ['SPIA', 'Income (SPIA)']];
-var BF_SD_TYPE_NAME = { MYGA: 'Multi-Year Guarantee', Fixed: 'Fixed', FIA: 'Fixed Index', SPIA: 'Income (SPIA)' };
 var BF_SD_FUND = ['Qualified transfer (IRA or 401k)', '1035 exchange', 'CD at maturity', 'Non-qualified cash'];
 var BF_SD_SCEN = [['low', 'Low (index flat)', 0], ['mid', 'Moderate (4.5% index gain)', 4.5], ['high', 'Strong (8% index gain)', 8]];
 var BF_SDR = { maxPct: 40, reviewAge: 75, maxAge: 85, bigPremium: 250000, autoApprove: true, replaceReview: true };
