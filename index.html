@@ -37120,6 +37120,8 @@ if (typeof document !== 'undefined' && document.head && document.createElement) 
    ['bfSdSubmit', 'submit'], ['bfSdSvcSave', 'service']].forEach(function(x) { wrap(x[0], x[1]); });
 })();
 
+/* ── consistent buttons, tables and focus states across every module ── */
+try { if (typeof document !== 'undefined' && document.head) { var _bfPol = document.createElement('style'); _bfPol.id = 'bf-polish'; _bfPol.textContent = '.bfx-tbl td,.bfx-tbl th{overflow-wrap:normal;word-break:normal}.bfx-tbl td{min-width:60px}.bfx-head .bfx-btn{padding:9px 18px;font-size:13px;font-weight:600;border-radius:10px;min-height:38px}.bfx-tbl .bfx-btn{padding:6px 13px;font-size:12px;border-radius:8px;min-height:30px}.bfx-btn{transition:box-shadow .15s,border-color .15s,background .15s}.bfx-btn:hover:not(:disabled){border-color:#c9c3b3;box-shadow:0 1px 3px rgba(0,0,0,.08)}.bfx-btn:disabled{opacity:.5;cursor:not-allowed}#bf-root button:focus-visible,#bf-root select:focus-visible,#bf-root input:focus-visible{outline:2px solid var(--teal2);outline-offset:2px}'; document.head.appendChild(_bfPol); } } catch (e) {}
 try { localStorage.removeItem('bf_bg'); } catch (e) {}
 try { setTimeout(function(){ document.body.classList.remove('bf-booting'); }, 2500); } catch (e) {}
 /* ── keep the same view after a refresh (per browser tab) ── */
